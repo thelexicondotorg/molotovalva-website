@@ -9,28 +9,16 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
   </head>
-  <body class="bg-black text-white min-h-screen flex flex-col font-mono selection:bg-[#00E900] selection:text-black">
+  <body class="bg-black text-white min-h-screen flex flex-col justify-center items-center font-mono selection:bg-[#00E900] selection:text-black">
     
-    <!-- Minimalist Industrial Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-black/90 border-b border-neutral-900 transition-all">
-      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#" class="text-sm font-semibold tracking-widest uppercase text-[#00E900]">
-          MOLOTOV ALVA
-        </a>
-        <div class="text-xs text-[#888888]">
-          [SYSTEM_READY]
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Viewport Layout -->
-    <main class="flex-grow flex flex-col items-center justify-center pt-16 px-6">
+    <!-- Landing Main Content Area (Centered Viewport) -->
+    <main class="w-full flex-grow flex flex-col items-center justify-center px-6">
       
       <!-- Central Portal Section -->
-      <section class="min-h-[85vh] w-full flex flex-col items-center justify-center text-center">
+      <section class="flex flex-col items-center justify-center text-center">
         
         <!-- Central Media Portal: 300px x 300px Circular Mask -->
-        <div class="media-portal border border-neutral-800 shadow-2xl">
+        <div class="media-portal border border-neutral-900 shadow-2xl">
           <img 
             src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=600&q=80" 
             alt="Central Media Portal" 
@@ -46,14 +34,6 @@
       </section>
 
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-neutral-900 py-6 px-6 bg-black text-[#888888] text-xs">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <span>&copy; 2026 MOLOTOV ALVA</span>
-        <span class="text-[#00E900] text-[10px]">● ONLINE</span>
-      </div>
-    </footer>
 
     <!-- Application Script Entrypoint -->
     <script type="module" src="/src/main.js"></script>
