@@ -35,20 +35,85 @@ window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
 /* -------------------------------------------------------------------------- */
-/*  Terminal Prompt Typewriter Animation                                      */
+/*  Landing Page Intro Choreography                                           */
 /* -------------------------------------------------------------------------- */
+const portalEl = document.getElementById('media-portal');
+const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
 
+// Calculate the vertical offset to place the prompt at the exact center of the screen
+function calculateCenterOffset() {
+  if (!portalEl || !promptEl) return -166;
+  const section = portalEl.parentElement;
+  if (!section) return -166;
+
+  const sectionRect = section.getBoundingClientRect();
+  const promptRect = promptEl.getBoundingClientRect();
+
+  const sectionCenterY = sectionRect.top + sectionRect.height / 2;
+  const promptCenterY = promptRect.top + promptRect.height / 2;
+
+  return sectionCenterY - promptCenterY;
+}
+
+const promptInitialY = calculateCenterOffset();
+
+// 1. Initial State
+if (portalEl) {
+  gsap.set(portalEl, {
+    opacity: 0,
+    y: -40, // drops from slightly above
+  });
+}
+
+if (promptEl) {
+  gsap.set(promptEl, {
+    y: promptInitialY, // positioned at the exact vertical center
+  });
+}
+
+// Master Intro Timeline
+const introTl = gsap.timeline();
+
+// Step 1: Wait 1.5s with blinking cursor at exact screen center, then type "click_to_enter" over 1.0s
 if (promptTextEl) {
-  // Initial state: cursor blinks next to ">: " for 2 seconds
-  // Then "click_to_enter" is typed out across 0.5 seconds
-  gsap.to(promptTextEl, {
+  introTl.to(promptTextEl, {
     text: {
       value: 'click_to_enter',
       delimiter: '',
     },
-    duration: 0.5,
-    delay: 2.0,
+    duration: 1.0,
+    delay: 1.5, // 0.5s shorter than previous 2.0s
     ease: 'none',
   });
+}
+
+// Step 2: 0.5s after typing ends:
+// - Move the prompt down to its resting position
+// - Fade in and drop the circular portal into place
+introTl.addLabel('reveal', '+=0.5');
+
+if (promptEl) {
+  introTl.to(
+    promptEl,
+    {
+      y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+    },
+    'reveal'
+  );
+}
+
+if (portalEl) {
+  introTl.to(
+    portalEl,
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+    },
+    'reveal'
+  );
 }
