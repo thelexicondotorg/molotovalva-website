@@ -2,9 +2,10 @@ import './styles/main.css';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TextPlugin } from 'gsap/TextPlugin';
 
 // Register GSAP Plugins
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 // Initialize Lenis Smooth Scroll
 export const lenis = new Lenis({
@@ -33,8 +34,21 @@ window.lenis = lenis;
 window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
-console.log('⚡ Molotovalva Website initialized: Lenis & GSAP ready.');
+/* -------------------------------------------------------------------------- */
+/*  Terminal Prompt Typewriter Animation                                      */
+/* -------------------------------------------------------------------------- */
+const promptTextEl = document.getElementById('prompt-text');
 
-/* -------------------------------------------------------------------------- */
-/*  Animation Logic Placeholder (Ready for future animation implementation)  */
-/* -------------------------------------------------------------------------- */
+if (promptTextEl) {
+  // Initial state: cursor blinks next to ">: " for 2 seconds
+  // Then "click_to_enter" is typed out across 0.5 seconds
+  gsap.to(promptTextEl, {
+    text: {
+      value: 'click_to_enter',
+      delimiter: '',
+    },
+    duration: 0.5,
+    delay: 2.0,
+    ease: 'none',
+  });
+}
