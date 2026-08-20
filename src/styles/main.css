@@ -1,6 +1,35 @@
 @import "tailwindcss";
 
-/* Base Lenis Smooth Scroll Configuration */
+/* -------------------------------------------------------------------------- */
+/*  DESIGN SYSTEM TOKENS (Source of Truth: design.md)                         */
+/* -------------------------------------------------------------------------- */
+@theme {
+  --color-canvas: #000000;
+  --color-terminal: #00e900;
+  --color-text-primary: #ffffff;
+  --color-text-muted: #888888;
+  --font-terminal: 'Platelet', 'Courier New', Courier, monospace;
+}
+
+:root {
+  /* Colors */
+  --color-canvas: #000000;
+  --color-terminal: #00e900;
+  --color-text-primary: #ffffff;
+  --color-text-muted: #888888;
+
+  /* Typography */
+  --font-terminal: 'Platelet', 'Courier New', Courier, monospace;
+  --terminal-font-size: 2rem;
+  --terminal-font-weight: 600;
+
+  /* Portal Component */
+  --portal-size: 300px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Lenis Smooth Scroll Baseline Configuration                                */
+/* -------------------------------------------------------------------------- */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -22,9 +51,65 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* Custom base typography & scrollbar polish */
+/* -------------------------------------------------------------------------- */
+/*  Base Styles (Invariant: Pure Black Canvas #000000)                        */
+/* -------------------------------------------------------------------------- */
 body {
-  @apply bg-neutral-950 text-neutral-100 antialiased selection:bg-neutral-800 selection:text-white;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-terminal);
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Reusable Design System Components                                         */
+/* -------------------------------------------------------------------------- */
+
+/* Terminal Text Specification */
+.terminal-text {
+  font-family: var(--font-terminal);
+  font-size: var(--terminal-font-size);
+  font-weight: var(--terminal-weight);
+  color: var(--color-terminal);
+  line-height: 1.2;
+}
+
+/* Interactive Terminal Prompts */
+.terminal-prompt {
+  font-family: var(--font-terminal);
+  font-size: var(--terminal-font-size);
+  font-weight: var(--terminal-weight);
+  color: var(--color-terminal);
+  margin-top: 2rem;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  transition: opacity 0.15s ease;
+}
+
+.terminal-prompt:hover {
+  opacity: 0.8;
+}
+
+/* Central Media Portal: Perfect Circle Mask (300px x 300px) */
+.media-portal {
+  width: var(--portal-size);
+  height: var(--portal-size);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0d0d;
+}
+
+.media-portal img,
+.media-portal video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
