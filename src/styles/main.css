@@ -5,22 +5,32 @@
 /* -------------------------------------------------------------------------- */
 @font-face {
   font-family: 'Platelet';
-  src: url('/fonts/Platelet.woff2') format('woff2'),
-       url('/fonts/Platelet.woff') format('woff'),
-       url('/fonts/Platelet.otf') format('opentype'),
-       url('/fonts/Platelet.ttf') format('truetype');
-  font-weight: 600;
+  src: url('/fonts/Platelet Thin Regular.otf') format('opentype');
+  font-weight: 100 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Platelet';
-  src: url('/fonts/Platelet-Regular.woff2') format('woff2'),
-       url('/fonts/Platelet-Regular.woff') format('woff'),
-       url('/fonts/Platelet-Regular.otf') format('opentype'),
-       url('/fonts/Platelet-Regular.ttf') format('truetype');
+  src: url('/fonts/Platelet Regular.ttf') format('truetype');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Platelet';
+  src: url('/fonts/Platelet Medium.ttf') format('truetype');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Platelet';
+  src: url('/fonts/Platelet Heavy Regular.otf') format('opentype');
+  font-weight: 700 900;
   font-style: normal;
   font-display: swap;
 }
