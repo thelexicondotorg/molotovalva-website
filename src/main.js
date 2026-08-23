@@ -62,7 +62,7 @@ const promptInitialY = calculateCenterOffset();
 if (portalEl) {
   gsap.set(portalEl, {
     opacity: 0,
-    y: -40, // drops from slightly above
+    y: -800, // starts from outside the screen above
   });
 }
 
