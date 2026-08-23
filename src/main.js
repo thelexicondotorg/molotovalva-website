@@ -99,7 +99,7 @@ if (promptEl) {
     {
       y: 0,
       duration: 1.0,
-      ease: 'power2.out',
+      ease: 'power2.inOut',
     },
     'reveal'
   );
@@ -112,7 +112,7 @@ if (portalEl) {
       opacity: 1,
       y: 0,
       duration: 1.0,
-      ease: 'power2.out',
+      ease: 'power2.inOut',
     },
     'reveal'
   );
