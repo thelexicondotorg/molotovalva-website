@@ -127,6 +127,11 @@ body {
   transition: opacity 0.15s ease;
 }
 
+.terminal-prompt.static-prompt {
+  cursor: default;
+  pointer-events: none;
+}
+
 .terminal-prompt:hover {
   opacity: 0.8;
 }

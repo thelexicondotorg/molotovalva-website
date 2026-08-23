@@ -131,7 +131,7 @@ if (promptEl) {
       .split('')
       .map((char) => `<span class="letter">${char}</span>`)
       .join('');
-    
+
     // Refresh letters after innerHTML change
     const newLetters = Array.from(promptTextEl.querySelectorAll('.letter'));
     const allElements = [prefix, ...newLetters, cursor];
@@ -174,7 +174,11 @@ if (promptEl) {
         ease: 'power2.inOut',
         onComplete: () => {
           // Scene 2: Type "hello_this_is_molotov"
-          const scene2Tl = gsap.timeline();
+          const scene2Tl = gsap.timeline({
+            onComplete: () => {
+              promptEl.classList.add('static-prompt');
+            }
+          });
           scene2Tl.to(promptTextEl, {
             text: { value: "hello", delimiter: "" },
             duration: 0.5,
@@ -190,3 +194,4 @@ if (promptEl) {
     });
   });
 }
+
