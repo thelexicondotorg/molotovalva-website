@@ -117,3 +117,76 @@ if (portalEl) {
     'reveal'
   );
 }
+
+// 3. Click-to-Enter Exit Animation
+if (promptEl) {
+  promptEl.addEventListener('click', () => {
+    // Prepare prompt letters, prefix, and cursor for animation
+    const prefix = promptEl.querySelector('.prompt-prefix');
+    const cursor = promptEl.querySelector('.terminal-cursor');
+    const letters = Array.from(promptTextEl.querySelectorAll('.letter'));
+    const elementsToFall = [prefix, ...letters, cursor];
+
+    promptTextEl.innerHTML = promptTextEl.innerText
+      .split('')
+      .map((char) => `<span class="letter">${char}</span>`)
+      .join('');
+    
+    // Refresh letters after innerHTML change
+    const newLetters = Array.from(promptTextEl.querySelectorAll('.letter'));
+    const allElements = [prefix, ...newLetters, cursor];
+
+    const exitTl = gsap.timeline();
+
+    // Shrink mask (Iris-out transition)
+    if (portalEl) {
+      // Initialize clip-path
+      gsap.set(portalEl, { clipPath: 'circle(50% at 50% 50%)' });
+      exitTl.to(portalEl, {
+        clipPath: 'circle(0% at 50% 50%)',
+        duration: 1.0,
+        ease: 'power1.in',
+      }, 0);
+    }
+
+    // Letters, prefix, and cursor fall down and fade out (Matrix rain)
+    exitTl.to(allElements, {
+      y: () => gsap.utils.random(200, 500), // Random fall distance
+      opacity: 0,
+      duration: () => gsap.utils.random(0.5, 1.5), // Random falling speed
+      stagger: {
+        amount: 0.8, // More spread out
+        from: 'random',
+      },
+      ease: 'power1.in',
+    }, 0);
+
+    // Reset cursor position and move to center
+    exitTl.call(() => {
+      promptTextEl.innerHTML = '';
+      // Reset all elements that fell
+      gsap.set(allElements, { clearProps: 'all' });
+      
+      gsap.to(promptEl, {
+        y: promptInitialY,
+        opacity: 1,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          // Scene 2: Type "hello_this_is_molotov"
+          const scene2Tl = gsap.timeline();
+          scene2Tl.to(promptTextEl, {
+            text: { value: "hello", delimiter: "" },
+            duration: 0.5,
+            ease: "none"
+          })
+          .to(promptTextEl, {
+            text: { value: "hello_this_is_molotov", delimiter: "" },
+            duration: 1.0,
+            ease: "none"
+          }, "+=0.2");
+        }
+      });
+    });
+  });
+}
