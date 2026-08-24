@@ -9,30 +9,33 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
   </head>
-  <body class="bg-black text-white min-h-screen flex flex-col justify-center items-center font-mono selection:bg-[#00E900] selection:text-black">
+  <body class="bg-black text-white min-h-screen font-mono selection:bg-[#00E900] selection:text-black overflow-x-hidden">
     
-    <!-- Landing Main Content Area (Centered Viewport) -->
-    <main class="w-full flex-grow flex flex-col items-center justify-center px-6">
-      
-      <!-- Central Portal Section -->
-      <section class="flex flex-col items-center justify-center text-center">
+    <!-- 1366px Main Canvas Wrapper (Fixed Viewport Stage) -->
+    <div id="canvas-container" class="fixed inset-0 pointer-events-none flex justify-center z-10">
+      <div id="main-canvas" class="w-full max-w-[1366px] h-full relative px-6 flex flex-col items-center justify-center">
         
-        <!-- Central Media Portal: 300px x 300px Circular Mask -->
-        <div class="media-portal border border-neutral-900 shadow-2xl" id="media-portal">
-          <img 
-            src="/images/01-click_to_enter.jpg" 
-            alt="Central Media Portal" 
-            class="w-full h-full object-cover"
-          />
-        </div>
+        <!-- Central Portal Section -->
+        <section class="flex flex-col items-center justify-center text-center pointer-events-auto">
+          
+          <!-- Central Media Portal: 300px x 300px Circular Mask -->
+          <div class="media-portal border border-neutral-900 shadow-2xl" id="media-portal">
+            <img 
+              src="/images/01-click_to_enter.jpg" 
+              alt="Central Media Portal" 
+              class="w-full h-full object-cover"
+            />
+          </div>
 
-        <!-- Interactive Terminal Prompt -->
-        <div class="terminal-prompt" role="button" tabindex="0" id="terminal-prompt">
-          <span class="prompt-prefix">&gt;:&nbsp;</span><span id="prompt-text"></span><span class="terminal-cursor">_</span>
-        </div>
+          <!-- Interactive Terminal Prompt -->
+          <div class="terminal-prompt" role="button" tabindex="0" id="terminal-prompt">
+            <span class="prompt-prefix">&gt;:&nbsp;</span><span id="prompt-text"></span><span class="terminal-cursor">_</span>
+          </div>
+
+        </section>
 
         <!-- Scroll Indicator -->
-        <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center">
+        <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
           <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
             <!-- Mouse Body -->
             <rect x="10" y="5" width="20" height="35" rx="10" />
@@ -43,9 +46,11 @@
           </svg>
         </div>
 
-      </section>
+      </div>
+    </div>
 
-    </main>
+    <!-- Scroll Track (Allows scrolling for GSAP ScrollTrigger) -->
+    <div id="scroll-track" class="w-full h-[2500px]"></div>
 
     <!-- Application Script Entrypoint -->
     <script type="module" src="/src/main.js"></script>

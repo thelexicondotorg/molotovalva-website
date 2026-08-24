@@ -18,6 +18,10 @@ export const lenis = new Lenis({
   touchMultiplier: 2,
 });
 
+// Stop Lenis during Scene 1 initial load
+lenis.stop();
+window.scrollTo(0, 0);
+
 // Synchronize Lenis scroll updates with GSAP ScrollTrigger
 lenis.on('scroll', ScrollTrigger.update);
 
@@ -40,6 +44,8 @@ window.ScrollTrigger = ScrollTrigger;
 const portalEl = document.getElementById('media-portal');
 const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
+const mainCanvasEl = document.getElementById('main-canvas');
+const scrollIndicator = document.getElementById('scroll-indicator');
 
 // Calculate the vertical offset to place the prompt at the exact center of the screen
 function calculateCenterOffset() {
@@ -83,7 +89,7 @@ if (promptTextEl) {
       delimiter: '',
     },
     duration: 1.0,
-    delay: 1.5, // 0.5s shorter than previous 2.0s
+    delay: 1.5,
     ease: 'none',
   });
 }
@@ -118,7 +124,7 @@ if (portalEl) {
   );
 }
 
-// 3. Click-to-Enter Exit Animation
+// 3. Click-to-Enter Exit Animation & Transition to Scene 2
 if (promptEl) {
   promptEl.addEventListener('click', () => {
     // Prepare prompt letters, prefix, and cursor for animation
@@ -140,7 +146,6 @@ if (promptEl) {
 
     // Shrink mask (Iris-out transition)
     if (portalEl) {
-      // Initialize clip-path
       gsap.set(portalEl, { clipPath: 'circle(50% at 50% 50%)' });
       exitTl.to(portalEl, {
         clipPath: 'circle(0% at 50% 50%)',
@@ -151,20 +156,19 @@ if (promptEl) {
 
     // Letters, prefix, and cursor fall down and fade out (Matrix rain)
     exitTl.to(allElements, {
-      y: () => gsap.utils.random(200, 500), // Random fall distance
+      y: () => gsap.utils.random(200, 500),
       opacity: 0,
-      duration: () => gsap.utils.random(0.5, 1.5), // Random falling speed
+      duration: () => gsap.utils.random(0.5, 1.5),
       stagger: {
-        amount: 0.8, // More spread out
+        amount: 0.8,
         from: 'random',
       },
       ease: 'power1.in',
     }, 0);
 
-    // Reset cursor position and move to center
+    // Reset cursor position and move to center for Scene 2
     exitTl.call(() => {
       promptTextEl.innerHTML = '';
-      // Reset all elements that fell
       gsap.set(allElements, { clearProps: 'all' });
       
       gsap.to(promptEl, {
@@ -178,36 +182,80 @@ if (promptEl) {
             onComplete: () => {
               promptEl.classList.add('static-prompt');
 
-              // Fade in container
-              const scrollIndicator = document.getElementById('scroll-indicator');
-              gsap.to(scrollIndicator, {
-                opacity: 1,
-                duration: 1.0,
-                ease: 'power2.inOut',
-              });
+              // 1. Fade in scroll indicator
+              if (scrollIndicator) {
+                gsap.to(scrollIndicator, {
+                  opacity: 1,
+                  duration: 1.0,
+                  ease: 'power2.inOut',
+                });
 
-              // Subtle vertical bounce for the entire container
-              gsap.to(scrollIndicator, {
-                y: -10,
-                duration: 1.5,
-                repeat: -1,
-                yoyo: true,
-                ease: 'power1.inOut'
-              });
+                // Subtle vertical bounce for scroll indicator container
+                gsap.to(scrollIndicator, {
+                  y: -10,
+                  duration: 1.5,
+                  repeat: -1,
+                  yoyo: true,
+                  ease: 'power1.inOut'
+                });
 
-              // Animate child elements (line and chevrons)
-              const elements = scrollIndicator.querySelectorAll('.scroll-anim');
-              const tl = gsap.timeline({ repeat: -1 });
+                // Animate child elements (line and chevrons)
+                const elements = scrollIndicator.querySelectorAll('.scroll-anim');
+                const chevronTl = gsap.timeline({ repeat: -1 });
+                
+                chevronTl.fromTo(elements,
+                  { opacity: 0, y: -5 },
+                  { opacity: 1, y: 5, duration: 0.75, stagger: 0.2, ease: "power1.in" }
+                )
+                .to(elements,
+                  { opacity: 0, y: 15, duration: 0.75, stagger: 0.2, ease: "power1.out" }
+                );
+              }
+
+              // 2. Enable Lenis smooth scroll now that Scene 2 is active
+              lenis.start();
+              window.scrollTo(0, 0);
+              ScrollTrigger.refresh();
+
+              // 3. Compute delta to top-left of the 1366px canvas
+              const canvasRect = mainCanvasEl ? mainCanvasEl.getBoundingClientRect() : { left: 24, top: 24 };
+              const promptRect = promptEl.getBoundingClientRect();
               
-              tl.fromTo(elements,
-                { opacity: 0, y: -5 },
-                { opacity: 1, y: 5, duration: 0.75, stagger: 0.2, ease: "power1.in" }
-              )
-              .to(elements,
-                { opacity: 0, y: 15, duration: 0.75, stagger: 0.2, ease: "power1.out" }
-              );
+              const targetLeft = canvasRect.left + 24;
+              const targetTop = canvasRect.top + 24;
+              const deltaX = targetLeft - promptRect.left;
+              const deltaY = targetTop - promptRect.top;
+
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 500px scroll scrub
+              const scrollTl = gsap.timeline({
+                scrollTrigger: {
+                  trigger: '#scroll-track',
+                  start: 'top top',
+                  end: '500px top',
+                  scrub: true,
+                  invalidateOnRefresh: true,
+                }
+              });
+
+              // Animate prompt: shrink to half size and move to top-left of 1366px canvas
+              scrollTl.to(promptEl, {
+                scale: 0.5,
+                transformOrigin: 'left top',
+                x: deltaX,
+                y: promptInitialY + deltaY,
+                ease: 'none',
+              }, 0);
+
+              // Animate scroll indicator: fade out smoothly
+              if (scrollIndicator) {
+                scrollTl.to(scrollIndicator, {
+                  opacity: 0,
+                  ease: 'none',
+                }, 0);
+              }
             }
           });
+
           scene2Tl.to(promptTextEl, {
             text: { value: "hello", delimiter: "" },
             duration: 0.5,
