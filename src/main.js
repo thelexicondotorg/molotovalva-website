@@ -177,6 +177,35 @@ if (promptEl) {
           const scene2Tl = gsap.timeline({
             onComplete: () => {
               promptEl.classList.add('static-prompt');
+
+              // Fade in container
+              const scrollIndicator = document.getElementById('scroll-indicator');
+              gsap.to(scrollIndicator, {
+                opacity: 1,
+                duration: 1.0,
+                ease: 'power2.inOut',
+              });
+
+              // Subtle vertical bounce for the entire container
+              gsap.to(scrollIndicator, {
+                y: -10,
+                duration: 1.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut'
+              });
+
+              // Animate child elements (line and chevrons)
+              const elements = scrollIndicator.querySelectorAll('.scroll-anim');
+              const tl = gsap.timeline({ repeat: -1 });
+              
+              tl.fromTo(elements,
+                { opacity: 0, y: -5 },
+                { opacity: 1, y: 5, duration: 0.75, stagger: 0.2, ease: "power1.in" }
+              )
+              .to(elements,
+                { opacity: 0, y: 15, duration: 0.75, stagger: 0.2, ease: "power1.out" }
+              );
             }
           });
           scene2Tl.to(promptTextEl, {

@@ -31,6 +31,18 @@
           <span class="prompt-prefix">&gt;:&nbsp;</span><span id="prompt-text"></span><span class="terminal-cursor">_</span>
         </div>
 
+        <!-- Scroll Indicator -->
+        <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center">
+          <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Mouse Body -->
+            <rect x="10" y="5" width="20" height="35" rx="10" />
+            <line class="scroll-anim" x1="20" y1="5" x2="20" y2="15" />
+            <!-- Chevrons -->
+            <path class="scroll-anim" d="M12 50 L20 58 L28 50" />
+            <path class="scroll-anim" d="M12 60 L20 68 L28 60" />
+          </svg>
+        </div>
+
       </section>
 
     </main>
