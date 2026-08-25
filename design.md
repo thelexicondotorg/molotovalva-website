@@ -29,7 +29,7 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
   - Text Align: `center`
   - CSS Class: `.scene-heading`
 - **Narrative Subheading Specs:**
-  - Font Size: `1.5rem` (`24px`)
+  - Font Size: `1.3rem` (`20.8px`)
   - Font Weight: `400` (Regular / Italic)
   - Line Height: `1.4`
   - Color: `#A3A3A3`
@@ -51,7 +51,7 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 
 #### Scene Narrative Headings & Subheadings
 - **Heading Style:** Serif narrative headline (`.scene-heading`), Adobe Garamond Pro Regular, `3rem`, `#B59E59`
-- **Subheading Style:** Serif narrative subtitle (`.scene-subheading`), Adobe Garamond Pro Regular/Italic, `1.5rem`, `#A3A3A3`
+- **Subheading Style:** Serif narrative subtitle (`.scene-subheading`), Adobe Garamond Pro Regular/Italic, `1.3rem`, `#A3A3A3`
 - **Placement:** Centered horizontally, stacked directly below the 5-circle row
 
 ## Invariant Design Rules (Never Change Across Iterations)
@@ -59,5 +59,5 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 2. Terminal text MUST remain `#00E900` using Platelet font at `2rem` / `600` weight.
 3. Portal MUST remain a perfect `300px` circular mask during single-portal focus.
 4. Scene headings MUST use Adobe Garamond Pro Regular at `3rem` with `#B59E59` fill.
-5. Scene subheadings MUST use Adobe Garamond Pro Regular/Italic at `1.5rem` with `#A3A3A3` fill.
+5. Scene subheadings MUST use Adobe Garamond Pro Regular/Italic at `1.3rem` with `#A3A3A3` fill.
 6. Do NOT add animation timelines, scroll triggers, or keyframes until static layout phase is finalized.
