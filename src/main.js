@@ -226,12 +226,12 @@ if (promptEl) {
               const deltaX = targetLeft - promptRect.left;
               const deltaY = targetTop - promptRect.top;
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 2500px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 3800px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '2500px top',
+                  end: '3800px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -255,24 +255,63 @@ if (promptEl) {
                 }, 0);
               }
 
+              // Phase 1: Sequential Center Flashes (500px -> 2500px)
               // Circle 1: Appears at 500px, holds 200px (500-700), fades out in 300px (700-1000)
-              scrollTl.set('#circle-1', { opacity: 1 }, 500);
+              scrollTl.fromTo('#circle-1', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 500);
               scrollTl.to('#circle-1', { opacity: 0, duration: 300, ease: 'none' }, 700);
 
               // Circle 2: Appears at 1000px, holds 200px (1000-1200), fades out in 300px (1200-1500)
-              scrollTl.set('#circle-2', { opacity: 1 }, 1000);
+              scrollTl.fromTo('#circle-2', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 1000);
               scrollTl.to('#circle-2', { opacity: 0, duration: 300, ease: 'none' }, 1200);
 
               // Circle 3: Appears at 1500px, holds 200px (1500-1700), fades out in 300px (1700-2000)
-              scrollTl.set('#circle-3', { opacity: 1 }, 1500);
+              scrollTl.fromTo('#circle-3', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 1500);
               scrollTl.to('#circle-3', { opacity: 0, duration: 300, ease: 'none' }, 1700);
 
               // Circle 4: Appears at 2000px, holds 200px (2000-2200), fades out in 300px (2200-2500)
-              scrollTl.set('#circle-4', { opacity: 1 }, 2000);
+              scrollTl.fromTo('#circle-4', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 2000);
               scrollTl.to('#circle-4', { opacity: 0, duration: 300, ease: 'none' }, 2200);
 
-              // Circle 5: Appears at 2500px, stays visible (does not fade out)
-              scrollTl.set('#circle-5', { opacity: 1 }, 2500);
+              // Circle 5: Appears at 2500px, holds center for 200px (2500-2700)
+              scrollTl.fromTo('#circle-5', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 2500);
+
+              // Phase 2: Circle 5 glides to Slot 5 (Far Right) & scales to row size (2700px -> 3000px)
+              const rowScale = 170 / 300; // 0.5667
+              scrollTl.to('#circle-5', {
+                x: 388,
+                scale: rowScale,
+                duration: 300,
+                ease: 'none',
+              }, 2700);
+
+              // Phase 3: Other 4 circles fade in into their respective row positions in random order (3000px -> 3800px)
+              // 1st: Circle 3 into Slot 3 (Center: x = 0) from 3000px -> 3200px
+              scrollTl.fromTo('#circle-3',
+                { x: 0, scale: rowScale, opacity: 0 },
+                { x: 0, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                3000
+              );
+
+              // 2nd: Circle 1 into Slot 1 (Far Left: x = -388) from 3200px -> 3400px
+              scrollTl.fromTo('#circle-1',
+                { x: -388, scale: rowScale, opacity: 0 },
+                { x: -388, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                3200
+              );
+
+              // 3rd: Circle 4 into Slot 4 (Right Center: x = +194) from 3400px -> 3600px
+              scrollTl.fromTo('#circle-4',
+                { x: 194, scale: rowScale, opacity: 0 },
+                { x: 194, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                3400
+              );
+
+              // 4th: Circle 2 into Slot 2 (Left Center: x = -194) from 3600px -> 3800px
+              scrollTl.fromTo('#circle-2',
+                { x: -194, scale: rowScale, opacity: 0 },
+                { x: -194, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                3600
+              );
             }
           });
 
