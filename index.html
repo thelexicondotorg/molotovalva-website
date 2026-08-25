@@ -34,6 +34,56 @@
 
         </section>
 
+        <!-- Scene 2: 5 Central Portals (Each 300px x 300px, Stacked at Center, Initially Opacity 0) -->
+        <div id="scene2-portals" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+          
+          <!-- Circle 1: Toxic Runoff -->
+          <div id="circle-1" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#071208]">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#1a3a1b] via-[#0d220e] to-[#040904] flex flex-col items-center justify-center text-center p-6 select-none">
+              <span class="text-5xl mb-3">☣️</span>
+              <span class="text-sm tracking-widest text-[#5cd663] uppercase font-bold">1: Toxic Runoff</span>
+              <span class="text-xs text-neutral-400 mt-2 font-mono">Industrial Discharge</span>
+            </div>
+          </div>
+
+          <!-- Circle 2: Fish Skull -->
+          <div id="circle-2" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#081518]">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#113138] via-[#091b20] to-[#03090b] flex flex-col items-center justify-center text-center p-6 select-none">
+              <span class="text-5xl mb-3">☠️</span>
+              <span class="text-sm tracking-widest text-[#4ecdc4] uppercase font-bold">2: Fish Skull</span>
+              <span class="text-xs text-neutral-400 mt-2 font-mono">Cranial Remains</span>
+            </div>
+          </div>
+
+          <!-- Circle 3: Fish Spine / Vertebrae -->
+          <div id="circle-3" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#071610]">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0e2c20] via-[#071811] to-[#020805] flex flex-col items-center justify-center text-center p-6 select-none">
+              <span class="text-5xl mb-3">🦴</span>
+              <span class="text-sm tracking-widest text-[#2ecc71] uppercase font-bold">3: Vertebrae</span>
+              <span class="text-xs text-neutral-400 mt-2 font-mono">Aquatic Skeleton</span>
+            </div>
+          </div>
+
+          <!-- Circle 4: Smokestacks -->
+          <div id="circle-4" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#141414]">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] flex flex-col items-center justify-center text-center p-6 select-none">
+              <span class="text-5xl mb-3">🏭</span>
+              <span class="text-sm tracking-widest text-[#dcdde1] uppercase font-bold">4: Smokestacks</span>
+              <span class="text-xs text-neutral-400 mt-2 font-mono">Atmospheric Plume</span>
+            </div>
+          </div>
+
+          <!-- Circle 5: Wildfire & Supplication -->
+          <div id="circle-5" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#1c0d06]">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#3d1a08] via-[#240e04] to-[#0c0401] flex flex-col items-center justify-center text-center p-6 select-none">
+              <span class="text-5xl mb-3">🔥</span>
+              <span class="text-sm tracking-widest text-[#f39c12] uppercase font-bold">5: Anthropocene</span>
+              <span class="text-xs text-neutral-400 mt-2 font-mono">Wildfire & Prayer</span>
+            </div>
+          </div>
+
+        </div>
+
         <!-- Scroll Indicator -->
         <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
           <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
@@ -50,7 +100,7 @@
     </div>
 
     <!-- Scroll Track (Allows scrolling for GSAP ScrollTrigger) -->
-    <div id="scroll-track" class="w-full h-[2500px]"></div>
+    <div id="scroll-track" class="w-full h-[5000px]"></div>
 
     <!-- Application Script Entrypoint -->
     <script type="module" src="/src/main.js"></script>

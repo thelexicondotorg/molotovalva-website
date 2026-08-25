@@ -226,33 +226,53 @@ if (promptEl) {
               const deltaX = targetLeft - promptRect.left;
               const deltaY = targetTop - promptRect.top;
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 500px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 2500px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '500px top',
+                  end: '2500px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
               });
 
-              // Animate prompt: shrink to half size and move to top-left of 1366px canvas
+              // Phase 0 (0px -> 500px): Prompt shrinks & moves to top-left, scroll indicator fades out
               scrollTl.to(promptEl, {
                 scale: 0.5,
                 transformOrigin: 'left top',
                 x: deltaX,
                 y: promptInitialY + deltaY,
+                duration: 500,
                 ease: 'none',
               }, 0);
 
-              // Animate scroll indicator: fade out smoothly
               if (scrollIndicator) {
                 scrollTl.to(scrollIndicator, {
                   opacity: 0,
+                  duration: 500,
                   ease: 'none',
                 }, 0);
               }
+
+              // Circle 1: Appears at 500px, holds 200px (500-700), fades out in 300px (700-1000)
+              scrollTl.set('#circle-1', { opacity: 1 }, 500);
+              scrollTl.to('#circle-1', { opacity: 0, duration: 300, ease: 'none' }, 700);
+
+              // Circle 2: Appears at 1000px, holds 200px (1000-1200), fades out in 300px (1200-1500)
+              scrollTl.set('#circle-2', { opacity: 1 }, 1000);
+              scrollTl.to('#circle-2', { opacity: 0, duration: 300, ease: 'none' }, 1200);
+
+              // Circle 3: Appears at 1500px, holds 200px (1500-1700), fades out in 300px (1700-2000)
+              scrollTl.set('#circle-3', { opacity: 1 }, 1500);
+              scrollTl.to('#circle-3', { opacity: 0, duration: 300, ease: 'none' }, 1700);
+
+              // Circle 4: Appears at 2000px, holds 200px (2000-2200), fades out in 300px (2200-2500)
+              scrollTl.set('#circle-4', { opacity: 1 }, 2000);
+              scrollTl.to('#circle-4', { opacity: 0, duration: 300, ease: 'none' }, 2200);
+
+              // Circle 5: Appears at 2500px, stays visible (does not fade out)
+              scrollTl.set('#circle-5', { opacity: 1 }, 2500);
             }
           });
 
