@@ -226,12 +226,12 @@ if (promptEl) {
               const deltaX = targetLeft - promptRect.left;
               const deltaY = targetTop - promptRect.top;
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 3800px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 4600px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '3800px top',
+                  end: '4600px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -325,6 +325,21 @@ if (promptEl) {
                   startTime
                 );
               });
+
+              // Phase 5: Subheading Part 1 & Part 2 sequential fade-in (3800px -> 4600px)
+              // Part 1: Fades in over 300px (3800-4100), holds for 200px (4100-4300)
+              scrollTl.fromTo('#subheading-part1',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                3800
+              );
+
+              // Part 2 (italic): Fades in over 300px (4300-4600)
+              scrollTl.fromTo('#subheading-part2',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                4300
+              );
             }
           });
 
