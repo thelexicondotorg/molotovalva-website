@@ -257,61 +257,74 @@ if (promptEl) {
 
               // Phase 1: Sequential Center Flashes (500px -> 2500px)
               // Circle 1: Appears at 500px, holds 200px (500-700), fades out in 300px (700-1000)
-              scrollTl.fromTo('#circle-1', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 500);
+              scrollTl.fromTo('#circle-1', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 500);
               scrollTl.to('#circle-1', { opacity: 0, duration: 300, ease: 'none' }, 700);
 
               // Circle 2: Appears at 1000px, holds 200px (1000-1200), fades out in 300px (1200-1500)
-              scrollTl.fromTo('#circle-2', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 1000);
+              scrollTl.fromTo('#circle-2', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 1000);
               scrollTl.to('#circle-2', { opacity: 0, duration: 300, ease: 'none' }, 1200);
 
               // Circle 3: Appears at 1500px, holds 200px (1500-1700), fades out in 300px (1700-2000)
-              scrollTl.fromTo('#circle-3', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 1500);
+              scrollTl.fromTo('#circle-3', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 1500);
               scrollTl.to('#circle-3', { opacity: 0, duration: 300, ease: 'none' }, 1700);
 
               // Circle 4: Appears at 2000px, holds 200px (2000-2200), fades out in 300px (2200-2500)
-              scrollTl.fromTo('#circle-4', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 2000);
+              scrollTl.fromTo('#circle-4', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 2000);
               scrollTl.to('#circle-4', { opacity: 0, duration: 300, ease: 'none' }, 2200);
 
               // Circle 5: Appears at 2500px, holds center for 200px (2500-2700)
-              scrollTl.fromTo('#circle-5', { opacity: 0, x: 0, scale: 1 }, { opacity: 1, x: 0, scale: 1, duration: 0.001, ease: 'none' }, 2500);
+              scrollTl.fromTo('#circle-5', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 2500);
 
-              // Phase 2: Circle 5 glides to Slot 5 (Far Right) & scales to row size (2700px -> 3000px)
+              // Phase 2: Circle 5 glides to Slot 5 (Far Right) & lifts upward to y: -95 (2700px -> 3000px)
               const rowScale = 170 / 300; // 0.5667
               scrollTl.to('#circle-5', {
                 x: 388,
+                y: -95,
                 scale: rowScale,
                 duration: 300,
                 ease: 'none',
               }, 2700);
 
-              // Phase 3: Other 4 circles fade in into their respective row positions in random order (3000px -> 3800px)
-              // 1st: Circle 3 into Slot 3 (Center: x = 0) from 3000px -> 3200px
+              // Phase 3: Other 4 circles fade into their row positions at y: -95 (3000px -> 3800px)
+              // 1st: Circle 3 into Slot 3 (Center: x = 0, y = -95) from 3000px -> 3200px
               scrollTl.fromTo('#circle-3',
-                { x: 0, scale: rowScale, opacity: 0 },
-                { x: 0, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: 0, y: -95, scale: rowScale, opacity: 0 },
+                { x: 0, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3000
               );
 
-              // 2nd: Circle 1 into Slot 1 (Far Left: x = -388) from 3200px -> 3400px
+              // 2nd: Circle 1 into Slot 1 (Far Left: x = -388, y = -95) from 3200px -> 3400px
               scrollTl.fromTo('#circle-1',
-                { x: -388, scale: rowScale, opacity: 0 },
-                { x: -388, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: -388, y: -95, scale: rowScale, opacity: 0 },
+                { x: -388, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3200
               );
 
-              // 3rd: Circle 4 into Slot 4 (Right Center: x = +194) from 3400px -> 3600px
+              // 3rd: Circle 4 into Slot 4 (Right Center: x = +194, y = -95) from 3400px -> 3600px
               scrollTl.fromTo('#circle-4',
-                { x: 194, scale: rowScale, opacity: 0 },
-                { x: 194, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: 194, y: -95, scale: rowScale, opacity: 0 },
+                { x: 194, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3400
               );
 
-              // 4th: Circle 2 into Slot 2 (Left Center: x = -194) from 3600px -> 3800px
+              // 4th: Circle 2 into Slot 2 (Left Center: x = -194, y = -95) from 3600px -> 3800px
               scrollTl.fromTo('#circle-2',
-                { x: -194, scale: rowScale, opacity: 0 },
-                { x: -194, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: -194, y: -95, scale: rowScale, opacity: 0 },
+                { x: -194, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3600
               );
+
+              // Phase 4: Heading word-by-word sequential fade-in (3000px -> 3800px)
+              // Synchronized directly with the 4 random circles appearing
+              const headingWords = document.querySelectorAll('#scene2-heading .heading-word');
+              headingWords.forEach((word, index) => {
+                const startTime = 3000 + index * 100;
+                scrollTl.fromTo(word,
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 100, ease: 'none', immediateRender: false },
+                  startTime
+                );
+              });
             }
           });
 

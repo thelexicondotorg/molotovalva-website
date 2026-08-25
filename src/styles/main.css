@@ -35,6 +35,38 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Adobe Garamond Pro';
+  src: url('/fonts/AGaramondPro-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Adobe Garamond Pro';
+  src: url('/fonts/AGaramondPro-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Adobe Garamond Pro';
+  src: url('/fonts/AGaramondPro-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Adobe Garamond Pro';
+  src: url('/fonts/AGaramondPro-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  DESIGN SYSTEM TOKENS (Source of Truth: design.md)                         */
 /* -------------------------------------------------------------------------- */
@@ -43,7 +75,9 @@
   --color-terminal: #00e900;
   --color-text-primary: #ffffff;
   --color-text-muted: #888888;
+  --color-gold: #b59e59;
   --font-terminal: 'Platelet', 'Courier New', Courier, monospace;
+  --font-serif: 'Adobe Garamond Pro', Garamond, 'Times New Roman', serif;
 }
 
 :root {
@@ -52,9 +86,11 @@
   --color-terminal: #00e900;
   --color-text-primary: #ffffff;
   --color-text-muted: #888888;
+  --color-gold: #b59e59;
 
   /* Typography */
   --font-terminal: 'Platelet', 'Courier New', Courier, monospace;
+  --font-serif: 'Adobe Garamond Pro', Garamond, 'Times New Roman', serif;
   --terminal-font-size: 2rem;
   --terminal-font-weight: 600;
 
@@ -177,3 +213,28 @@ body {
   object-fit: cover;
   display: block;
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Scene Narrative Headings & Subtitles                                      */
+/* -------------------------------------------------------------------------- */
+.scene-heading {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  line-height: 1.25;
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color: var(--color-gold);
+  text-align: center;
+  max-width: 1200px;
+}
+
+.scene-heading .heading-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
