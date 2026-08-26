@@ -243,8 +243,8 @@ if (promptEl) {
                     circle.style.width = '72px';
                     circle.style.height = '72px';
                     circle.style.backgroundImage = "url('/images/OhDeer.jpg')";
-                    circle.style.backgroundSize = '846px 330px';
-                    circle.style.backgroundPosition = `-${c * 86}px -${r * 86}px`;
+                    circle.style.backgroundSize = '846px 335px';
+                    circle.style.backgroundPosition = `-${c * 86}px -${r * 87.67}px`;
                     circle.style.backgroundRepeat = 'no-repeat';
                     circle.setAttribute('data-row', r);
                     circle.setAttribute('data-col', c);
@@ -270,12 +270,12 @@ if (promptEl) {
                 }
               }
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 8100px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 10000px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '8100px top',
+                  end: '10000px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -448,7 +448,7 @@ if (promptEl) {
                 ease: 'none',
               }, 6700);
 
-              // Phase 12: Scene 3 Step 1 — Large Deer Focus & Heading Start (7200px -> 7500px)
+              // Phase 12: Scene 3 Step 1 — Large Deer Focus & Initial Clause "You see the deer" (7200px -> 7500px)
               // 1. Deer Portal fades in centered over 100px (7200 -> 7300), holds for 200px (7300 -> 7500)
               scrollTl.fromTo('#scene3-deer-focus',
                 { opacity: 0, scale: 1, x: 0, y: 0 },
@@ -484,7 +484,8 @@ if (promptEl) {
                   7425
                 );
 
-                // Phase 13: Scene 3 Step 2 — Deer Migration & Left-Half Random Reveal (7500px -> 8100px)
+                // Phase 13: Scene 3 Step 2 — Left Half Grid Assembles (7500px -> 8100px)
+                // [HEADING IS PAUSED ON "You see the deer"]
                 // 1. Deer Portal glides and scales down into Slot (Row 4, Column 4)
                 scrollTl.to('#scene3-deer-focus', {
                   x: deerDeltaX,
@@ -524,37 +525,85 @@ if (promptEl) {
                   );
                 });
 
-                // 3. Heading words 5-9 ("but", "miss", "the", "burning", "forest.")
-                // Word 4: "but" (7500 -> 7620)
+                // Phase 14: Contemplation Hold (8100px -> 8300px)
+                // [200px stillness hold on completed pristine left half + "You see the deer"]
+
+                // Phase 15: Scene 3 Step 3 — Right Half (Cols 6-10) Wildfire Reveal & Heading Completion (8300px -> 8900px)
+                // 1. Randomized reveal of 20 circles of Columns 6-10 (Right Half)
+                const rightHalfCoords = [
+                  [1, 7], [0, 5], [2, 9], [3, 6], [0, 8],
+                  [1, 5], [2, 6], [3, 9], [0, 6], [2, 5],
+                  [1, 9], [3, 5], [0, 9], [2, 8], [1, 6],
+                  [3, 7], [0, 7], [2, 7], [1, 8], [3, 8]
+                ];
+
+                rightHalfCoords.forEach(([r, c], index) => {
+                  const circleId = `#scene3-circle-${r}-${c}`;
+                  const startTime = 8300 + index * 24;
+                  scrollTl.fromTo(circleId,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 120, ease: 'none', immediateRender: false },
+                    startTime
+                  );
+                });
+
+                // 2. Heading resumes to complete sentence: "...but miss the burning forest."
+                // Word 4: "but" (8300 -> 8420)
                 scrollTl.fromTo(scene3HeadingWords[4],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
-                  7500
+                  8300
                 );
-                // Word 5: "miss" (7620 -> 7740)
+                // Word 5: "miss" (8420 -> 8540)
                 scrollTl.fromTo(scene3HeadingWords[5],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
-                  7620
+                  8420
                 );
-                // Word 6: "the" (7740 -> 7860)
+                // Word 6: "the" (8540 -> 8660)
                 scrollTl.fromTo(scene3HeadingWords[6],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
-                  7740
+                  8540
                 );
-                // Word 7: "burning" (7860 -> 7980)
+                // Word 7: "burning" (8660 -> 8780)
                 scrollTl.fromTo(scene3HeadingWords[7],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
-                  7860
+                  8660
                 );
-                // Word 8: "forest." (7980 -> 8100)
+                // Word 8: "forest." (8780 -> 8900)
                 scrollTl.fromTo(scene3HeadingWords[8],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
-                  7980
+                  8780
                 );
+
+                // Phase 16: Scene 3 Step 4 — Subheading Reveal & Horizontal Telescope Flip (8900px -> 10000px)
+                // 1. Part 1 fades in normally (8900 -> 9150)
+                scrollTl.fromTo('#scene3-subheading-part1',
+                  { opacity: 0, y: 8 },
+                  { opacity: 1, y: 0, duration: 250, ease: 'none', immediateRender: false },
+                  8900
+                );
+                // 2. Part 2 fades in simultaneously HORIZONTALLY MIRRORED (scaleX: -1) (8900 -> 9150)
+                scrollTl.fromTo('#scene3-subheading-part2',
+                  { opacity: 0, scaleX: -1, transformOrigin: 'center center' },
+                  { opacity: 1, scaleX: -1, transformOrigin: 'center center', duration: 250, ease: 'none', immediateRender: false },
+                  8900
+                );
+
+                // 3. Mirror Contemplation Hold (9150 -> 9300)
+
+                // 4. Physical horizontal flip: "Turns the telescope around" (scaleX: -1 -> 1) (9300 -> 9700)
+                scrollTl.to('#scene3-subheading-part2', {
+                  scaleX: 1,
+                  transformOrigin: 'center center',
+                  duration: 400,
+                  ease: 'power2.inOut',
+                }, 9300);
+
+                // 5. Final Scene 3 End-State Hold (9700 -> 10000)
               }
             }
           });

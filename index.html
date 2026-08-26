@@ -113,8 +113,8 @@
 
         <!-- Scene 3: Visuals & Narrative Container -->
         <div id="scene3-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
-          <!-- 4x10 Grid Container of 40 Circular Apertures (846px x 330px) -->
-          <div id="scene3-grid" class="relative w-[846px] h-[330px] grid grid-cols-10 grid-rows-4 gap-[14px] pointer-events-none" style="transform: translateY(-20px);">
+          <!-- 4x10 Grid Container of 40 Circular Apertures (846px x 335px matching OhDeer.jpg aspect ratio) -->
+          <div id="scene3-grid" class="relative w-[846px] h-[335px] grid grid-cols-10 grid-rows-4 gap-x-[14px] gap-y-[15.67px] pointer-events-none" style="transform: translateY(-20px);">
             <!-- 40 circles populated by JS with seamless continuous offsets -->
           </div>
 
@@ -131,16 +131,16 @@
               <span class="heading-word">burning</span>
               <span class="heading-word">forest.</span>
             </h2>
-            <p id="scene3-subheading" class="scene-subheading text-center select-none mt-4 opacity-0">
-              <span id="scene3-subheading-part1">The tools you use to find solutions limit what you’re able to see. </span>
-              <span id="scene3-subheading-part2" class="italic">(Turn the telescope around.)</span>
+            <p id="scene3-subheading" class="scene-subheading text-center select-none mt-4">
+              <span id="scene3-subheading-part1" class="inline-block opacity-0">The tools you use to find solutions limit what you’re able to see. </span>
+              <span id="scene3-subheading-part2" class="inline-block italic opacity-0 origin-center">(Turn the telescope around.)</span>
             </p>
           </div>
         </div>
 
         <!-- Scene 3: Initial Large Deer Focus Circle (300px centered) -->
         <div id="scene3-deer-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div id="scene3-deer-focus" class="w-[300px] h-[300px] rounded-full overflow-hidden opacity-0 pointer-events-none relative" style="background-image: url('/images/OhDeer.jpg'); background-size: 3525px 1375px; background-position: -1075px -1075px; background-repeat: no-repeat;">
+          <div id="scene3-deer-focus" class="w-[300px] h-[300px] rounded-full overflow-hidden opacity-0 pointer-events-none relative" style="background-image: url('/images/OhDeer.jpg'); background-size: 3525px 1397px; background-position: -1075px -1096px; background-repeat: no-repeat;">
           </div>
         </div>
 
@@ -160,7 +160,7 @@
     </div>
 
     <!-- Scroll Track (Allows scrolling for GSAP ScrollTrigger) -->
-    <div id="scroll-track" class="w-full h-[10000px]"></div>
+    <div id="scroll-track" class="w-full h-[12000px]"></div>
 
     <!-- Application Script Entrypoint -->
     <script type="module" src="/src/main.js"></script>
