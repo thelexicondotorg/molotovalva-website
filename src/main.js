@@ -226,12 +226,56 @@ if (promptEl) {
               const deltaX = targetLeft - promptRect.left;
               const deltaY = targetTop - promptRect.top;
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 6500px scroll scrub
+              // Scene 3 Prompt delta to top-left
+              const scene3PromptEl = document.querySelector('#scene3-prompt');
+              const scene3Rect = scene3PromptEl ? scene3PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
+              const scene3DeltaX = targetLeft - scene3Rect.left;
+              const scene3DeltaY = targetTop - scene3Rect.top;
+
+              // Populate Scene 3: 4x10 grid of 40 circular apertures
+              const scene3GridEl = document.querySelector('#scene3-grid');
+              if (scene3GridEl && scene3GridEl.children.length === 0) {
+                for (let r = 0; r < 4; r++) {
+                  for (let c = 0; c < 10; c++) {
+                    const circle = document.createElement('div');
+                    circle.id = `scene3-circle-${r}-${c}`;
+                    circle.className = 'scene3-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
+                    circle.style.width = '72px';
+                    circle.style.height = '72px';
+                    circle.style.backgroundImage = "url('/images/OhDeer.jpg')";
+                    circle.style.backgroundSize = '846px 330px';
+                    circle.style.backgroundPosition = `-${c * 86}px -${r * 86}px`;
+                    circle.style.backgroundRepeat = 'no-repeat';
+                    circle.setAttribute('data-row', r);
+                    circle.setAttribute('data-col', c);
+                    scene3GridEl.appendChild(circle);
+                  }
+                }
+              }
+
+              // Scene 3 Deer Portal Delta calculation
+              const deerFocusEl = document.querySelector('#scene3-deer-focus');
+              const deerSlotEl = document.querySelector('#scene3-circle-3-3');
+              let deerDeltaX = -129;
+              let deerDeltaY = 109;
+              let deerScale = 0.24;
+
+              if (deerFocusEl && deerSlotEl) {
+                const focusRect = deerFocusEl.getBoundingClientRect();
+                const slotRect = deerSlotEl.getBoundingClientRect();
+                if (focusRect.width > 0 && slotRect.width > 0) {
+                  deerDeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
+                  deerDeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
+                  deerScale = slotRect.width / focusRect.width;
+                }
+              }
+
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 8100px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '6500px top',
+                  end: '8100px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -390,6 +434,128 @@ if (promptEl) {
                 duration: 600,
                 ease: 'none',
               }, 5900);
+
+              // Phase 10: Scene 3 Prompt Centered Hold (6500px -> 6700px)
+              // 200px stillness hold at screen center before migrating to corner
+
+              // Phase 11: Scene 3 Prompt Shrinks & Moves to Upper-Left Corner (6700px -> 7200px)
+              scrollTl.to('#scene3-prompt', {
+                scale: 0.5,
+                transformOrigin: 'left top',
+                x: scene3DeltaX,
+                y: scene3DeltaY,
+                duration: 500,
+                ease: 'none',
+              }, 6700);
+
+              // Phase 12: Scene 3 Step 1 — Large Deer Focus & Heading Start (7200px -> 7500px)
+              // 1. Deer Portal fades in centered over 100px (7200 -> 7300), holds for 200px (7300 -> 7500)
+              scrollTl.fromTo('#scene3-deer-focus',
+                { opacity: 0, scale: 1, x: 0, y: 0 },
+                { opacity: 1, scale: 1, x: 0, y: 0, duration: 100, ease: 'none', immediateRender: false },
+                7200
+              );
+
+              // 2. Heading words 1-4 ("You", "see", "the", "deer") fade in sequentially
+              const scene3HeadingWords = document.querySelectorAll('#scene3-heading .heading-word');
+              if (scene3HeadingWords.length >= 9) {
+                // Word 0: "You" (7200 -> 7275)
+                scrollTl.fromTo(scene3HeadingWords[0],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 75, ease: 'none', immediateRender: false },
+                  7200
+                );
+                // Word 1: "see" (7275 -> 7350)
+                scrollTl.fromTo(scene3HeadingWords[1],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 75, ease: 'none', immediateRender: false },
+                  7275
+                );
+                // Word 2: "the" (7350 -> 7425)
+                scrollTl.fromTo(scene3HeadingWords[2],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 75, ease: 'none', immediateRender: false },
+                  7350
+                );
+                // Word 3: "deer" (7425 -> 7500)
+                scrollTl.fromTo(scene3HeadingWords[3],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 75, ease: 'none', immediateRender: false },
+                  7425
+                );
+
+                // Phase 13: Scene 3 Step 2 — Deer Migration & Left-Half Random Reveal (7500px -> 8100px)
+                // 1. Deer Portal glides and scales down into Slot (Row 4, Column 4)
+                scrollTl.to('#scene3-deer-focus', {
+                  x: deerDeltaX,
+                  y: deerDeltaY,
+                  scale: deerScale,
+                  duration: 600,
+                  ease: 'power1.inOut',
+                }, 7500);
+
+                // Seamless switch to grid circle at 8100px
+                scrollTl.fromTo('#scene3-circle-3-3',
+                  { opacity: 0 },
+                  { opacity: 1, duration: 20, ease: 'none', immediateRender: false },
+                  8080
+                );
+                scrollTl.to('#scene3-deer-focus', {
+                  opacity: 0,
+                  duration: 20,
+                  ease: 'none',
+                }, 8080);
+
+                // 2. Randomized reveal of remaining 19 circles of Columns 1-5 (Left Half)
+                const leftHalfCoords = [
+                  [1, 2], [0, 0], [2, 4], [3, 1], [0, 3],
+                  [1, 0], [2, 1], [3, 4], [0, 1], [2, 0],
+                  [1, 4], [3, 0], [0, 4], [2, 3], [1, 1],
+                  [3, 2], [0, 2], [2, 2], [1, 3]
+                ];
+
+                leftHalfCoords.forEach(([r, c], index) => {
+                  const circleId = `#scene3-circle-${r}-${c}`;
+                  const startTime = 7500 + index * 24;
+                  scrollTl.fromTo(circleId,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 120, ease: 'none', immediateRender: false },
+                    startTime
+                  );
+                });
+
+                // 3. Heading words 5-9 ("but", "miss", "the", "burning", "forest.")
+                // Word 4: "but" (7500 -> 7620)
+                scrollTl.fromTo(scene3HeadingWords[4],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
+                  7500
+                );
+                // Word 5: "miss" (7620 -> 7740)
+                scrollTl.fromTo(scene3HeadingWords[5],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
+                  7620
+                );
+                // Word 6: "the" (7740 -> 7860)
+                scrollTl.fromTo(scene3HeadingWords[6],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
+                  7740
+                );
+                // Word 7: "burning" (7860 -> 7980)
+                scrollTl.fromTo(scene3HeadingWords[7],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
+                  7860
+                );
+                // Word 8: "forest." (7980 -> 8100)
+                scrollTl.fromTo(scene3HeadingWords[8],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 120, ease: 'none', immediateRender: false },
+                  7980
+                );
+              }
             }
           });
 
