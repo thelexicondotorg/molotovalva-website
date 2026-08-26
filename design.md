@@ -61,3 +61,5 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 4. Scene headings MUST use Adobe Garamond Pro Regular at `3rem` with `#B59E59` fill.
 5. Scene subheadings MUST use Adobe Garamond Pro Regular/Italic at `1.3rem` with `#A3A3A3` fill.
 6. Do NOT add animation timelines, scroll triggers, or keyframes until static layout phase is finalized.
+7. Inter-scene transitions MUST follow the standardized Zero-Gravity Staggered Exit protocol documented in [animation.md](./animation.md).
+

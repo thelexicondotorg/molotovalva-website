@@ -226,12 +226,12 @@ if (promptEl) {
               const deltaX = targetLeft - promptRect.left;
               const deltaY = targetTop - promptRect.top;
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 4500px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 6500px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '4500px top',
+                  end: '6500px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -340,6 +340,56 @@ if (promptEl) {
                 { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
                 4200
               );
+
+              // Phase 6: Scene 2 Hold (4500px -> 5000px)
+              // 500px stillness hold with all Scene 2 elements at 100% opacity.
+
+              // Phase 7: Staggered "Zero Gravity" Rise & Fade Out of Scene 2 Elements (5000px -> 5550px)
+              // 1st to go: "hello_this_is_molotov_" prompt (5000px -> 5250px)
+              scrollTl.to(promptEl, {
+                y: promptInitialY + deltaY - 200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 5000);
+
+              // 2nd to go: 5 Circles row (5100px -> 5350px)
+              scrollTl.to('#scene2-portals', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 5100);
+
+              // 3rd to go: Heading (5200px -> 5450px)
+              scrollTl.to('#scene2-heading', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 5200);
+
+              // 4th to go: Sub-heading (5300px -> 5550px)
+              scrollTl.to('#scene2-subheading', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 5300);
+
+              // Phase 8: Scene 3 Prompt Rises cleanly to the Center (5500px -> 5900px)
+              scrollTl.fromTo('#scene3-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                5500
+              );
+
+              // Phase 9: Scene 3 Prompt Typing Sequence (5900px -> 6500px)
+              scrollTl.to('#scene3-prompt-text', {
+                text: { value: 'you_look_through_the_wrong_end_of_telescopes', delimiter: '' },
+                duration: 600,
+                ease: 'none',
+              }, 5900);
             }
           });
 
