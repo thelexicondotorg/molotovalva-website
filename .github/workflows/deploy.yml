@@ -1,4 +1,4 @@
-name: Deploy to DreamHost
+name: Deploy to Hostinger
 
 on:
   push:
@@ -20,16 +20,16 @@ jobs:
 
       - name: Install Dependencies & Build
         run: |
-          npm install
+          npm ci || npm install
           npm run build
 
-      - name: Deploy via SFTP to DreamHost
+      - name: Deploy via SFTP to Hostinger
         uses: wlixcc/SFTP-Deploy-Action@v1.2.6
         with:
-          server: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          port: 22
-          local_path: './dist/*'
-          remote_path: '/home/dh_59xwfr/molotovalva.dreamhosters.com/'
+          server: ${{ secrets.HOSTINGER_SERVER }}                                                                                                                                                                           
+          username: ${{ secrets.HOSTINGER_USERNAME }}                                                                                                                                                                       
+          password: ${{ secrets.HOSTINGER_PASSWORD }}                                                                                                                                                                       
+          port: ${{ secrets.HOSTINGER_PORT || 65002 }}                                                                                                                                                                      
+          local_path: './dist/*'                                                                                                                                                                                            
+              remote_path: ${{ secrets.HOSTINGER_REMOTE_PATH }}
           delete_remote_files: true
