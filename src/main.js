@@ -282,16 +282,16 @@ if (promptEl) {
                 const s4Assets = [
                   // Row 0
                   { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-02-placeholder.png')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-03-placeholder.png')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-04-placeholder.png')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-05-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-02-plane.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-03-Water.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-04-pumps.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-05-wood.jpg')", size: 'cover', pos: 'center' },
                   // Row 1
                   { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '0px center' },
                   { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '-158px center' },
-                  { bg: "url('/images/S4-08-placeholder.png')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-09-placeholder.png')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-10-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-08-activists.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-09-orangutan.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-10-diggers.jpg')", size: 'cover', pos: 'center' },
                 ];
 
                 for (let r = 0; r < 2; r++) {
@@ -846,21 +846,16 @@ if (promptEl) {
               }
 
               // Phase 29: Two-Line Subheading Reveal (16600px -> 17400px)
-              scrollTl.fromTo('#scene4-subheading',
-                { opacity: 0, y: 10 },
-                { opacity: 1, y: 0, duration: 250, ease: 'none', immediateRender: false },
-                16600
-              );
               // Line 1: (16600 -> 17000)
               scrollTl.fromTo('#scene4-subheading-line1',
-                { opacity: 0 },
-                { opacity: 1, duration: 400, ease: 'none', immediateRender: false },
+                { opacity: 0, y: 6 },
+                { opacity: 1, y: 0, duration: 400, ease: 'none', immediateRender: false },
                 16600
               );
               // Line 2: (17000 -> 17400)
               scrollTl.fromTo('#scene4-subheading-line2',
-                { opacity: 0 },
-                { opacity: 1, duration: 400, ease: 'none', immediateRender: false },
+                { opacity: 0, y: 6 },
+                { opacity: 1, y: 0, duration: 400, ease: 'none', immediateRender: false },
                 17000
               );
 
