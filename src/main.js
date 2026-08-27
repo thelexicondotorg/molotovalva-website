@@ -129,9 +129,51 @@ export function loadScene4Assets() {
   }
 }
 
+// Lazy load Scene 5 assets
+let scene5AssetsLoaded = false;
+export function loadScene5Assets() {
+  if (scene5AssetsLoaded) return;
+  scene5AssetsLoaded = true;
+
+  const s5Assets = [
+    // Row 0
+    { bg: "url('/images/S5-01-lungs.jpg')", size: 'cover', pos: 'center', url: '/images/S5-01-lungs.jpg' },
+    { bg: "url('/images/S5-02-cow.jpg')", size: 'cover', pos: 'center', url: '/images/S5-02-cow.jpg' },
+    // Row 1
+    { bg: "url('/images/S5-03-steakhealth.jpg')", size: 'cover', pos: 'center', url: '/images/S5-03-steakhealth.jpg' },
+    { bg: "url('/images/S5-04-comenothere.jpg')", size: 'cover', pos: 'center', url: '/images/S5-04-comenothere.jpg' },
+    // Row 2
+    { bg: "url('/images/S5-05-skull.jpg')", size: 'cover', pos: 'center', url: '/images/S5-05-skull.jpg' },
+    { bg: "url('/images/S5-06-dude.jpg')", size: 'cover', pos: 'center', url: '/images/S5-06-dude.jpg' },
+  ];
+
+  // Preload images into browser memory
+  s5Assets.forEach((item) => {
+    if (item.url) {
+      const img = new Image();
+      img.src = item.url;
+    }
+  });
+
+  // Attach backgrounds to Scene 5 3x2 grid
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 2; c++) {
+      const idx = r * 2 + c;
+      const circle = document.querySelector(`#scene5-circle-${r}-${c}`);
+      if (circle && s5Assets[idx]) {
+        circle.style.backgroundImage = s5Assets[idx].bg;
+        circle.style.backgroundSize = s5Assets[idx].size;
+        circle.style.backgroundPosition = s5Assets[idx].pos;
+        circle.style.backgroundRepeat = 'no-repeat';
+      }
+    }
+  }
+}
+
 // Global expose for console inspection
 window.loadScene3Assets = loadScene3Assets;
 window.loadScene4Assets = loadScene4Assets;
+window.loadScene5Assets = loadScene5Assets;
 
 // Build Scene 3 Grid Structure immediately (DOM-only, 0 bytes network)
 const scene3GridEl = document.querySelector('#scene3-grid');
@@ -163,6 +205,23 @@ if (scene4GridEl && scene4GridEl.children.length === 0) {
       circle.setAttribute('data-row', r);
       circle.setAttribute('data-col', c);
       scene4GridEl.appendChild(circle);
+    }
+  }
+}
+
+// Build Scene 5 Grid Structure immediately (DOM-only, 0 bytes network)
+const scene5GridEl = document.querySelector('#scene5-grid');
+if (scene5GridEl && scene5GridEl.children.length === 0) {
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 2; c++) {
+      const circle = document.createElement('div');
+      circle.id = `scene5-circle-${r}-${c}`;
+      circle.className = 'scene5-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
+      circle.style.width = '140px';
+      circle.style.height = '140px';
+      circle.setAttribute('data-row', r);
+      circle.setAttribute('data-col', c);
+      scene5GridEl.appendChild(circle);
     }
   }
 }
@@ -414,7 +473,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 21500;
+              const TOTAL_SCROLL_TRACK = 24200;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -434,6 +493,9 @@ function handleEnter() {
                     }
                     if (scrollPos >= 7000 && !scene4AssetsLoaded) {
                       loadScene4Assets();
+                    }
+                    if (scrollPos >= 14000 && !scene5AssetsLoaded) {
+                      loadScene5Assets();
                     }
                   }
                 }
@@ -1003,9 +1065,97 @@ function handleEnter() {
                 ease: 'none',
               }, 19300);
 
-              // Phase 35: Breathing Moment & Centered Hold (20000px -> 21500px)
-              // [1500px stillness hold on "you_say_no_instead_of_yes_" with cursor blinking]
-              scrollTl.to({}, { duration: 1 }, 21500);
+              // Phase 35: Breathing Moment & Centered Hold (20000px -> 20500px)
+              // [500px stillness hold on centered "you_say_no_instead_of_yes_" with cursor blinking]
+
+              // Phase 36: Scene 5 Prompt Migration to Top-Left Corner (20500px -> 21000px)
+              scrollTl.to('#scene5-prompt', {
+                scale: 0.5,
+                transformOrigin: 'left top',
+                x: scene5DeltaX,
+                y: scene5DeltaY,
+                duration: 500,
+                ease: 'none',
+              }, 20500);
+
+              // Phase 37: Option 2 - Orbital Gravitational Convergence (21000px -> 22400px)
+              // 6 circles start dispersed across deep space and converge into 3x2 grid slots
+              
+              // Row 0, Col 0 (Lungs) - converges from upper-left
+              scrollTl.fromTo('#scene5-circle-0-0',
+                { x: -140, y: -100, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21000
+              );
+
+              // Row 0, Col 1 (Cow) - converges from upper-right
+              scrollTl.fromTo('#scene5-circle-0-1',
+                { x: 140, y: -90, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21150
+              );
+
+              // Row 1, Col 0 (Steak) - converges from mid-left
+              scrollTl.fromTo('#scene5-circle-1-0',
+                { x: -160, y: 20, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21300
+              );
+
+              // Row 1, Col 1 (Spiders) - converges from mid-right
+              scrollTl.fromTo('#scene5-circle-1-1',
+                { x: 160, y: 30, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21450
+              );
+
+              // Row 2, Col 0 (Skull) - converges from bottom-left
+              scrollTl.fromTo('#scene5-circle-2-0',
+                { x: -130, y: 120, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21600
+              );
+
+              // Row 2, Col 1 (Gentleman) - converges from bottom-right
+              scrollTl.fromTo('#scene5-circle-2-1',
+                { x: 130, y: 110, scale: 0.65, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+                21750
+              );
+
+              // Phase 38: Narrative Heading Word-by-Word Reveal (22400px -> 22900px)
+              // "Doing" (22400 -> 22500)
+              // "less"  (22500 -> 22600)
+              // "bad"   (22600 -> 22700)
+              // "is"    (22700 -> 22800)
+              // "bad."  (22800 -> 22900)
+              const s5HeadingWords = document.querySelectorAll('#scene5-heading .heading-word');
+              s5HeadingWords.forEach((word, idx) => {
+                const wordStart = 22400 + idx * 100;
+                scrollTl.fromTo(word,
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 100, ease: 'none', immediateRender: false },
+                  wordStart
+                );
+              });
+
+              // Phase 39: Two-Line Narrative Subheading Reveal (22900px -> 23600px)
+              // Line 1: (22900 -> 23200)
+              scrollTl.fromTo('#scene5-subheading-line1',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                22900
+              );
+              // Line 2: (23300 -> 23600) after 100px pause
+              scrollTl.fromTo('#scene5-subheading-line2',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                23300
+              );
+
+              // Phase 40: Scene 5 Complete Reading & Reflection Hold (23600px -> 24200px)
+              // [600px stillness hold on complete 3x2 grid, heading, and subheading]
+              scrollTl.to({}, { duration: 1 }, 24200);
             }
           });
 
