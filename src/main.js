@@ -121,9 +121,10 @@ export function loadScene4Assets() {
     }
   }
 
-  // Preload video
+  // Lazy load video only when Scene 4 assets are requested
   const s4Video = document.querySelector('#scene4-video');
-  if (s4Video) {
+  if (s4Video && !s4Video.getAttribute('src')) {
+    s4Video.src = '/images/Woman_in_sea_of_bottles-squared-v1.mp4';
     s4Video.load();
   }
 }
@@ -826,9 +827,6 @@ function handleEnter() {
 
               // Phase 25: 512x512 Centered Video Scrub (13200px -> 14600px)
               const s4Video = document.querySelector('#scene4-video');
-              if (s4Video) {
-                s4Video.load();
-              }
               const s4VideoState = { time: 0 };
               scrollTl.to(s4VideoState, {
                 time: 6.04,
