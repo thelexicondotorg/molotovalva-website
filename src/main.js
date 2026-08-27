@@ -373,6 +373,12 @@ function handleEnter() {
               const scene4DeltaX = targetLeft - scene4Rect.left;
               const scene4DeltaY = targetTop - scene4Rect.top;
 
+              // Scene 5 Prompt delta to top-left
+              const scene5PromptEl = document.querySelector('#scene5-prompt');
+              const scene5Rect = scene5PromptEl ? scene5PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
+              const scene5DeltaX = targetLeft - scene5Rect.left;
+              const scene5DeltaY = targetTop - scene5Rect.top;
+
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
               const deerSlotEl = document.querySelector('#scene3-circle-3-3');
@@ -407,16 +413,16 @@ function handleEnter() {
                 }
               }
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 18000px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 26000px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '18000px top',
+                  end: '26000px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                   onUpdate: (self) => {
-                    const scrollPos = self.progress * 18000;
+                    const scrollPos = self.progress * 26000;
                     if (scrollPos >= 1500 && !scene3AssetsLoaded) {
                       loadScene3Assets();
                     }
@@ -930,7 +936,69 @@ function handleEnter() {
                 17000
               );
 
-              // Phase 30: Final Stillness Hold (17400px -> 18000px)
+              // Phase 30: Final Scene 4 Stillness Hold (17400px -> 18000px)
+              // [600px hold with complete grid, heading, and subheading visible]
+
+              // Phase 31: Scene 4 Zero-Gravity Float-Away Exit (18000px -> 18600px)
+              // 1. Subheading floats up & fades
+              scrollTl.to('#scene4-subheading', {
+                y: -40,
+                opacity: 0,
+                duration: 350,
+                ease: 'power1.in',
+              }, 18000);
+
+              // 2. Heading floats up & fades
+              scrollTl.to('#scene4-heading', {
+                y: -60,
+                opacity: 0,
+                duration: 400,
+                ease: 'power1.in',
+              }, 18050);
+
+              // 3. 10-Circle Grid floats up & fades
+              scrollTl.to('#scene4-grid', {
+                y: -80,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 18100);
+
+              // 4. Docked Still aperture floats up & fades synchronously with grid
+              scrollTl.to('#scene4-still-focus', {
+                y: s4DeltaY - 80,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 18100);
+
+              // 5. Scene 4 Pinned Prompt floats up & dissolves
+              scrollTl.to('#scene4-prompt', {
+                y: scene4DeltaY - 50,
+                opacity: 0,
+                duration: 350,
+                ease: 'power1.in',
+              }, 18150);
+
+              // Phase 32: Pure Black Space (18600px -> 18900px)
+              // [300px pitch-black contemplation runway before Scene 5]
+
+              // Phase 33: Scene 5 Prompt Rises to Screen Center (18900px -> 19300px)
+              scrollTl.fromTo('#scene5-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                18900
+              );
+
+              // Phase 34: Scene 5 Prompt Typing (19300px -> 20000px)
+              scrollTl.to('#scene5-prompt-text', {
+                text: { value: 'you_say_no_instead_of_yes', delimiter: '' },
+                duration: 700,
+                ease: 'none',
+              }, 19300);
+
+              // Phase 35: Breathing Moment & Centered Hold (20000px -> 20500px)
+              // [500px stillness hold on "you_say_no_instead_of_yes_" with cursor blinking]
             }
           });
 
