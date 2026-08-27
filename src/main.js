@@ -170,10 +170,72 @@ export function loadScene5Assets() {
   }
 }
 
+// Lazy load Scene 6 assets
+let scene6AssetsLoaded = false;
+export function loadScene6Assets() {
+  if (scene6AssetsLoaded) return;
+  scene6AssetsLoaded = true;
+
+  // 1. Inject video sources
+  const s6Video1 = document.querySelector('#scene6-video-1');
+  const s6Video2 = document.querySelector('#scene6-video-2');
+  if (s6Video1 && !s6Video1.getAttribute('src')) {
+    s6Video1.src = '/images/Museum_Plastic_Ocean-squared-v2.mp4';
+    s6Video1.load();
+  }
+  if (s6Video2 && !s6Video2.getAttribute('src')) {
+    s6Video2.src = '/images/Museum_Plastic_Ocean-squared-v2.mp4';
+    s6Video2.load();
+  }
+
+  // 2. Dual Still Portals
+  const stillLeft = document.querySelector('#scene6-still-portal-left');
+  const stillRight = document.querySelector('#scene6-still-portal-right');
+  if (stillLeft) stillLeft.style.backgroundImage = "url('/images/S6-11_12-plasticocean.jpg')";
+  if (stillRight) stillRight.style.backgroundImage = "url('/images/S6-11_12-plasticocean.jpg')";
+
+  // 3. 5x3 Grid 15 Circle Assets
+  const s6GridAssets = [
+    // Row 0
+    { id: 'scene6-circle-0-0', bg: "url('/images/S6-01-mining.jpg')", size: 'cover', pos: 'center', url: '/images/S6-01-mining.jpg' },
+    { id: 'scene6-circle-0-1', bg: "url('/images/S6-02-cigarettebutt.jpg')", size: 'cover', pos: 'center', url: '/images/S6-02-cigarettebutt.jpg' },
+    { id: 'scene6-circle-0-2', bg: "url('/images/S6-03-fires.jpg')", size: 'cover', pos: 'center', url: '/images/S6-03-fires.jpg' },
+    { id: 'scene6-circle-0-3', bg: "url('/images/S6-04-motherdaughter.jpg')", size: 'cover', pos: 'center', url: '/images/S6-04-motherdaughter.jpg' },
+    { id: 'scene6-circle-0-4', bg: "url('/images/S6-05-bins.jpg')", size: 'cover', pos: 'center', url: '/images/S6-05-bins.jpg' },
+    // Row 1
+    { id: 'scene6-circle-1-0', bg: "url('/images/S6-06-fishingnet.jpg')", size: 'cover', pos: 'center', url: '/images/S6-06-fishingnet.jpg' },
+    { id: 'scene6-circle-1-1', bg: "url('/images/S6-07-scientists.jpg')", size: 'cover', pos: 'center', url: '/images/S6-07-scientists.jpg' },
+    { id: 'scene6-circle-1-2', bg: "url('/images/S6-08-diggers.jpg')", size: 'cover', pos: 'center', url: '/images/S6-08-diggers.jpg' },
+    { id: 'scene6-circle-1-3', bg: "url('/images/S6-09_14-microplastics.jpg')", size: '100% 200%', pos: 'center top', url: '/images/S6-09_14-microplastics.jpg' },
+    { id: 'scene6-circle-1-4', bg: "url('/images/S6-10-projectedwhale.jpg')", size: 'cover', pos: 'center', url: '/images/S6-10-projectedwhale.jpg' },
+    // Row 2
+    { id: 'scene6-circle-2-0', bg: "url('/images/S6-11_12-plasticocean.jpg')", size: '200% 100%', pos: 'left center', url: '/images/S6-11_12-plasticocean.jpg' },
+    { id: 'scene6-circle-2-1', bg: "url('/images/S6-11_12-plasticocean.jpg')", size: '200% 100%', pos: 'right center', url: '/images/S6-11_12-plasticocean.jpg' },
+    { id: 'scene6-circle-2-2', bg: "url('/images/S6-13-landfill.jpg')", size: 'cover', pos: 'center', url: '/images/S6-13-landfill.jpg' },
+    { id: 'scene6-circle-2-3', bg: "url('/images/S6-09_14-microplastics.jpg')", size: '100% 200%', pos: 'center bottom', url: '/images/S6-09_14-microplastics.jpg' },
+    { id: 'scene6-circle-2-4', bg: "url('/images/S6-15-dam.jpg')", size: 'cover', pos: 'center', url: '/images/S6-15-dam.jpg' },
+  ];
+
+  s6GridAssets.forEach((item) => {
+    if (item.url) {
+      const img = new Image();
+      img.src = item.url;
+    }
+    const el = document.querySelector(`#${item.id}`);
+    if (el) {
+      el.style.backgroundImage = item.bg;
+      el.style.backgroundSize = item.size;
+      el.style.backgroundPosition = item.pos;
+      el.style.backgroundRepeat = 'no-repeat';
+    }
+  });
+}
+
 // Global expose for console inspection
 window.loadScene3Assets = loadScene3Assets;
 window.loadScene4Assets = loadScene4Assets;
 window.loadScene5Assets = loadScene5Assets;
+window.loadScene6Assets = loadScene6Assets;
 
 // Build Scene 3 Grid Structure immediately (DOM-only, 0 bytes network)
 const scene3GridEl = document.querySelector('#scene3-grid');
@@ -438,6 +500,12 @@ function handleEnter() {
               const scene5DeltaX = targetLeft - scene5Rect.left;
               const scene5DeltaY = targetTop - scene5Rect.top;
 
+              // Scene 6 Prompt delta to top-left
+              const scene6PromptEl = document.querySelector('#scene6-prompt');
+              const scene6Rect = scene6PromptEl ? scene6PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
+              const scene6DeltaX = targetLeft - scene6Rect.left;
+              const scene6DeltaY = targetTop - scene6Rect.top;
+
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
               const deerSlotEl = document.querySelector('#scene3-circle-3-3');
@@ -472,8 +540,39 @@ function handleEnter() {
                 }
               }
 
+              // Scene 6 Still Portals Delta calculation (400px -> 124px into Slot 2,0 and Slot 2,1)
+              const s6StillLeftEl = document.querySelector('#scene6-still-portal-left');
+              const s6SlotLeftEl = document.querySelector('#scene6-circle-2-0');
+              let s6LeftDeltaX = -300;
+              let s6LeftDeltaY = 148;
+              let s6Scale = 124 / 400;
+
+              if (s6StillLeftEl && s6SlotLeftEl) {
+                const focusRect = s6StillLeftEl.getBoundingClientRect();
+                const slotRect = s6SlotLeftEl.getBoundingClientRect();
+                if (focusRect.width > 0 && slotRect.width > 0) {
+                  s6LeftDeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
+                  s6LeftDeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
+                  s6Scale = slotRect.width / focusRect.width;
+                }
+              }
+
+              const s6StillRightEl = document.querySelector('#scene6-still-portal-right');
+              const s6SlotRightEl = document.querySelector('#scene6-circle-2-1');
+              let s6RightDeltaX = -150;
+              let s6RightDeltaY = 148;
+
+              if (s6StillRightEl && s6SlotRightEl) {
+                const focusRect = s6StillRightEl.getBoundingClientRect();
+                const slotRect = s6SlotRightEl.getBoundingClientRect();
+                if (focusRect.width > 0 && slotRect.width > 0) {
+                  s6RightDeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
+                  s6RightDeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
+                }
+              }
+
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 27500;
+              const TOTAL_SCROLL_TRACK = 35500;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -496,6 +595,9 @@ function handleEnter() {
                     }
                     if (scrollPos >= 14000 && !scene5AssetsLoaded) {
                       loadScene5Assets();
+                    }
+                    if (scrollPos >= 22000 && !scene6AssetsLoaded) {
+                      loadScene6Assets();
                     }
                   }
                 }
@@ -1212,9 +1314,186 @@ function handleEnter() {
                 ease: 'none',
               }, 25500);
 
-              // Phase 44: Breathing Moment & Centered Hold (26500px -> 27500px)
-              // [1000px stillness hold on "our_future_without_food_illustratively_explained_by_ai_" with cursor blinking]
-              scrollTl.to({}, { duration: 1 }, 27500);
+              // Phase 44: Centered Breathing Hold on Prompt (26500px -> 27000px)
+              // [500px stillness hold on "our_future_without_food_illustratively_explained_by_ai_" with cursor blinking]
+
+              // Phase 45: Scene 6 Prompt Migration to Top-Left Corner (27000px -> 27500px)
+              scrollTl.to('#scene6-prompt', {
+                scale: 0.5,
+                transformOrigin: 'left top',
+                x: scene6DeltaX,
+                y: scene6DeltaY,
+                duration: 500,
+                ease: 'none',
+              }, 27000);
+
+              // Phase 46: Scene 6 Video Playback & Mitosis Choreography (27500px -> 30500px)
+              const s6Video1 = document.querySelector('#scene6-video-1');
+              const s6Video2 = document.querySelector('#scene6-video-2');
+              const s6VideoState = { time: 0 };
+              
+              scrollTl.to(s6VideoState, {
+                time: 6.5,
+                duration: 3000,
+                ease: 'none',
+                onUpdate: () => {
+                  if (s6Video1 && s6Video1.readyState >= 1) {
+                    s6Video1.currentTime = s6VideoState.time;
+                  }
+                  if (s6Video2 && s6Video2.readyState >= 1) {
+                    s6Video2.currentTime = s6VideoState.time;
+                  }
+                }
+              }, 27500);
+
+              // Shot 1 (0.0s -> 1.8s | 27500 -> 28400): 400px Central Aperture
+              scrollTl.fromTo('#scene6-video-portal-left',
+                { opacity: 0, x: 0, y: 0 },
+                { opacity: 1, x: 0, y: 0, duration: 150, ease: 'none', immediateRender: false },
+                27500
+              );
+
+              // Shot 2 (2.0s -> 3.8s | 28400 -> 29300): Single central circle continues
+
+              // Shot 3a (4.0s -> 5.0s | 29300 -> 29800): Single central circle holds for 1s equivalent
+
+              // Shot 3b & Mitosis Split (5.0s -> 6.5s | 29800 -> 30300):
+              // Primary circle shifts left (-210px) while right cloned circle emerges and shifts right (+210px)
+              scrollTl.to('#scene6-video-portal-left', {
+                x: -210,
+                duration: 500,
+                ease: 'power2.inOut',
+              }, 29800);
+
+              scrollTl.fromTo('#scene6-video-portal-right',
+                { opacity: 0, x: 0, y: 0 },
+                { opacity: 1, x: 210, y: 0, duration: 500, ease: 'power2.inOut', immediateRender: false },
+                29800
+              );
+
+              // Video Fade-Out at end of scrub (30350 -> 30500)
+              scrollTl.to('#scene6-video-portal-left', {
+                opacity: 0,
+                duration: 150,
+                ease: 'none',
+              }, 30350);
+              scrollTl.to('#scene6-video-portal-right', {
+                opacity: 0,
+                duration: 150,
+                ease: 'none',
+              }, 30350);
+
+              // Phase 47: Large Still Dual Focus Handoff & Hold (30400px -> 30800px)
+              scrollTl.fromTo('#scene6-still-portal-left',
+                { opacity: 0, x: -210, y: 0, scale: 1 },
+                { opacity: 1, x: -210, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
+                30450
+              );
+              scrollTl.fromTo('#scene6-still-portal-right',
+                { opacity: 0, x: 210, y: 0, scale: 1 },
+                { opacity: 1, x: 210, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
+                30450
+              );
+
+              // Phase 48: Dual Portals Migrate to Grid Slots 11 & 12 (30800px -> 31500px)
+              scrollTl.to('#scene6-still-portal-left', {
+                x: s6LeftDeltaX,
+                y: s6LeftDeltaY,
+                scale: s6Scale,
+                duration: 700,
+                ease: 'power2.inOut',
+              }, 30800);
+
+              scrollTl.to('#scene6-still-portal-right', {
+                x: s6RightDeltaX,
+                y: s6RightDeltaY,
+                scale: s6Scale,
+                duration: 700,
+                ease: 'power2.inOut',
+              }, 30800);
+
+              // Seamless swap to 5x3 Grid at 31500px
+              scrollTl.set('#scene6-circle-2-0', { opacity: 1 }, 31500);
+              scrollTl.set('#scene6-circle-2-1', { opacity: 1 }, 31500);
+              scrollTl.set(['#scene6-still-portal-left', '#scene6-still-portal-right'], { opacity: 0 }, 31500);
+
+              // Phase 49: Assembly of Remaining 13 Museum Circles (31500px -> 33000px)
+              const s6RemainingCircles = [
+                // Row 0
+                { id: '#scene6-circle-0-0', x: -380, y: -240, rot: -45, scale: 0.35, dur: 850, start: 31500 },
+                { id: '#scene6-circle-0-1', x: -120, y: -320, rot: 30,  scale: 0.40, dur: 900, start: 31650 },
+                { id: '#scene6-circle-0-2', x: 80,   y: -360, rot: -20, scale: 0.30, dur: 950, start: 31550 },
+                { id: '#scene6-circle-0-3', x: 280,  y: -290, rot: 50,  scale: 0.45, dur: 800, start: 31750 },
+                { id: '#scene6-circle-0-4', x: 420,  y: -190, rot: -35, scale: 0.35, dur: 900, start: 31600 },
+                // Row 1
+                { id: '#scene6-circle-1-0', x: -440, y: 40,   rot: 40,  scale: 0.40, dur: 900, start: 31700 },
+                { id: '#scene6-circle-1-1', x: -260, y: 90,   rot: -30, scale: 0.35, dur: 850, start: 31800 },
+                { id: '#scene6-circle-1-2', x: -90,  y: 120,  rot: 25,  scale: 0.45, dur: 950, start: 31600 },
+                { id: '#scene6-circle-1-3', x: 140,  y: 150,  rot: -40, scale: 0.35, dur: 850, start: 31750 },
+                { id: '#scene6-circle-1-4', x: 460,  y: 80,   rot: 35,  scale: 0.40, dur: 900, start: 31650 },
+                // Row 2
+                { id: '#scene6-circle-2-2', x: 20,   y: 320,  rot: -35, scale: 0.35, dur: 850, start: 31700 },
+                { id: '#scene6-circle-2-3', x: 220,  y: 350,  rot: 45,  scale: 0.40, dur: 900, start: 31800 },
+                { id: '#scene6-circle-2-4', x: 410,  y: 280,  rot: -50, scale: 0.30, dur: 950, start: 31600 },
+              ];
+
+              s6RemainingCircles.forEach((item) => {
+                scrollTl.fromTo(item.id,
+                  {
+                    opacity: 0,
+                    x: item.x,
+                    y: item.y,
+                    scale: item.scale,
+                    rotation: item.rot,
+                  },
+                  {
+                    opacity: 1,
+                    x: 0,
+                    y: 0,
+                    scale: 1,
+                    rotation: 0,
+                    duration: item.dur,
+                    ease: 'power2.out',
+                    immediateRender: false,
+                  },
+                  item.start
+                );
+              });
+
+              // Phase 50: Narrative Heading Word-by-Word Reveal (33000px -> 33800px)
+              const s6HeadingWords = document.querySelectorAll('#scene6-heading .heading-word');
+              s6HeadingWords.forEach((wordEl, idx) => {
+                scrollTl.fromTo(wordEl,
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 100, ease: 'power1.out', immediateRender: false },
+                  33000 + idx * 100
+                );
+              });
+
+              // Phase 51: Narrative Subheading Reveal (33800px -> 34600px)
+              // Line 1: "As witnessed by Douglas Gayeton." (33800 -> 34100)
+              scrollTl.fromTo('#scene6-subheading-line1',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                33800
+              );
+              // 100px pause (34100 -> 34200)
+              // Line 2: "272 pages. Signed and numbered edition of 500." (34200 -> 34500)
+              scrollTl.fromTo('#scene6-subheading-line2',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                34200
+              );
+
+              // Phase 52: Purchase Button Fade-In & Ambient Breathing Hold (34500px -> 35500px)
+              scrollTl.fromTo('#scene6-purchase-btn',
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 300, ease: 'power1.out', immediateRender: false },
+                34500
+              );
+
+              // Final reading & reflection hold on the complete masterpiece
+              scrollTl.to({}, { duration: 1 }, 35500);
             }
           });
 

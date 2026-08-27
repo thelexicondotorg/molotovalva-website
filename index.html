@@ -193,6 +193,76 @@
           <span class="prompt-prefix">&gt;:&nbsp;</span><span id="scene5-prompt-text"></span><span class="terminal-cursor">_</span>
         </div>
 
+        <!-- Scene 6: Video Portals (400px Central Apertures) -->
+        <div id="scene6-video-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <!-- Left / Primary Video Circle -->
+          <div id="scene6-video-portal-left" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
+            <video id="scene6-video-1" playsinline muted class="w-full h-full object-cover"></video>
+          </div>
+          <!-- Right / Cloned Video Circle (Mitosis generated) -->
+          <div id="scene6-video-portal-right" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
+            <video id="scene6-video-2" playsinline muted class="w-full h-full object-cover"></video>
+          </div>
+        </div>
+
+        <!-- Scene 6: Large Still Dual Focus (400px -> migrates to Grid Slots 11 & 12) -->
+        <div id="scene6-still-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <div id="scene6-still-portal-left" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute border border-neutral-900 shadow-2xl bg-no-repeat" style="background-size: 200% 100%; background-position: left center;"></div>
+          <div id="scene6-still-portal-right" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute border border-neutral-900 shadow-2xl bg-no-repeat" style="background-size: 200% 100%; background-position: right center;"></div>
+        </div>
+
+        <!-- Scene 6: Full Museum Container (5x3 Grid & Final Typography) -->
+        <div id="scene6-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
+          
+          <!-- 5x3 Grid of 15 Circles (~124px diameter) -->
+          <div id="scene6-grid" class="flex flex-col items-center gap-[22px] select-none" style="transform: translateY(-85px);">
+            <!-- Row 0 (5 circles) -->
+            <div class="flex items-center gap-[26px]">
+              <div id="scene6-circle-0-0" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-0-1" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-0-2" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-0-3" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-0-4" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+            </div>
+            <!-- Row 1 (5 circles) -->
+            <div class="flex items-center gap-[26px]">
+              <div id="scene6-circle-1-0" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-1-1" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-1-2" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-1-3" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-no-repeat border border-neutral-900 shadow-xl opacity-0" style="background-size: 100% 200%; background-position: center top;"></div>
+              <div id="scene6-circle-1-4" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+            </div>
+            <!-- Row 2 (5 circles) -->
+            <div class="flex items-center gap-[26px]">
+              <div id="scene6-circle-2-0" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-no-repeat border border-neutral-900 shadow-xl opacity-0" style="background-size: 200% 100%; background-position: left center;"></div>
+              <div id="scene6-circle-2-1" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-no-repeat border border-neutral-900 shadow-xl opacity-0" style="background-size: 200% 100%; background-position: right center;"></div>
+              <div id="scene6-circle-2-2" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+              <div id="scene6-circle-2-3" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-no-repeat border border-neutral-900 shadow-xl opacity-0" style="background-size: 100% 200%; background-position: center bottom;"></div>
+              <div id="scene6-circle-2-4" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
+            </div>
+          </div>
+
+          <!-- Scene 6: Typography Area & Purchase Button -->
+          <div id="scene6-typography" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <h2 id="scene6-heading" class="scene-heading text-center select-none" style="transform: translateY(220px);">
+              <span class="heading-word">Molotov</span>
+              <span class="heading-word">Alva</span>
+              <span class="heading-word">and</span>
+              <span class="heading-word">the</span><br/>
+              <span class="heading-word">Museum</span>
+              <span class="heading-word">of</span>
+              <span class="heading-word">Extraction.</span>
+            </h2>
+            <div id="scene6-subheading" class="scene-subheading text-center select-none mt-4 flex flex-col items-center gap-1.5" style="transform: translateY(220px);">
+              <span id="scene6-subheading-line1" class="inline-block opacity-0 text-[1.15rem]">As witnessed by Douglas Gayeton.</span>
+              <span id="scene6-subheading-line2" class="inline-block opacity-0 text-[1.15rem]">272 pages. Signed and numbered edition of 500.</span>
+            </div>
+            <div id="scene6-purchase-btn-wrapper" class="mt-7" style="transform: translateY(220px);">
+              <a href="#" id="scene6-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase.</a>
+            </div>
+          </div>
+        </div>
+
         <!-- Scene 6: Prompt ("our_future_without_food_illustratively_explained_by_ai") -->
         <div id="scene6-prompt" class="terminal-prompt select-none absolute opacity-0 z-40 pointer-events-none">
           <span class="prompt-prefix">&gt;:&nbsp;</span><span id="scene6-prompt-text"></span><span class="terminal-cursor">_</span>
