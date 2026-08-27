@@ -232,6 +232,12 @@ if (promptEl) {
               const scene3DeltaX = targetLeft - scene3Rect.left;
               const scene3DeltaY = targetTop - scene3Rect.top;
 
+              // Scene 4 Prompt delta to top-left
+              const scene4PromptEl = document.querySelector('#scene4-prompt');
+              const scene4Rect = scene4PromptEl ? scene4PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
+              const scene4DeltaX = targetLeft - scene4Rect.left;
+              const scene4DeltaY = targetTop - scene4Rect.top;
+
               // Populate Scene 3: 4x10 grid of 40 circular apertures
               const scene3GridEl = document.querySelector('#scene3-grid');
               if (scene3GridEl && scene3GridEl.children.length === 0) {
@@ -270,12 +276,66 @@ if (promptEl) {
                 }
               }
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 10000px scroll scrub
+              // Populate Scene 4: 2x5 grid of 10 circular apertures
+              const scene4GridEl = document.querySelector('#scene4-grid');
+              if (scene4GridEl && scene4GridEl.children.length === 0) {
+                const s4Assets = [
+                  // Row 0
+                  { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-02-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-03-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-04-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-05-placeholder.png')", size: 'cover', pos: 'center' },
+                  // Row 1
+                  { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '0px center' },
+                  { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '-158px center' },
+                  { bg: "url('/images/S4-08-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-09-placeholder.png')", size: 'cover', pos: 'center' },
+                  { bg: "url('/images/S4-10-placeholder.png')", size: 'cover', pos: 'center' },
+                ];
+
+                for (let r = 0; r < 2; r++) {
+                  for (let c = 0; c < 5; c++) {
+                    const idx = r * 5 + c;
+                    const circle = document.createElement('div');
+                    circle.id = `scene4-circle-${r}-${c}`;
+                    circle.className = 'scene4-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
+                    circle.style.width = '140px';
+                    circle.style.height = '140px';
+                    circle.style.backgroundImage = s4Assets[idx].bg;
+                    circle.style.backgroundSize = s4Assets[idx].size;
+                    circle.style.backgroundPosition = s4Assets[idx].pos;
+                    circle.style.backgroundRepeat = 'no-repeat';
+                    circle.setAttribute('data-row', r);
+                    circle.setAttribute('data-col', c);
+                    scene4GridEl.appendChild(circle);
+                  }
+                }
+              }
+
+              // Scene 4 Still Portal Delta calculation (512px -> 140px into Slot 0,0)
+              const s4StillFocusEl = document.querySelector('#scene4-still-focus');
+              const s4StillSlotEl = document.querySelector('#scene4-circle-0-0');
+              let s4DeltaX = -328;
+              let s4DeltaY = -82;
+              let s4Scale = 140 / 512;
+
+              if (s4StillFocusEl && s4StillSlotEl) {
+                const focusRect = s4StillFocusEl.getBoundingClientRect();
+                const slotRect = s4StillSlotEl.getBoundingClientRect();
+                if (focusRect.width > 0 && slotRect.width > 0) {
+                  s4DeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
+                  s4DeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
+                  s4Scale = slotRect.width / focusRect.width;
+                }
+              }
+
+              // 4. Bind GSAP ScrollTrigger for the 0 -> 18000px scroll scrub
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '10000px top',
+                  end: '18000px top',
                   scrub: true,
                   invalidateOnRefresh: true,
                 }
@@ -605,6 +665,206 @@ if (promptEl) {
 
                 // 5. Final Scene 3 End-State Hold (9700 -> 10000)
               }
+
+              // Phase 17: Scene 3 Zero-Gravity Float-Away Exit (10000px -> 10600px)
+              // 1. Subheading floats up & fades
+              scrollTl.to('#scene3-subheading', {
+                y: -40,
+                opacity: 0,
+                duration: 350,
+                ease: 'power1.in',
+              }, 10000);
+
+              // 2. Heading floats up & fades
+              scrollTl.to('#scene3-heading', {
+                y: -60,
+                opacity: 0,
+                duration: 400,
+                ease: 'power1.in',
+              }, 10050);
+
+              // 3. 40-Circle Grid floats up & fades
+              scrollTl.to('#scene3-grid', {
+                y: -80,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 10100);
+
+              // 4. Scene 3 Pinned Prompt floats up & dissolves
+              scrollTl.to('#scene3-prompt', {
+                y: scene3DeltaY - 50,
+                opacity: 0,
+                duration: 350,
+                ease: 'power1.in',
+              }, 10150);
+
+              // Phase 18: Pure Black Space (10600px -> 10900px)
+              // [300px pitch-black contemplation runway before Scene 4]
+
+              // Phase 19: Scene 4 Prompt Rises to Screen Center (10900px -> 11300px)
+              scrollTl.fromTo('#scene4-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                10900
+              );
+
+              // Phase 20: Scene 4 Prompt Clause 1 Typing (11300px -> 11700px)
+              scrollTl.to('#scene4-prompt-text', {
+                text: { value: 'you_think_in_fractions', delimiter: '' },
+                duration: 400,
+                ease: 'none',
+              }, 11300);
+
+              // Phase 21: Breathing Moment (11700px -> 11800px)
+              // [100px pause on "you_think_in_fractions_" with cursor blinking]
+
+              // Phase 22: Scene 4 Prompt Clause 2 Typing (11800px -> 12500px)
+              scrollTl.to('#scene4-prompt-text', {
+                text: { value: 'you_think_in_fractions_then_call_the_consequences_unexpected', delimiter: '' },
+                duration: 700,
+                ease: 'none',
+              }, 11800);
+
+              // Phase 23: Scene 4 Prompt Centered Hold (12500px -> 12700px)
+              // [200px stillness hold at screen center before migrating to corner]
+
+              // Phase 24: Scene 4 Prompt Shrinks & Moves to Upper-Left Corner (12700px -> 13200px)
+              scrollTl.to('#scene4-prompt', {
+                scale: 0.5,
+                transformOrigin: 'left top',
+                x: scene4DeltaX,
+                y: scene4DeltaY,
+                duration: 500,
+                ease: 'none',
+              }, 12700);
+
+              // Phase 25: 512x512 Centered Video Scrub (13200px -> 14600px)
+              const s4Video = document.querySelector('#scene4-video');
+              if (s4Video) {
+                s4Video.load();
+              }
+              const s4VideoState = { time: 0 };
+              scrollTl.to(s4VideoState, {
+                time: 6.04,
+                duration: 1400,
+                ease: 'none',
+                onUpdate: () => {
+                  if (s4Video && s4Video.readyState >= 1) {
+                    s4Video.currentTime = s4VideoState.time;
+                  }
+                }
+              }, 13200);
+
+              // 0.5s equivalent fade-in (13200 -> 13350)
+              scrollTl.fromTo('#scene4-video-portal',
+                { opacity: 0 },
+                { opacity: 1, duration: 150, ease: 'none', immediateRender: false },
+                13200
+              );
+
+              // 0.5s equivalent fade-out (14450 -> 14600)
+              scrollTl.to('#scene4-video-portal', {
+                opacity: 0,
+                duration: 150,
+                ease: 'none',
+              }, 14450);
+
+              // Phase 26: Large Still Frame Substitution & 100px Hold (14600px -> 14800px)
+              // 1. Still frame fades in at center
+              scrollTl.fromTo('#scene4-still-focus',
+                { opacity: 0, scale: 1, x: 0, y: 0 },
+                { opacity: 1, scale: 1, x: 0, y: 0, duration: 100, ease: 'none', immediateRender: false },
+                14600
+              );
+              // [100px stillness hold at center from 14700px -> 14800px]
+
+              // Phase 27: Still Frame Glide & Scale to Grid Slot 1 (14800px -> 15400px)
+              scrollTl.to('#scene4-still-focus', {
+                x: s4DeltaX,
+                y: s4DeltaY,
+                scale: s4Scale,
+                duration: 600,
+                ease: 'power1.inOut',
+              }, 14800);
+
+              // Seamless switch to grid circle at 15400px
+              scrollTl.fromTo('#scene4-circle-0-0',
+                { opacity: 0 },
+                { opacity: 1, duration: 20, ease: 'none', immediateRender: false },
+                15380
+              );
+              scrollTl.to('#scene4-still-focus', {
+                opacity: 0,
+                duration: 20,
+                ease: 'none',
+              }, 15380);
+
+              // Phase 28: Grid Random Population & Word-by-Word Heading (15400px -> 16600px)
+              const remainingS4Coords = [
+                [0, 2], [1, 3], [0, 4], [1, 0], [0, 1],
+                [1, 4], [1, 1], [0, 3], [1, 2]
+              ];
+
+              remainingS4Coords.forEach(([r, c], index) => {
+                const circleId = `#scene4-circle-${r}-${c}`;
+                const startTime = 15400 + index * 110;
+                scrollTl.fromTo(circleId,
+                  { opacity: 0 },
+                  { opacity: 1, duration: 180, ease: 'none', immediateRender: false },
+                  startTime
+                );
+              });
+
+              // Heading words: "Nature thinks in wholes."
+              const scene4HeadingWords = document.querySelectorAll('#scene4-heading .heading-word');
+              if (scene4HeadingWords.length >= 4) {
+                // Word 0: "Nature" (15400 -> 15700)
+                scrollTl.fromTo(scene4HeadingWords[0],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  15400
+                );
+                // Word 1: "thinks" (15700 -> 16000)
+                scrollTl.fromTo(scene4HeadingWords[1],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  15700
+                );
+                // Word 2: "in" (16000 -> 16300)
+                scrollTl.fromTo(scene4HeadingWords[2],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  16000
+                );
+                // Word 3: "wholes." (16300 -> 16600)
+                scrollTl.fromTo(scene4HeadingWords[3],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  16300
+                );
+              }
+
+              // Phase 29: Two-Line Subheading Reveal (16600px -> 17400px)
+              scrollTl.fromTo('#scene4-subheading',
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 250, ease: 'none', immediateRender: false },
+                16600
+              );
+              // Line 1: (16600 -> 17000)
+              scrollTl.fromTo('#scene4-subheading-line1',
+                { opacity: 0 },
+                { opacity: 1, duration: 400, ease: 'none', immediateRender: false },
+                16600
+              );
+              // Line 2: (17000 -> 17400)
+              scrollTl.fromTo('#scene4-subheading-line2',
+                { opacity: 0 },
+                { opacity: 1, duration: 400, ease: 'none', immediateRender: false },
+                17000
+              );
+
+              // Phase 30: Final Stillness Hold (17400px -> 18000px)
             }
           });
 

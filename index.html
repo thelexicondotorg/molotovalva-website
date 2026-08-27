@@ -144,6 +144,50 @@
           </div>
         </div>
 
+        <!-- Scene 4: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene4-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene4-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene4-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
+        </div>
+
+        <!-- Scene 4: Visuals & Narrative Container -->
+        <div id="scene4-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
+          <!-- 2x5 Grid Container of 10 Circular Apertures (796px x 304px) -->
+          <div id="scene4-grid" class="relative w-[796px] h-[304px] grid grid-cols-5 grid-rows-2 gap-[24px] pointer-events-none" style="transform: translateY(-20px);">
+            <!-- 10 circles populated by JS with background assets -->
+          </div>
+
+          <!-- Scene 4: Typography Area -->
+          <div id="scene4-typography" class="flex flex-col items-center justify-center mt-6 select-none" style="transform: translateY(-20px);">
+            <h2 id="scene4-heading" class="scene-heading text-center select-none">
+              <span class="heading-word">Nature</span>
+              <span class="heading-word">thinks</span>
+              <span class="heading-word">in</span>
+              <span class="heading-word">wholes.</span>
+            </h2>
+            <div id="scene4-subheading" class="scene-subheading text-center select-none mt-4 flex flex-col items-center gap-1.5 opacity-0">
+              <span id="scene4-subheading-line1">Climate change is one entry, but biodiversity loss, desertification,</span>
+              <span id="scene4-subheading-line2">ocean acidification, and soil depletion carry equal weight in your ledger of extraction.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 4: Centered Video Portal (512px x 512px) -->
+        <div id="scene4-video-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <div id="scene4-video-portal" class="w-[512px] h-[512px] rounded-full overflow-hidden opacity-0 pointer-events-none relative">
+            <video id="scene4-video" src="/images/Woman_in_sea_of_bottles-squared-v1.mp4" playsinline muted preload="auto" class="w-full h-full object-cover"></video>
+          </div>
+        </div>
+
+        <!-- Scene 4: Centered Still Portal (512px x 512px) for substitution & migration to Slot 1 -->
+        <div id="scene4-still-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <div id="scene4-still-focus" class="w-[512px] h-[512px] rounded-full overflow-hidden opacity-0 pointer-events-none relative bg-cover bg-center" style="background-image: url('/images/S4-01-woman-in-sea-of-bottles.jpg');">
+          </div>
+        </div>
+
         <!-- Scroll Indicator -->
         <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
           <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
@@ -160,7 +204,7 @@
     </div>
 
     <!-- Scroll Track (Allows scrolling for GSAP ScrollTrigger) -->
-    <div id="scroll-track" class="w-full h-[12000px]"></div>
+    <div id="scroll-track" class="w-full h-[20000px]"></div>
 
     <!-- Application Script Entrypoint -->
     <script type="module" src="/src/main.js"></script>
