@@ -473,7 +473,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 24600;
+              const TOTAL_SCROLL_TRACK = 27500;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -1163,7 +1163,58 @@ function handleEnter() {
 
               // Phase 40: Scene 5 Complete Reading & Reflection Hold (24000px -> 24600px)
               // [600px stillness hold on complete 3x2 grid, heading, and full subheading]
-              scrollTl.to({}, { duration: 1 }, 24600);
+
+              // Phase 41: Scene 5 Standard Zero-Gravity Staggered Exit (24600px -> 25150px)
+              // 1. Top-Left Terminal Prompt departs (24600 -> 24850)
+              scrollTl.to('#scene5-prompt', {
+                y: '-=200',
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 24600);
+
+              // 2. Scene 5 3x2 Visuals / Grid departs (24700 -> 24950)
+              scrollTl.to('#scene5-grid', {
+                y: '-=200',
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 24700);
+
+              // 3. Narrative Heading departs (24800 -> 25050)
+              scrollTl.to('#scene5-heading', {
+                y: '-=200',
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 24800);
+
+              // 4. Narrative Subheading departs (24900 -> 25150)
+              scrollTl.to('#scene5-subheading', {
+                y: '-=200',
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 24900);
+
+              // Phase 42: Scene 6 Prompt Rises to Screen Center (25100px -> 25500px)
+              // [Starts at T0 + 500px, overlapping final 50px of fading subheading]
+              scrollTl.fromTo('#scene6-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                25100
+              );
+
+              // Phase 43: Scene 6 Prompt Typing (25500px -> 26500px)
+              scrollTl.to('#scene6-prompt-text', {
+                text: { value: 'our_future_without_food_illustratively_explained_by_ai', delimiter: '' },
+                duration: 1000,
+                ease: 'none',
+              }, 25500);
+
+              // Phase 44: Breathing Moment & Centered Hold (26500px -> 27500px)
+              // [1000px stillness hold on "our_future_without_food_illustratively_explained_by_ai_" with cursor blinking]
+              scrollTl.to({}, { duration: 1 }, 27500);
             }
           });
 
