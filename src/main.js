@@ -871,18 +871,6 @@ function handleEnter() {
                 ease: 'power1.inOut',
               }, 14800);
 
-              // Seamless switch to grid circle at 15400px
-              scrollTl.fromTo('#scene4-circle-0-0',
-                { opacity: 0 },
-                { opacity: 1, duration: 20, ease: 'none', immediateRender: false },
-                15380
-              );
-              scrollTl.to('#scene4-still-focus', {
-                opacity: 0,
-                duration: 20,
-                ease: 'none',
-              }, 15380);
-
               // Phase 28: Grid Random Population & Word-by-Word Heading (15400px -> 16600px)
               const remainingS4Coords = [
                 [0, 2], [1, 3], [0, 4], [1, 0], [0, 1],
