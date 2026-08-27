@@ -10,7 +10,7 @@
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
 
     <!-- Scene 1 Critical Preloads -->
-    <link rel="preload" as="image" href="/images/01-click_to_enter.jpg" />
+    <link rel="preload" as="image" href="/images/01-click_to_enter-v2.jpg" />
     <link rel="preload" as="font" type="font/ttf" href="/fonts/Platelet Regular.ttf" crossorigin />
   </head>
   <body class="bg-black text-white min-h-screen font-mono selection:bg-[#00E900] selection:text-black overflow-x-hidden">
@@ -25,7 +25,7 @@
           <!-- Central Media Portal: 300px x 300px Circular Mask -->
           <div class="media-portal border border-neutral-900 shadow-2xl" id="media-portal">
             <img 
-              src="/images/01-click_to_enter.jpg" 
+              src="/images/01-click_to_enter-v2.jpg" 
               alt="Central Media Portal" 
               class="w-full h-full object-cover"
             />
@@ -41,50 +41,20 @@
         <!-- Scene 2: 5 Central Portals (Each 300px x 300px, Stacked at Center, Initially Opacity 0) -->
         <div id="scene2-portals" class="absolute inset-0 flex items-center justify-center pointer-events-none">
           
-          <!-- Circle 1: Toxic Runoff -->
-          <div id="circle-1" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#071208]">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#1a3a1b] via-[#0d220e] to-[#040904] flex flex-col items-center justify-center text-center p-6 select-none">
-              <span class="text-5xl mb-3">☣️</span>
-              <span class="text-sm tracking-widest text-[#5cd663] uppercase font-bold">1: Toxic Runoff</span>
-              <span class="text-xs text-neutral-400 mt-2 font-mono">Industrial Discharge</span>
-            </div>
-          </div>
+          <!-- Circle 1: Runoff -->
+          <div id="circle-1" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden absolute bg-cover bg-center bg-no-repeat" style="background-image: url('/images/S2-01-runoff.jpg');"></div>
 
-          <!-- Circle 2: Fish Skull -->
-          <div id="circle-2" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#081518]">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#113138] via-[#091b20] to-[#03090b] flex flex-col items-center justify-center text-center p-6 select-none">
-              <span class="text-5xl mb-3">☠️</span>
-              <span class="text-sm tracking-widest text-[#4ecdc4] uppercase font-bold">2: Fish Skull</span>
-              <span class="text-xs text-neutral-400 mt-2 font-mono">Cranial Remains</span>
-            </div>
-          </div>
+          <!-- Circle 2: Dead Fish (Left Half: Skull/Head) -->
+          <div id="circle-2" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden absolute bg-no-repeat" style="background-image: url('/images/S2-02_03-deadfish.jpg'); background-size: 200% 100%; background-position: left center;"></div>
 
-          <!-- Circle 3: Fish Spine / Vertebrae -->
-          <div id="circle-3" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#071610]">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0e2c20] via-[#071811] to-[#020805] flex flex-col items-center justify-center text-center p-6 select-none">
-              <span class="text-5xl mb-3">🦴</span>
-              <span class="text-sm tracking-widest text-[#2ecc71] uppercase font-bold">3: Vertebrae</span>
-              <span class="text-xs text-neutral-400 mt-2 font-mono">Aquatic Skeleton</span>
-            </div>
-          </div>
+          <!-- Circle 3: Dead Fish (Right Half: Vertebrae/Skeleton) -->
+          <div id="circle-3" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden absolute bg-no-repeat" style="background-image: url('/images/S2-02_03-deadfish.jpg'); background-size: 200% 100%; background-position: right center;"></div>
 
-          <!-- Circle 4: Smokestacks -->
-          <div id="circle-4" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#141414]">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#2a2a2a] via-[#1a1a1a] to-[#0a0a0a] flex flex-col items-center justify-center text-center p-6 select-none">
-              <span class="text-5xl mb-3">🏭</span>
-              <span class="text-sm tracking-widest text-[#dcdde1] uppercase font-bold">4: Smokestacks</span>
-              <span class="text-xs text-neutral-400 mt-2 font-mono">Atmospheric Plume</span>
-            </div>
-          </div>
+          <!-- Circle 4: Factories / Smokestacks -->
+          <div id="circle-4" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden absolute bg-cover bg-center bg-no-repeat" style="background-image: url('/images/S2-04-factories.jpg');"></div>
 
-          <!-- Circle 5: Wildfire & Supplication -->
-          <div id="circle-5" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden border border-neutral-800 shadow-2xl absolute flex items-center justify-center bg-[#1c0d06]">
-            <div class="absolute inset-0 bg-gradient-to-br from-[#3d1a08] via-[#240e04] to-[#0c0401] flex flex-col items-center justify-center text-center p-6 select-none">
-              <span class="text-5xl mb-3">🔥</span>
-              <span class="text-sm tracking-widest text-[#f39c12] uppercase font-bold">5: Anthropocene</span>
-              <span class="text-xs text-neutral-400 mt-2 font-mono">Wildfire & Prayer</span>
-            </div>
-          </div>
+          <!-- Circle 5: Fire Prayer / Anthropocene -->
+          <div id="circle-5" class="scene2-circle opacity-0 w-[300px] h-[300px] rounded-full overflow-hidden absolute bg-cover bg-center bg-no-repeat" style="background-image: url('/images/S2-05-fireprayer.jpg');"></div>
 
         </div>
 
@@ -210,7 +180,10 @@
             </h2>
             <div id="scene5-subheading" class="scene-subheading text-center select-none mt-4 flex flex-col items-center gap-1.5">
               <span id="scene5-subheading-line1" class="inline-block opacity-0">Nobody gets out of bed to do less bad, but if you're asked to save the planet, you show up.</span>
-              <span id="scene5-subheading-line2" class="inline-block opacity-0">What if you stopped mitigating risks and started building what you want? What if you said yes?</span>
+              <div id="scene5-subheading-line2" class="inline-block">
+                <span id="scene5-subheading-line2-part1" class="inline-block opacity-0">What if you stopped mitigating risks and started building what you want?&nbsp;</span>
+                <span id="scene5-subheading-line2-part2" class="inline-block opacity-0">What if you said yes?</span>
+              </div>
             </div>
           </div>
         </div>

@@ -473,7 +473,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 24200;
+              const TOTAL_SCROLL_TRACK = 24600;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -1078,49 +1078,49 @@ function handleEnter() {
                 ease: 'none',
               }, 20500);
 
-              // Phase 37: Option 2 - Orbital Gravitational Convergence (21000px -> 22400px)
-              // 6 circles start dispersed across deep space and converge into 3x2 grid slots
+              // Phase 37: Option 2 - Randomized Orbital Gravitational Convergence (21000px -> 22400px)
+              // 6 circles start from asymmetric randomized vectors across space and converge into 3x2 grid slots
               
-              // Row 0, Col 0 (Lungs) - converges from upper-left
-              scrollTl.fromTo('#scene5-circle-0-0',
-                { x: -140, y: -100, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
+              // 1. Slot [1, 1] (Spiders emblem) - converges from upper-left diagonal
+              scrollTl.fromTo('#scene5-circle-1-1',
+                { x: -240, y: -180, scale: 0.45, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
                 21000
               );
 
-              // Row 0, Col 1 (Cow) - converges from upper-right
-              scrollTl.fromTo('#scene5-circle-0-1',
-                { x: 140, y: -90, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
-                21150
+              // 2. Slot [0, 0] (Lungs) - converges from lower-left
+              scrollTl.fromTo('#scene5-circle-0-0',
+                { x: -190, y: 210, scale: 0.5, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 850, ease: 'power2.out', immediateRender: false },
+                21100
               );
 
-              // Row 1, Col 0 (Steak) - converges from mid-left
-              scrollTl.fromTo('#scene5-circle-1-0',
-                { x: -160, y: 20, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
-                21300
-              );
-
-              // Row 1, Col 1 (Spiders) - converges from mid-right
-              scrollTl.fromTo('#scene5-circle-1-1',
-                { x: 160, y: 30, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
-                21450
-              );
-
-              // Row 2, Col 0 (Skull) - converges from bottom-left
-              scrollTl.fromTo('#scene5-circle-2-0',
-                { x: -130, y: 120, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
-                21600
-              );
-
-              // Row 2, Col 1 (Gentleman) - converges from bottom-right
+              // 3. Slot [2, 1] (Gentleman) - converges from high upper-right
               scrollTl.fromTo('#scene5-circle-2-1',
-                { x: 130, y: 110, scale: 0.65, opacity: 0 },
-                { x: 0, y: 0, scale: 1, opacity: 1, duration: 600, ease: 'power2.out', immediateRender: false },
-                21750
+                { x: 230, y: -240, scale: 0.4, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 750, ease: 'power2.out', immediateRender: false },
+                21220
+              );
+
+              // 4. Slot [1, 0] (Steak) - converges from wide lower-right
+              scrollTl.fromTo('#scene5-circle-1-0',
+                { x: 260, y: 150, scale: 0.55, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 850, ease: 'power2.out', immediateRender: false },
+                21320
+              );
+
+              // 5. Slot [0, 1] (Cow) - converges from wide left-center
+              scrollTl.fromTo('#scene5-circle-0-1',
+                { x: -270, y: -50, scale: 0.45, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 750, ease: 'power2.out', immediateRender: false },
+                21420
+              );
+
+              // 6. Slot [2, 0] (Skull) - converges from high north
+              scrollTl.fromTo('#scene5-circle-2-0',
+                { x: 70, y: -260, scale: 0.5, opacity: 0 },
+                { x: 0, y: 0, scale: 1, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
+                21520
               );
 
               // Phase 38: Narrative Heading Word-by-Word Reveal (22400px -> 22900px)
@@ -1139,23 +1139,31 @@ function handleEnter() {
                 );
               });
 
-              // Phase 39: Two-Line Narrative Subheading Reveal (22900px -> 23600px)
+              // Phase 39: Two-Line Narrative Subheading Reveal (22900px -> 24000px)
               // Line 1: (22900 -> 23200)
               scrollTl.fromTo('#scene5-subheading-line1',
                 { opacity: 0, y: 8 },
                 { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
                 22900
               );
-              // Line 2: (23300 -> 23600) after 100px pause
-              scrollTl.fromTo('#scene5-subheading-line2',
+              // 100px pause between Line 1 and Line 2
+              // Line 2, Part 1: "What if you stopped mitigating risks and started building what you want?" (23300 -> 23600)
+              scrollTl.fromTo('#scene5-subheading-line2-part1',
                 { opacity: 0, y: 8 },
                 { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
                 23300
               );
+              // 100px pause after question mark (23600 -> 23700)
+              // Line 2, Part 2: "What if you said yes?" (23700 -> 24000)
+              scrollTl.fromTo('#scene5-subheading-line2-part2',
+                { opacity: 0, y: 8 },
+                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                23700
+              );
 
-              // Phase 40: Scene 5 Complete Reading & Reflection Hold (23600px -> 24200px)
-              // [600px stillness hold on complete 3x2 grid, heading, and subheading]
-              scrollTl.to({}, { duration: 1 }, 24200);
+              // Phase 40: Scene 5 Complete Reading & Reflection Hold (24000px -> 24600px)
+              // [600px stillness hold on complete 3x2 grid, heading, and full subheading]
+              scrollTl.to({}, { duration: 1 }, 24600);
             }
           });
 
