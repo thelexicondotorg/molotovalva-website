@@ -8,6 +8,10 @@
     <meta name="description" content="MOLOTOVALVA" />
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
+
+    <!-- Scene 1 Critical Preloads -->
+    <link rel="preload" as="image" href="/images/01-click_to_enter.jpg" />
+    <link rel="preload" as="font" type="font/ttf" href="/fonts/Platelet Regular.ttf" crossorigin />
   </head>
   <body class="bg-black text-white min-h-screen font-mono selection:bg-[#00E900] selection:text-black overflow-x-hidden">
     
@@ -140,7 +144,7 @@
 
         <!-- Scene 3: Initial Large Deer Focus Circle (300px centered) -->
         <div id="scene3-deer-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div id="scene3-deer-focus" class="w-[300px] h-[300px] rounded-full overflow-hidden opacity-0 pointer-events-none relative" style="background-image: url('/images/OhDeer.jpg'); background-size: 3525px 1397px; background-position: -1075px -1096px; background-repeat: no-repeat;">
+          <div id="scene3-deer-focus" class="w-[300px] h-[300px] rounded-full overflow-hidden opacity-0 pointer-events-none relative">
           </div>
         </div>
 
@@ -157,7 +161,7 @@
         <div id="scene4-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
           <!-- 2x5 Grid Container of 10 Circular Apertures (796px x 304px) -->
           <div id="scene4-grid" class="relative w-[796px] h-[304px] grid grid-cols-5 grid-rows-2 gap-[24px] pointer-events-none" style="transform: translateY(-20px);">
-            <!-- 10 circles populated by JS with background assets -->
+            <!-- 10 circles populated by loadScene4Assets -->
           </div>
 
           <!-- Scene 4: Typography Area -->
@@ -175,16 +179,16 @@
           </div>
         </div>
 
-        <!-- Scene 4: Centered Video Portal (512px x 512px) -->
+        <!-- Scene 4: Centered Video Portal (512px x 512px) - preload="none" for zero startup overhead -->
         <div id="scene4-video-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
           <div id="scene4-video-portal" class="w-[512px] h-[512px] rounded-full overflow-hidden opacity-0 pointer-events-none relative">
-            <video id="scene4-video" src="/images/Woman_in_sea_of_bottles-squared-v1.mp4" playsinline muted preload="auto" class="w-full h-full object-cover"></video>
+            <video id="scene4-video" src="/images/Woman_in_sea_of_bottles-squared-v1.mp4" playsinline muted preload="none" class="w-full h-full object-cover"></video>
           </div>
         </div>
 
         <!-- Scene 4: Centered Still Portal (512px x 512px) for substitution & migration to Slot 1 -->
         <div id="scene4-still-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <div id="scene4-still-focus" class="w-[512px] h-[512px] rounded-full overflow-hidden opacity-0 pointer-events-none relative bg-cover bg-center" style="background-image: url('/images/S4-01-woman-in-sea-of-bottles.jpg');">
+          <div id="scene4-still-focus" class="w-[512px] h-[512px] rounded-full overflow-hidden opacity-0 pointer-events-none relative bg-cover bg-center">
           </div>
         </div>
 

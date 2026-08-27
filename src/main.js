@@ -39,6 +39,134 @@ window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
 /* -------------------------------------------------------------------------- */
+/*  Staged Just-In-Time (JIT) Asset Loaders                                   */
+/* -------------------------------------------------------------------------- */
+let scene3AssetsLoaded = false;
+export function loadScene3Assets() {
+  if (scene3AssetsLoaded) return;
+  scene3AssetsLoaded = true;
+
+  // 1. Preload image into browser cache
+  const img = new Image();
+  img.src = '/images/OhDeer.jpg';
+
+  // 2. Attach background to deer focus portal
+  const deerFocusEl = document.querySelector('#scene3-deer-focus');
+  if (deerFocusEl) {
+    deerFocusEl.style.backgroundImage = "url('/images/OhDeer.jpg')";
+    deerFocusEl.style.backgroundSize = '3525px 1397px';
+    deerFocusEl.style.backgroundPosition = '-1075px -1096px';
+    deerFocusEl.style.backgroundRepeat = 'no-repeat';
+  }
+
+  // 3. Attach backgrounds to 4x10 grid circles
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 10; c++) {
+      const circle = document.querySelector(`#scene3-circle-${r}-${c}`);
+      if (circle) {
+        circle.style.backgroundImage = "url('/images/OhDeer.jpg')";
+        circle.style.backgroundSize = '846px 335px';
+        circle.style.backgroundPosition = `-${c * 86}px -${r * 87.67}px`;
+        circle.style.backgroundRepeat = 'no-repeat';
+      }
+    }
+  }
+}
+
+let scene4AssetsLoaded = false;
+export function loadScene4Assets() {
+  if (scene4AssetsLoaded) return;
+  scene4AssetsLoaded = true;
+
+  const s4Assets = [
+    // Row 0
+    { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center', url: '/images/S4-01-woman-in-sea-of-bottles.jpg' },
+    { bg: "url('/images/S4-02-plane.jpg')", size: 'cover', pos: 'center', url: '/images/S4-02-plane.jpg' },
+    { bg: "url('/images/S4-03-Water.jpg')", size: 'cover', pos: 'center', url: '/images/S4-03-Water.jpg' },
+    { bg: "url('/images/S4-04-pumps.jpg')", size: 'cover', pos: 'center', url: '/images/S4-04-pumps.jpg' },
+    { bg: "url('/images/S4-05-wood.jpg')", size: 'cover', pos: 'center', url: '/images/S4-05-wood.jpg' },
+    // Row 1
+    { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '0px center', url: '/images/S4-06_07-desert.jpg' },
+    { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '-158px center' },
+    { bg: "url('/images/S4-08-activists.jpg')", size: 'cover', pos: 'center', url: '/images/S4-08-activists.jpg' },
+    { bg: "url('/images/S4-09-orangutan.jpg')", size: 'cover', pos: 'center', url: '/images/S4-09-orangutan.jpg' },
+    { bg: "url('/images/S4-10-diggers.jpg')", size: 'cover', pos: 'center', url: '/images/S4-10-diggers.jpg' },
+  ];
+
+  // Preload images into browser memory
+  s4Assets.forEach((item) => {
+    if (item.url) {
+      const img = new Image();
+      img.src = item.url;
+    }
+  });
+
+  // Attach background to Scene 4 still focus
+  const stillFocusEl = document.querySelector('#scene4-still-focus');
+  if (stillFocusEl) {
+    stillFocusEl.style.backgroundImage = "url('/images/S4-01-woman-in-sea-of-bottles.jpg')";
+  }
+
+  // Attach backgrounds to Scene 4 2x5 grid
+  for (let r = 0; r < 2; r++) {
+    for (let c = 0; c < 5; c++) {
+      const idx = r * 5 + c;
+      const circle = document.querySelector(`#scene4-circle-${r}-${c}`);
+      if (circle && s4Assets[idx]) {
+        circle.style.backgroundImage = s4Assets[idx].bg;
+        circle.style.backgroundSize = s4Assets[idx].size;
+        circle.style.backgroundPosition = s4Assets[idx].pos;
+        circle.style.backgroundRepeat = 'no-repeat';
+      }
+    }
+  }
+
+  // Preload video
+  const s4Video = document.querySelector('#scene4-video');
+  if (s4Video) {
+    s4Video.load();
+  }
+}
+
+// Global expose for console inspection
+window.loadScene3Assets = loadScene3Assets;
+window.loadScene4Assets = loadScene4Assets;
+
+// Build Scene 3 Grid Structure immediately (DOM-only, 0 bytes network)
+const scene3GridEl = document.querySelector('#scene3-grid');
+if (scene3GridEl && scene3GridEl.children.length === 0) {
+  for (let r = 0; r < 4; r++) {
+    for (let c = 0; c < 10; c++) {
+      const circle = document.createElement('div');
+      circle.id = `scene3-circle-${r}-${c}`;
+      circle.className = 'scene3-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
+      circle.style.width = '72px';
+      circle.style.height = '72px';
+      circle.setAttribute('data-row', r);
+      circle.setAttribute('data-col', c);
+      scene3GridEl.appendChild(circle);
+    }
+  }
+}
+
+// Build Scene 4 Grid Structure immediately (DOM-only, 0 bytes network)
+const scene4GridEl = document.querySelector('#scene4-grid');
+if (scene4GridEl && scene4GridEl.children.length === 0) {
+  for (let r = 0; r < 2; r++) {
+    for (let c = 0; c < 5; c++) {
+      const circle = document.createElement('div');
+      circle.id = `scene4-circle-${r}-${c}`;
+      circle.className = 'scene4-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
+      circle.style.width = '140px';
+      circle.style.height = '140px';
+      circle.setAttribute('data-row', r);
+      circle.setAttribute('data-col', c);
+      scene4GridEl.appendChild(circle);
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Landing Page Intro Choreography                                           */
 /* -------------------------------------------------------------------------- */
 const portalEl = document.getElementById('media-portal');
@@ -81,30 +209,30 @@ if (promptEl) {
 // Master Intro Timeline
 const introTl = gsap.timeline();
 
-// Step 1: Wait 1.5s with blinking cursor at exact screen center, then type "click_to_enter" over 1.0s
+// Step 1: Blinking cursor at center, then type "click_to_enter" (tight 0.4s initial breath + 0.8s typing)
 if (promptTextEl) {
   introTl.to(promptTextEl, {
     text: {
       value: 'click_to_enter',
       delimiter: '',
     },
-    duration: 1.0,
-    delay: 1.5,
+    duration: 0.8,
+    delay: 0.4,
     ease: 'none',
   });
 }
 
-// Step 2: 0.5s after typing ends:
+// Step 2: 0.3s after typing ends:
 // - Move the prompt down to its resting position
 // - Fade in and drop the circular portal into place
-introTl.addLabel('reveal', '+=0.5');
+introTl.addLabel('reveal', '+=0.3');
 
 if (promptEl) {
   introTl.to(
     promptEl,
     {
       y: 0,
-      duration: 1.0,
+      duration: 0.8,
       ease: 'power2.inOut',
     },
     'reveal'
@@ -117,7 +245,7 @@ if (portalEl) {
     {
       opacity: 1,
       y: 0,
-      duration: 1.0,
+      duration: 0.8,
       ease: 'power2.inOut',
     },
     'reveal'
@@ -125,13 +253,19 @@ if (portalEl) {
 }
 
 // 3. Click-to-Enter Exit Animation & Transition to Scene 2
-if (promptEl) {
-  promptEl.addEventListener('click', () => {
-    // Prepare prompt letters, prefix, and cursor for animation
-    const prefix = promptEl.querySelector('.prompt-prefix');
-    const cursor = promptEl.querySelector('.terminal-cursor');
-    const letters = Array.from(promptTextEl.querySelectorAll('.letter'));
-    const elementsToFall = [prefix, ...letters, cursor];
+let isEntering = false;
+function handleEnter() {
+  if (isEntering) return;
+  isEntering = true;
+
+  // Just-In-Time: Trigger prefetch for Scene 3 assets as soon as Scene 1 is exited
+  loadScene3Assets();
+
+  // Prepare prompt letters, prefix, and cursor for animation
+  const prefix = promptEl.querySelector('.prompt-prefix');
+  const cursor = promptEl.querySelector('.terminal-cursor');
+  const letters = Array.from(promptTextEl.querySelectorAll('.letter'));
+  const elementsToFall = [prefix, ...letters, cursor];
 
     promptTextEl.innerHTML = promptTextEl.innerText
       .split('')
@@ -238,27 +372,6 @@ if (promptEl) {
               const scene4DeltaX = targetLeft - scene4Rect.left;
               const scene4DeltaY = targetTop - scene4Rect.top;
 
-              // Populate Scene 3: 4x10 grid of 40 circular apertures
-              const scene3GridEl = document.querySelector('#scene3-grid');
-              if (scene3GridEl && scene3GridEl.children.length === 0) {
-                for (let r = 0; r < 4; r++) {
-                  for (let c = 0; c < 10; c++) {
-                    const circle = document.createElement('div');
-                    circle.id = `scene3-circle-${r}-${c}`;
-                    circle.className = 'scene3-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
-                    circle.style.width = '72px';
-                    circle.style.height = '72px';
-                    circle.style.backgroundImage = "url('/images/OhDeer.jpg')";
-                    circle.style.backgroundSize = '846px 335px';
-                    circle.style.backgroundPosition = `-${c * 86}px -${r * 87.67}px`;
-                    circle.style.backgroundRepeat = 'no-repeat';
-                    circle.setAttribute('data-row', r);
-                    circle.setAttribute('data-col', c);
-                    scene3GridEl.appendChild(circle);
-                  }
-                }
-              }
-
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
               const deerSlotEl = document.querySelector('#scene3-circle-3-3');
@@ -273,43 +386,6 @@ if (promptEl) {
                   deerDeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
                   deerDeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
                   deerScale = slotRect.width / focusRect.width;
-                }
-              }
-
-              // Populate Scene 4: 2x5 grid of 10 circular apertures
-              const scene4GridEl = document.querySelector('#scene4-grid');
-              if (scene4GridEl && scene4GridEl.children.length === 0) {
-                const s4Assets = [
-                  // Row 0
-                  { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-02-plane.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-03-Water.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-04-pumps.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-05-wood.jpg')", size: 'cover', pos: 'center' },
-                  // Row 1
-                  { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '0px center' },
-                  { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '-158px center' },
-                  { bg: "url('/images/S4-08-activists.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-09-orangutan.jpg')", size: 'cover', pos: 'center' },
-                  { bg: "url('/images/S4-10-diggers.jpg')", size: 'cover', pos: 'center' },
-                ];
-
-                for (let r = 0; r < 2; r++) {
-                  for (let c = 0; c < 5; c++) {
-                    const idx = r * 5 + c;
-                    const circle = document.createElement('div');
-                    circle.id = `scene4-circle-${r}-${c}`;
-                    circle.className = 'scene4-circle rounded-full overflow-hidden opacity-0 pointer-events-none select-none';
-                    circle.style.width = '140px';
-                    circle.style.height = '140px';
-                    circle.style.backgroundImage = s4Assets[idx].bg;
-                    circle.style.backgroundSize = s4Assets[idx].size;
-                    circle.style.backgroundPosition = s4Assets[idx].pos;
-                    circle.style.backgroundRepeat = 'no-repeat';
-                    circle.setAttribute('data-row', r);
-                    circle.setAttribute('data-col', c);
-                    scene4GridEl.appendChild(circle);
-                  }
                 }
               }
 
@@ -338,6 +414,15 @@ if (promptEl) {
                   end: '18000px top',
                   scrub: true,
                   invalidateOnRefresh: true,
+                  onUpdate: (self) => {
+                    const scrollPos = self.progress * 18000;
+                    if (scrollPos >= 1500 && !scene3AssetsLoaded) {
+                      loadScene3Assets();
+                    }
+                    if (scrollPos >= 7000 && !scene4AssetsLoaded) {
+                      loadScene4Assets();
+                    }
+                  }
                 }
               });
 
@@ -876,6 +961,14 @@ if (promptEl) {
         }
       });
     });
-  });
 }
+
+if (promptEl) {
+  promptEl.addEventListener('click', handleEnter);
+}
+if (portalEl) {
+  portalEl.addEventListener('click', handleEnter);
+  portalEl.style.cursor = 'pointer';
+}
+
 
