@@ -413,16 +413,22 @@ function handleEnter() {
                 }
               }
 
-              // 4. Bind GSAP ScrollTrigger for the 0 -> 26000px scroll scrub
+              // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
+              const TOTAL_SCROLL_TRACK = 21500;
+              const scrollTrackEl = document.querySelector('#scroll-track');
+              if (scrollTrackEl) {
+                scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
+              }
+
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
                   start: 'top top',
-                  end: '26000px top',
+                  end: 'bottom bottom',
                   scrub: true,
                   invalidateOnRefresh: true,
                   onUpdate: (self) => {
-                    const scrollPos = self.progress * 26000;
+                    const scrollPos = self.progress * TOTAL_SCROLL_TRACK;
                     if (scrollPos >= 1500 && !scene3AssetsLoaded) {
                       loadScene3Assets();
                     }
@@ -997,8 +1003,9 @@ function handleEnter() {
                 ease: 'none',
               }, 19300);
 
-              // Phase 35: Breathing Moment & Centered Hold (20000px -> 20500px)
-              // [500px stillness hold on "you_say_no_instead_of_yes_" with cursor blinking]
+              // Phase 35: Breathing Moment & Centered Hold (20000px -> 21500px)
+              // [1500px stillness hold on "you_say_no_instead_of_yes_" with cursor blinking]
+              scrollTl.to({}, { duration: 1 }, 21500);
             }
           });
 
