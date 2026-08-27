@@ -33,3 +33,4 @@ jobs:
           local-dir: './dist/'
           server-dir: ${{ secrets.HOSTINGER_REMOTE_PATH }}
           dangerous-clean-slate: false
+          timeout: 60000
