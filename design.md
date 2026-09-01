@@ -51,11 +51,13 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 
 #### Interactive Terminal Buttons (`.purchase-btn`)
 - **Typeface:** Platelet, monospace (`var(--font-terminal)`)
+- **Content Structure:** Text followed by standard terminal blinking cursor (`Purchase<span class="terminal-cursor">_</span>`)
 - **Specs:**
   - Font Size: `1.25rem` (`20px`)
   - Font Weight: `500`
   - Letter Spacing: `0.05em`
-  - Text Color: `#00E900` (`var(--color-terminal)`)
+  - Text & Cursor Color: `#00E900` (`var(--color-terminal)`)
+  - Blinking Animation: Inherits standard terminal `0.8s` step blink (`.terminal-cursor`)
   - Border: `1px solid rgba(0, 233, 0, 0.6)`
   - Shape: Pill (`border-radius: 9999px`)
   - Padding: `0.65rem 2.4rem`
@@ -63,7 +65,7 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
   - Box Shadow: `0 0 15px rgba(0, 233, 0, 0.12)`
 - **Hover State:**
   - Background: `#00E900`
-  - Text Color: `#000000` (Pure Black)
+  - Text & Cursor Color: `#000000` (Pure Black)
   - Border Color: `#00E900`
   - Box Shadow: `0 0 25px rgba(0, 233, 0, 0.5)`
   - Transform: `translateY(-2px)`

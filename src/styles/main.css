@@ -275,6 +275,11 @@ body {
   box-shadow: 0 0 15px rgba(0, 233, 0, 0.12);
 }
 
+.purchase-btn .terminal-cursor {
+  color: inherit;
+  margin-left: 3px;
+}
+
 .purchase-btn:hover {
   color: #000000;
   border-color: var(--color-terminal);
