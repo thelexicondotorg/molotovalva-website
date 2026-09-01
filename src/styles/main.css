@@ -238,6 +238,11 @@ body {
   transform: translateY(12px);
 }
 
+.scene-heading .heading-word.heading-word-light,
+.scene-heading .heading-word.text-light {
+  color: #F2E5B9;
+}
+
 .scene-subheading {
   font-family: var(--font-serif);
   font-size: 1.3rem;
