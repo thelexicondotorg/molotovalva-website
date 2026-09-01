@@ -188,9 +188,22 @@
           </div>
         </div>
 
-        <!-- Scene 5: Prompt ("you_say_no_instead_of_yes") -->
-        <div id="scene5-prompt" class="terminal-prompt select-none absolute opacity-0 z-40 pointer-events-none">
-          <span class="prompt-prefix">&gt;:&nbsp;</span><span id="scene5-prompt-text"></span><span class="terminal-cursor">_</span>
+        <!-- Scene 5: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene5-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene5-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene5-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
+        </div>
+
+        <!-- Scene 6: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene6-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene6-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene6-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
         </div>
 
         <!-- Scene 6: Video Portals (400px Central Apertures) -->
@@ -261,11 +274,6 @@
               <a href="#" id="scene6-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
             </div>
           </div>
-        </div>
-
-        <!-- Scene 6: Prompt ("our_future_without_food_illustratively_explained_by_ai") -->
-        <div id="scene6-prompt" class="terminal-prompt select-none absolute opacity-0 z-40 pointer-events-none">
-          <span class="prompt-prefix">&gt;:&nbsp;</span><span id="scene6-prompt-text"></span><span class="terminal-cursor">_</span>
         </div>
 
         <!-- Scroll Indicator -->

@@ -473,38 +473,41 @@ function handleEnter() {
               window.scrollTo(0, 0);
               ScrollTrigger.refresh();
 
-              // 3. Compute delta to top-left of the 1366px canvas
-              const canvasRect = mainCanvasEl ? mainCanvasEl.getBoundingClientRect() : { left: 24, top: 24 };
+              // 3. Compute dynamic responsive docking coordinates for top-left pinned prompts
+              function getPromptDockCoordinates() {
+                const canvasRect = mainCanvasEl ? mainCanvasEl.getBoundingClientRect() : { width: 1366, height: window.innerHeight, left: 0, top: 0 };
+                const isMobile = window.innerWidth <= 768;
+                const padX = isMobile ? 16 : 24;
+                const padY = isMobile ? 16 : 24;
+                const scale = isMobile ? 0.65 : 0.5;
+
+                return {
+                  dockX: -(canvasRect.width / 2 - padX),
+                  dockY: -(canvasRect.height / 2 - padY),
+                  scale: scale,
+                  padX: padX,
+                  padY: padY,
+                  canvasRect: canvasRect,
+                };
+              }
+
+              const promptCoords = getPromptDockCoordinates();
               const promptRect = promptEl.getBoundingClientRect();
-              
-              const targetLeft = canvasRect.left + 24;
-              const targetTop = canvasRect.top + 24;
-              const deltaX = targetLeft - promptRect.left;
-              const deltaY = targetTop - promptRect.top;
+              const targetLeft = promptCoords.canvasRect.left + promptCoords.padX;
+              const targetTop = promptCoords.canvasRect.top + promptCoords.padY;
+              const s1DeltaX = targetLeft - promptRect.left;
+              const s1DeltaY = targetTop - promptRect.top;
 
-              // Scene 3 Prompt delta to top-left
-              const scene3PromptEl = document.querySelector('#scene3-prompt');
-              const scene3Rect = scene3PromptEl ? scene3PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
-              const scene3DeltaX = targetLeft - scene3Rect.left;
-              const scene3DeltaY = targetTop - scene3Rect.top;
-
-              // Scene 4 Prompt delta to top-left
-              const scene4PromptEl = document.querySelector('#scene4-prompt');
-              const scene4Rect = scene4PromptEl ? scene4PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
-              const scene4DeltaX = targetLeft - scene4Rect.left;
-              const scene4DeltaY = targetTop - scene4Rect.top;
-
-              // Scene 5 Prompt delta to top-left
-              const scene5PromptEl = document.querySelector('#scene5-prompt');
-              const scene5Rect = scene5PromptEl ? scene5PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
-              const scene5DeltaX = targetLeft - scene5Rect.left;
-              const scene5DeltaY = targetTop - scene5Rect.top;
-
-              // Scene 6 Prompt delta to top-left
-              const scene6PromptEl = document.querySelector('#scene6-prompt');
-              const scene6Rect = scene6PromptEl ? scene6PromptEl.getBoundingClientRect() : { left: canvasRect.left + canvasRect.width / 2, top: canvasRect.top + canvasRect.height / 2 };
-              const scene6DeltaX = targetLeft - scene6Rect.left;
-              const scene6DeltaY = targetTop - scene6Rect.top;
+              // Ensure initial centering baseline for Scene 3, 4, 5, 6 prompt elements
+              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt'], {
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                xPercent: -50,
+                yPercent: -50,
+                x: 0,
+                y: 0,
+              });
 
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
@@ -605,10 +608,10 @@ function handleEnter() {
 
               // Phase 0 (0px -> 500px): Prompt shrinks & moves to top-left, scroll indicator fades out
               scrollTl.to(promptEl, {
-                scale: 0.5,
-                transformOrigin: 'left top',
-                x: deltaX,
-                y: promptInitialY + deltaY,
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                x: s1DeltaX,
+                y: promptInitialY + s1DeltaY,
                 duration: 500,
                 ease: 'none',
               }, 0);
@@ -713,7 +716,7 @@ function handleEnter() {
               // Phase 7: Staggered "Zero Gravity" Rise & Fade Out of Scene 2 Elements (5000px -> 5550px)
               // 1st to go: "hello_this_is_molotov_" prompt (5000px -> 5250px)
               scrollTl.to(promptEl, {
-                y: promptInitialY + deltaY - 200,
+                y: promptInitialY + s1DeltaY - 200,
                 opacity: 0,
                 duration: 250,
                 ease: 'power1.in',
@@ -745,8 +748,8 @@ function handleEnter() {
 
               // Phase 8: Scene 3 Prompt Rises cleanly to the Center (5500px -> 5900px)
               scrollTl.fromTo('#scene3-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
+                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
                 5500
               );
 
@@ -762,10 +765,12 @@ function handleEnter() {
 
               // Phase 11: Scene 3 Prompt Shrinks & Moves to Upper-Left Corner (6700px -> 7200px)
               scrollTl.to('#scene3-prompt', {
-                scale: 0.5,
-                transformOrigin: 'left top',
-                x: scene3DeltaX,
-                y: scene3DeltaY,
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
                 duration: 500,
                 ease: 'none',
               }, 6700);
@@ -955,9 +960,9 @@ function handleEnter() {
 
               // 4. Scene 3 Pinned Prompt floats up & dissolves
               scrollTl.to('#scene3-prompt', {
-                y: scene3DeltaY - 50,
+                y: promptCoords.dockY - 200,
                 opacity: 0,
-                duration: 350,
+                duration: 250,
                 ease: 'power1.in',
               }, 10150);
 
@@ -966,8 +971,8 @@ function handleEnter() {
 
               // Phase 19: Scene 4 Prompt Rises to Screen Center (10900px -> 11300px)
               scrollTl.fromTo('#scene4-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
+                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
                 10900
               );
 
@@ -993,10 +998,12 @@ function handleEnter() {
 
               // Phase 24: Scene 4 Prompt Shrinks & Moves to Upper-Left Corner (12700px -> 13200px)
               scrollTl.to('#scene4-prompt', {
-                scale: 0.5,
-                transformOrigin: 'left top',
-                x: scene4DeltaX,
-                y: scene4DeltaY,
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
                 duration: 500,
                 ease: 'none',
               }, 12700);
@@ -1144,9 +1151,9 @@ function handleEnter() {
 
               // 5. Scene 4 Pinned Prompt floats up & dissolves
               scrollTl.to('#scene4-prompt', {
-                y: scene4DeltaY - 50,
+                y: promptCoords.dockY - 200,
                 opacity: 0,
-                duration: 350,
+                duration: 250,
                 ease: 'power1.in',
               }, 18150);
 
@@ -1155,8 +1162,8 @@ function handleEnter() {
 
               // Phase 33: Scene 5 Prompt Rises to Screen Center (18900px -> 19300px)
               scrollTl.fromTo('#scene5-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
+                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
                 18900
               );
 
@@ -1172,10 +1179,12 @@ function handleEnter() {
 
               // Phase 36: Scene 5 Prompt Migration to Top-Left Corner (20500px -> 21000px)
               scrollTl.to('#scene5-prompt', {
-                scale: 0.5,
-                transformOrigin: 'left top',
-                x: scene5DeltaX,
-                y: scene5DeltaY,
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
                 duration: 500,
                 ease: 'none',
               }, 20500);
@@ -1269,7 +1278,7 @@ function handleEnter() {
               // Phase 41: Scene 5 Standard Zero-Gravity Staggered Exit (24600px -> 25150px)
               // 1. Top-Left Terminal Prompt departs (24600 -> 24850)
               scrollTl.to('#scene5-prompt', {
-                y: '-=200',
+                y: promptCoords.dockY - 200,
                 opacity: 0,
                 duration: 250,
                 ease: 'power1.in',
@@ -1302,8 +1311,8 @@ function handleEnter() {
               // Phase 42: Scene 6 Prompt Rises to Screen Center (25100px -> 25500px)
               // [Starts at T0 + 500px, overlapping final 50px of fading subheading]
               scrollTl.fromTo('#scene6-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
+                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
                 25100
               );
 
@@ -1319,10 +1328,12 @@ function handleEnter() {
 
               // Phase 45: Scene 6 Prompt Migration to Top-Left Corner (27000px -> 27500px)
               scrollTl.to('#scene6-prompt', {
-                scale: 0.5,
-                transformOrigin: 'left top',
-                x: scene6DeltaX,
-                y: scene6DeltaY,
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
                 duration: 500,
                 ease: 'none',
               }, 27000);

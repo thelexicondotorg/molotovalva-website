@@ -97,6 +97,30 @@ Each element ascends by `-200px` on the Y-axis while fading to `opacity: 0`.
 | 1st Exit: Prompt | 250px | `power1.in` | $T_0 \to T_0 + 250\text{px}$ |
 | 2nd Exit: Portals | 250px | `power1.in` | $T_0 + 100\text{px} \to T_0 + 350\text{px}$ |
 | 3rd Exit: Heading | 250px | `power1.in` | $T_0 + 200\text{px} \to T_0 + 450\text{px}$ |
-| 4th Exit: Subheading | 250px | `power1.in` | $T_0 + 300\text{px} \to T_0 + 550\text{px}$ |
 | Next Prompt Rise | 400px | `power1.out` | $T_0 + 500\text{px} \to T_0 + 900\text{px}$ |
 | Next Prompt Typing | 600px | `none` | $T_0 + 900\text{px} \to T_0 + 1500\text{px}$ |
+
+---
+
+## 6. Responsive Prompt Docking System
+
+To ensure all terminal prompts dock to the upper-left corner across all viewports (desktop, tablet, mobile) regardless of string length or viewport aspect ratios, prompts use a normalized origin-center architecture:
+
+1. **Initial Centered Baseline**:
+   - `position: absolute; left: 50%; top: 50%;`
+   - `xPercent: -50; yPercent: -50; x: 0; y: 0;`
+   - Centering is purely mathematical and invariant to dynamically typed text width.
+
+2. **Corner Migration Formula**:
+   - When migrating to the top-left corner, GSAP transitions:
+     - `xPercent: 0; yPercent: 0;`
+     - `x: -(canvasWidth / 2 - padX)`
+     - `y: -(canvasHeight / 2 - padY)`
+     - `transformOrigin: '0% 0%'`
+     - `scale: 0.5` (Desktop) / `0.65` (Mobile)
+   - The top-left corner of the element lands on `(padX, padY)` (`24px, 24px` on desktop, `16px, 16px` on mobile/tablet) with zero coordinate drift.
+
+3. **Zero-Gravity Exit**:
+   - `y: -(canvasHeight / 2 - padY) - 200`
+   - `opacity: 0`
+   - `duration: 250px`, `ease: 'power1.in'`.

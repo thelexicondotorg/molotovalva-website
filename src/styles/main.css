@@ -91,11 +91,24 @@
   /* Typography */
   --font-terminal: 'Platelet', 'Courier New', Courier, monospace;
   --font-serif: 'Adobe Garamond Pro', Garamond, 'Times New Roman', serif;
-  --terminal-font-size: 2rem;
+  --terminal-font-size: clamp(1.2rem, 2.2vw, 2rem);
   --terminal-font-weight: 600;
+
+  /* Stage Safe Bounds */
+  --stage-pad-x: 24px;
+  --stage-pad-y: 24px;
 
   /* Portal Component */
   --portal-size: 300px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --stage-pad-x: max(16px, env(safe-area-inset-left, 16px));
+    --stage-pad-y: max(16px, env(safe-area-inset-top, 16px));
+    --terminal-font-size: clamp(1.1rem, 3.8vw, 1.45rem);
+    --portal-size: min(260px, 75vw);
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -142,7 +155,7 @@ body {
 .terminal-text {
   font-family: var(--font-terminal);
   font-size: var(--terminal-font-size);
-  font-weight: var(--terminal-weight);
+  font-weight: var(--terminal-font-weight);
   color: var(--color-terminal);
   line-height: 1.2;
 }
@@ -151,16 +164,20 @@ body {
 .terminal-prompt {
   font-family: var(--font-terminal);
   font-size: var(--terminal-font-size);
-  font-weight: var(--terminal-weight);
+  font-weight: var(--terminal-font-weight);
   color: var(--color-terminal);
-  margin-top: 2rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   user-select: none;
+  white-space: nowrap;
   transition: opacity 0.15s ease;
+}
+
+#terminal-prompt {
+  margin-top: 2rem;
 }
 
 .terminal-prompt.static-prompt {
