@@ -22,13 +22,23 @@
         <!-- Central Portal Section -->
         <section class="flex flex-col items-center justify-center text-center pointer-events-auto">
           
-          <!-- Central Media Portal: 300px x 300px Circular Mask -->
-          <div class="media-portal border border-neutral-900 shadow-2xl" id="media-portal">
-            <img 
-              src="/images/01-click_to_enter-v2.jpg" 
-              alt="Central Media Portal" 
-              class="w-full h-full object-cover"
-            />
+          <!-- Central Media Portal: 300px x 300px Circular Mask with Dual Looping Video -->
+          <div class="media-portal border border-neutral-900 shadow-2xl relative overflow-hidden" id="media-portal">
+            <video 
+              id="intro-video-a" 
+              playsinline 
+              muted 
+              autoplay
+              src="/images/S0-Intro-Video-v2.mp4" 
+              class="w-full h-full object-cover absolute inset-0 opacity-100"
+            ></video>
+            <video 
+              id="intro-video-b" 
+              playsinline 
+              muted 
+              src="/images/S0-Intro-Video-v2.mp4" 
+              class="w-full h-full object-cover absolute inset-0 opacity-0"
+            ></video>
           </div>
 
           <!-- Interactive Terminal Prompt -->

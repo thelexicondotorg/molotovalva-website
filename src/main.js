@@ -289,13 +289,98 @@ if (scene5GridEl && scene5GridEl.children.length === 0) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Landing Page Intro Choreography                                           */
+/*  Landing Page Intro Choreography & Dual-Video Crossfade Loop              */
 /* -------------------------------------------------------------------------- */
 const portalEl = document.getElementById('media-portal');
 const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
 const mainCanvasEl = document.getElementById('main-canvas');
 const scrollIndicator = document.getElementById('scroll-indicator');
+
+let cancelIntroVideoLoop = null;
+
+function initIntroVideoCrossfadeLoop() {
+  const videoA = document.getElementById('intro-video-a');
+  const videoB = document.getElementById('intro-video-b');
+  if (!videoA || !videoB) return;
+
+  const CROSSFADE_DURATION = 0.85; // seconds
+  const END_MARGIN = 1.5; // Cut-off margin before file end
+  const PRE_ROLL_ADVANCE = -2.2; // Seconds to play incoming video in background before starting the crossfade
+  let activeVideo = videoA;
+  let nextVideo = videoB;
+  let isPreRolling = false;
+  let isCrossfading = false;
+  let isLoopRunning = true;
+
+  // Initial z-index & playback
+  videoA.style.zIndex = '1';
+  videoB.style.zIndex = '2';
+  videoA.style.opacity = '1';
+  videoB.style.opacity = '0';
+  videoA.currentTime = 0;
+  videoA.play().catch(() => {});
+
+  function checkLoop() {
+    if (!isLoopRunning) return;
+
+    if (activeVideo && activeVideo.duration && activeVideo.duration > 0) {
+      const remainingTime = activeVideo.duration - activeVideo.currentTime;
+
+      // Phase 1: Start incoming video playing silently in the background (Pre-roll)
+      if (remainingTime <= (CROSSFADE_DURATION + END_MARGIN + PRE_ROLL_ADVANCE) && !isPreRolling) {
+        isPreRolling = true;
+        nextVideo.currentTime = 0;
+        nextVideo.style.zIndex = '2';
+        nextVideo.style.opacity = '0';
+        nextVideo.play().catch(() => {});
+      }
+
+      // Phase 2: Trigger crossfade once pre-roll advance has elapsed
+      if (remainingTime <= (CROSSFADE_DURATION + END_MARGIN) && !isCrossfading && isPreRolling) {
+        isCrossfading = true;
+
+        activeVideo.style.zIndex = '1';
+        activeVideo.style.opacity = '1';
+
+        // Fade next video IN on top of active video
+        gsap.to(nextVideo, {
+          opacity: 1,
+          duration: CROSSFADE_DURATION,
+          ease: 'power1.inOut',
+          onComplete: () => {
+            activeVideo.pause();
+            activeVideo.currentTime = 0;
+            activeVideo.style.opacity = '0';
+
+            // Swap roles
+            const temp = activeVideo;
+            activeVideo = nextVideo;
+            nextVideo = temp;
+
+            activeVideo.style.zIndex = '1';
+            nextVideo.style.zIndex = '2';
+            nextVideo.style.opacity = '0';
+            isPreRolling = false;
+            isCrossfading = false;
+          },
+        });
+      }
+    }
+
+    requestAnimationFrame(checkLoop);
+  }
+
+  requestAnimationFrame(checkLoop);
+
+  cancelIntroVideoLoop = () => {
+    isLoopRunning = false;
+    videoA.pause();
+    videoB.pause();
+  };
+}
+
+initIntroVideoCrossfadeLoop();
 
 // Calculate the vertical offset to place the prompt at the exact center of the screen
 function calculateCenterOffset() {
@@ -380,6 +465,11 @@ function handleEnter() {
   if (isEntering) return;
   isEntering = true;
 
+  // Stop intro video looping
+  if (cancelIntroVideoLoop) {
+    cancelIntroVideoLoop();
+  }
+
   // Just-In-Time: Trigger prefetch for Scene 3 assets as soon as Scene 1 is exited
   loadScene3Assets();
 
@@ -426,7 +516,7 @@ function handleEnter() {
     exitTl.call(() => {
       promptTextEl.innerHTML = '';
       gsap.set(allElements, { clearProps: 'all' });
-      
+
       gsap.to(promptEl, {
         y: promptInitialY,
         opacity: 1,
@@ -458,7 +548,7 @@ function handleEnter() {
                 // Animate child elements (line and chevrons)
                 const elements = scrollIndicator.querySelectorAll('.scroll-anim');
                 const chevronTl = gsap.timeline({ repeat: -1 });
-                
+
                 chevronTl.fromTo(elements,
                   { opacity: 0, y: -5 },
                   { opacity: 1, y: 5, duration: 0.75, stagger: 0.2, ease: "power1.in" }
@@ -1191,7 +1281,7 @@ function handleEnter() {
 
               // Phase 37: Option 2 - Randomized Orbital Gravitational Convergence (21000px -> 22400px)
               // 6 circles start from asymmetric randomized vectors across space and converge into 3x2 grid slots
-              
+
               // 1. Slot [1, 1] (Spiders emblem) - converges from upper-left diagonal
               scrollTl.fromTo('#scene5-circle-1-1',
                 { x: -240, y: -180, scale: 0.45, opacity: 0 },
@@ -1342,7 +1432,7 @@ function handleEnter() {
               const s6Video1 = document.querySelector('#scene6-video-1');
               const s6Video2 = document.querySelector('#scene6-video-2');
               const s6VideoState = { time: 0 };
-              
+
               scrollTl.to(s6VideoState, {
                 time: 6.5,
                 duration: 3000,
@@ -1550,5 +1640,3 @@ if (portalEl) {
   portalEl.addEventListener('click', handleEnter);
   portalEl.style.cursor = 'pointer';
 }
-
-
