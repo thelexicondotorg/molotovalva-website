@@ -197,11 +197,11 @@
         <div id="scene6-video-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
           <!-- Left / Primary Video Circle -->
           <div id="scene6-video-portal-left" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
-            <video id="scene6-video-1" playsinline muted class="w-full h-full object-cover"></video>
+            <video id="scene6-video-1" playsinline muted class="w-[800px] h-full max-w-none object-cover object-center absolute top-0 left-0"></video>
           </div>
           <!-- Right / Cloned Video Circle (Mitosis generated) -->
           <div id="scene6-video-portal-right" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
-            <video id="scene6-video-2" playsinline muted class="w-full h-full object-cover"></video>
+            <video id="scene6-video-2" playsinline muted class="w-[800px] h-full max-w-none object-cover object-center absolute top-0 left-0"></video>
           </div>
         </div>
 
@@ -215,7 +215,7 @@
         <div id="scene6-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
           
           <!-- 5x3 Grid of 15 Circles (~124px diameter) -->
-          <div id="scene6-grid" class="flex flex-col items-center gap-[22px] select-none" style="transform: translateY(-85px);">
+          <div id="scene6-grid" class="flex flex-col items-center gap-[22px] select-none">
             <!-- Row 0 (5 circles) -->
             <div class="flex items-center gap-[26px]">
               <div id="scene6-circle-0-0" class="scene6-circle w-[124px] h-[124px] rounded-full overflow-hidden bg-cover bg-center border border-neutral-900 shadow-xl opacity-0"></div>
@@ -243,8 +243,8 @@
           </div>
 
           <!-- Scene 6: Typography Area & Purchase Button -->
-          <div id="scene6-typography" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <h2 id="scene6-heading" class="scene-heading text-center select-none" style="transform: translateY(220px);">
+          <div id="scene6-typography" class="flex flex-col items-center justify-center mt-6 select-none pointer-events-none">
+            <h2 id="scene6-heading" class="scene-heading text-center select-none">
               <span class="heading-word">Molotov</span>
               <span class="heading-word">Alva</span>
               <span class="heading-word">and</span>
@@ -253,11 +253,11 @@
               <span class="heading-word">of</span>
               <span class="heading-word">Extraction.</span>
             </h2>
-            <div id="scene6-subheading" class="scene-subheading text-center select-none mt-4 flex flex-col items-center gap-1.5" style="transform: translateY(220px);">
+            <div id="scene6-subheading" class="scene-subheading text-center select-none mt-4 flex flex-col items-center gap-1.5">
               <span id="scene6-subheading-line1" class="inline-block opacity-0 text-[1.15rem]">As witnessed by Douglas Gayeton.</span>
               <span id="scene6-subheading-line2" class="inline-block opacity-0 text-[1.15rem]">272 pages. Signed and numbered edition of 500.</span>
             </div>
-            <div id="scene6-purchase-btn-wrapper" class="mt-7" style="transform: translateY(220px);">
+            <div id="scene6-purchase-btn-wrapper" class="mt-6">
               <a href="#" id="scene6-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase.</a>
             </div>
           </div>

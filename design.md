@@ -49,17 +49,38 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 - **Spacing:** `2rem` top margin below the circular portal
 - **Cursor:** `pointer`
 
+#### Interactive Terminal Buttons (`.purchase-btn`)
+- **Typeface:** Platelet, monospace (`var(--font-terminal)`)
+- **Specs:**
+  - Font Size: `1.25rem` (`20px`)
+  - Font Weight: `500`
+  - Letter Spacing: `0.05em`
+  - Text Color: `#00E900` (`var(--color-terminal)`)
+  - Border: `1px solid rgba(0, 233, 0, 0.6)`
+  - Shape: Pill (`border-radius: 9999px`)
+  - Padding: `0.65rem 2.4rem`
+  - Background: `transparent`
+  - Box Shadow: `0 0 15px rgba(0, 233, 0, 0.12)`
+- **Hover State:**
+  - Background: `#00E900`
+  - Text Color: `#000000` (Pure Black)
+  - Border Color: `#00E900`
+  - Box Shadow: `0 0 25px rgba(0, 233, 0, 0.5)`
+  - Transform: `translateY(-2px)`
+  - Transition: `all 0.35s cubic-bezier(0.16, 1, 0.3, 1)`
+
 #### Scene Narrative Headings & Subheadings
 - **Heading Style:** Serif narrative headline (`.scene-heading`), Adobe Garamond Pro Regular, `3rem`, `#B59E59`
 - **Subheading Style:** Serif narrative subtitle (`.scene-subheading`), Adobe Garamond Pro Regular/Italic, `1.3rem`, `#A3A3A3`
-- **Placement:** Centered horizontally, stacked directly below the 5-circle row
+- **Placement:** Centered horizontally, stacked directly below the visual grid with standardized `mt-6` (`24px`) top margin
 
 ## Invariant Design Rules (Never Change Across Iterations)
 1. Canvas MUST remain pure black (`#000000`). Never replace with slate, dark gray, or gradient fills.
-2. Terminal text MUST remain `#00E900` using Platelet font at `2rem` / `600` weight.
+2. Terminal text and interactive CTA buttons MUST use Platelet font and `#00E900` neon green accent.
 3. Portal MUST remain a perfect `300px` circular mask during single-portal focus.
 4. Scene headings MUST use Adobe Garamond Pro Regular at `3rem` with `#B59E59` fill.
 5. Scene subheadings MUST use Adobe Garamond Pro Regular/Italic at `1.3rem` with `#A3A3A3` fill.
-6. Do NOT add animation timelines, scroll triggers, or keyframes until static layout phase is finalized.
-7. Inter-scene transitions MUST follow the standardized Zero-Gravity Staggered Exit protocol documented in [animation.md](./animation.md).
+6. Narrative typography MUST always sit in natural vertical flow below visual elements with standardized top padding/margin (`mt-6`), never overlapping visual circles.
+7. Do NOT add animation timelines, scroll triggers, or keyframes until static layout phase is finalized.
+8. Inter-scene transitions MUST follow the standardized Zero-Gravity Staggered Exit protocol documented in [animation.md](./animation.md).
 

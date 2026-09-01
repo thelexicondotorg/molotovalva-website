@@ -60,7 +60,14 @@ Each element ascends by `-200px` on the Y-axis while fading to `opacity: 0`.
 
 ---
 
-## 4. Typography Choreography Specs
+## 4. Typography Choreography & Layout Hierarchy Specs
+
+### Vertical Spacing & Layout Hierarchy
+- **Standard Layout Flow:** Narrative typography containers (`.scene-typography`) must ALWAYS sit in the natural vertical flex flow directly beneath visual grids/elements with a standardized top margin (`mt-6` / `24px`).
+- **No Overlapping Coordinates:** Headings and subheadings must never use unanchored absolute coordinates or collide with visual aperture rows/grids.
+- **Internal Typography Spacing:** 
+  - Margin between Heading and Subheading: `mt-4` (`16px`).
+  - Margin between Subheading and CTA Button: `mt-6` (`24px`).
 
 ### Narrative Heading (`.scene-heading`)
 - **Typeface**: Adobe Garamond Pro Regular (`3rem`, `#B59E59`).
@@ -74,6 +81,11 @@ Each element ascends by `-200px` on the Y-axis while fading to `opacity: 0`.
 - **Reveal**: Two-part sequence:
   - **Part 1 (Regular)**: `300px` fade-in (`opacity: 0 → 1`, `y: 8px → 0px`), followed by a `100px` hold.
   - **Part 2 (Italic)**: `300px` fade-in (`opacity: 0 → 1`, `y: 8px → 0px`).
+
+### Terminal CTA Button (`.purchase-btn`)
+- **Typeface**: Platelet monospace (`1.25rem`, `#00E900`).
+- **Reveal**: `300px` fade-in (`opacity: 0 → 1`, `y: 10px → 0px`, `power1.out`).
+- **Pointer Events**: Switched to `auto` upon reveal completion.
 
 ---
 

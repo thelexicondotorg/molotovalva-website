@@ -1352,22 +1352,42 @@ function handleEnter() {
                 { opacity: 1, x: 0, y: 0, duration: 150, ease: 'none', immediateRender: false },
                 27500
               );
+              // Video 1 starts centered inside the 400px aperture (x: -200)
+              scrollTl.fromTo('#scene6-video-1',
+                { x: -200 },
+                { x: -200, duration: 2300, ease: 'none', immediateRender: false },
+                27500
+              );
 
               // Shot 2 (2.0s -> 3.8s | 28400 -> 29300): Single central circle continues
 
               // Shot 3a (4.0s -> 5.0s | 29300 -> 29800): Single central circle holds for 1s equivalent
 
               // Shot 3b & Mitosis Split (5.0s -> 6.5s | 29800 -> 30300):
-              // Primary circle shifts left (-210px) while right cloned circle emerges and shifts right (+210px)
+              // Primary circle shifts left (-200px) while right cloned circle emerges and shifts right (+200px)
+              // Inner video 1 transitions from center (-200px) to left half (0px)
+              // Inner video 2 transitions from center (-200px) to right half (-400px)
               scrollTl.to('#scene6-video-portal-left', {
-                x: -210,
+                x: -200,
+                duration: 500,
+                ease: 'power2.inOut',
+              }, 29800);
+
+              scrollTl.to('#scene6-video-1', {
+                x: 0,
                 duration: 500,
                 ease: 'power2.inOut',
               }, 29800);
 
               scrollTl.fromTo('#scene6-video-portal-right',
                 { opacity: 0, x: 0, y: 0 },
-                { opacity: 1, x: 210, y: 0, duration: 500, ease: 'power2.inOut', immediateRender: false },
+                { opacity: 1, x: 200, y: 0, duration: 500, ease: 'power2.inOut', immediateRender: false },
+                29800
+              );
+
+              scrollTl.fromTo('#scene6-video-2',
+                { x: -200 },
+                { x: -400, duration: 500, ease: 'power2.inOut', immediateRender: false },
                 29800
               );
 
@@ -1385,13 +1405,13 @@ function handleEnter() {
 
               // Phase 47: Large Still Dual Focus Handoff & Hold (30400px -> 30800px)
               scrollTl.fromTo('#scene6-still-portal-left',
-                { opacity: 0, x: -210, y: 0, scale: 1 },
-                { opacity: 1, x: -210, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
+                { opacity: 0, x: -200, y: 0, scale: 1 },
+                { opacity: 1, x: -200, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
                 30450
               );
               scrollTl.fromTo('#scene6-still-portal-right',
-                { opacity: 0, x: 210, y: 0, scale: 1 },
-                { opacity: 1, x: 210, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
+                { opacity: 0, x: 200, y: 0, scale: 1 },
+                { opacity: 1, x: 200, y: 0, scale: 1, duration: 100, ease: 'none', immediateRender: false },
                 30450
               );
 
