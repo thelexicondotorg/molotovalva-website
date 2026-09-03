@@ -310,3 +310,42 @@ body {
   transform: translateY(-2px);
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Scene 7 Narrative Paragraphs                                              */
+/* -------------------------------------------------------------------------- */
+#scene7-narrative {
+  transform-origin: center center;
+}
+
+.scene7-paragraph {
+  font-family: var(--font-serif);
+  font-size: 1.22rem;
+  line-height: 1.68;
+  font-weight: 400;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  color: #eaeaea;
+}
+
+.scene7-paragraph-italic {
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.62;
+  color: #c4c4c4;
+}
+
+@media (max-width: 768px) {
+  .scene7-paragraph {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  .scene7-paragraph-italic {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+

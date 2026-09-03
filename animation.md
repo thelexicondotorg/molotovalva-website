@@ -124,3 +124,41 @@ To ensure all terminal prompts dock to the upper-left corner across all viewport
    - `y: -(canvasHeight / 2 - padY) - 200`
    - `opacity: 0`
    - `duration: 250px`, `ease: 'power1.in'`.
+
+---
+
+## 7. Scene 6 Exit & Scene 7 Lifecycle Specs
+
+### Scene 6 Zero-Gravity Staggered Exit (35,300px – 35,950px)
+- **Reading Hold**: `34,800px` -> `35,300px` (500px stillness hold on completed Museum grid and Purchase CTA).
+- **Staggered Upward Ascension** (`-200px` on Y-axis with `power1.in`, `250px` scrub per element):
+  1. `#scene6-prompt`: starts at `35,300px` (ends at `35,550px`)
+  2. `#scene6-grid` (15 circles): starts at `35,400px` (ends at `35,650px`)
+  3. `#scene6-heading`: starts at `35,500px` (ends at `35,750px`)
+  4. `#scene6-subheading`: starts at `35,600px` (ends at `35,850px`)
+  5. `#scene6-purchase-btn-wrapper`: starts at `35,700px` (ends at `35,950px`)
+
+### Scene 7 Prompt Entrance & Typing (35,900px – 37,300px)
+- **Prompt Rise**: `35,900px` -> `36,300px` (400px scrub, `fromTo` `{ y: 180, opacity: 0 }` to `{ y: 0, opacity: 1 }`, `power1.out`).
+- **Prompt Typing**: `36,300px` -> `37,100px` (800px scrub, types `narrated_by_an_otherwordly_intelligence` via `TextPlugin`).
+- **Centered Breathing Hold**: `37,100px` -> `37,300px` (200px stillness hold on typed prompt at center with blinking cursor).
+
+### Scene 7 Multi-Act Cinematic Choreography: The Spatial Continuum (37,300px – 39,200px)
+- **Act 1: Prompt Docking & Portal Zoom-In** (`37,300px` -> `37,800px` | 500px):
+  - Prompt shrinks and migrates to top-left corner (`scale: 0.5` / `0.65`, `dockX`, `dockY`).
+  - Unified 512px circular portal (`#scene7-portal`, native resolution, zero upscaling):
+    - Fades in over 200px (`37,300px` -> `37,500px`, `opacity: 0 -> 1`).
+    - Slowly zooms from 95% to 100% over the full 500px (`scale: 0.95 -> 1.0`).
+- **Act 2: Circle Continues Zooming In Behind End-Credits Crawl** (`37,800px` -> `38,300px` | 500px):
+  - The portal **never shrinks down or zooms out**: it continues zooming in smoothly (`scale: 1.0 -> 1.05`) while behind the text at low ambient opacity (`opacity: 1.0 -> 0.18`).
+  - 3 paragraphs of text (100% wide, large film credits styling at `scale: 1.25`) slowly scroll up in front of the portal (`y: 450 -> 0`, `opacity: 0 -> 1`).
+- **Credits Center Pause** (`38,300px` -> `38,400px` | 100px):
+  - 100px stillness hold with all three paragraphs visible, large, and centered in the viewport with the dim avatar watermark hovering behind them at 105% scale.
+- **Act 3: Spatial Separation & Return to Full Presence** (`38,400px` -> `39,000px` | 600px):
+  - Text zooms down from credit scale (`scale: 1.25 -> 1.0`, max-width to `600px`) and glides right (`x: 0 -> +300px`, `power2.inOut`).
+  - Portal glides smoothly from center to the left column (`x: 0 -> -330px`, `power2.inOut`) while brightening to 100% presence (`opacity: 0.18 -> 1.0`) at full 105% size, perfectly balanced in the desktop spread.
+- **End-State Pause** (`39,000px` -> `39,200px` | 200px):
+  - 200px stillness pause on the final layout matching `Scene7-end.png`.
+- **Final Reflection Hold** (`39,200px` -> `41,000px` | 1,800px):
+  - Deep reading hold on the final composition.
+

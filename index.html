@@ -286,6 +286,42 @@
           </div>
         </div>
 
+        <!-- Scene 7: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene7-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene7-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene7-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
+        </div>
+
+        <!-- Scene 7: Visuals & Narrative Container (Continuous Spatial Stage) -->
+        <div id="scene7-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20 px-6 sm:px-10">
+          
+          <!-- Unified Circular Portal (512px native, recedes to 320px / scale 0.625, glides left in Act 3) -->
+          <div id="scene7-portal-wrapper" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+            <div id="scene7-portal" class="media-portal w-[512px] h-[512px] max-w-[85vw] max-h-[85vw] rounded-full overflow-hidden border border-neutral-900 shadow-2xl opacity-0">
+              <img id="scene7-image" src="/images/S7-1-molotov.jpg" alt="Molotov Alva" class="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          <!-- Narrative Text (100% wide end-credits crawl in Act 2, then zooms down & moves to right in Act 3) -->
+          <div id="scene7-narrative-wrapper" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[960px] pointer-events-none z-20 flex justify-center">
+            <div id="scene7-narrative" class="w-full flex flex-col gap-6 text-left select-none opacity-0">
+              <p id="scene7-p1" class="scene7-paragraph">
+                In 2006, Douglas Gayeton stumbled upon an amplified intelligence living in Second Life. The result of that encounter, <span class="italic">Molotov Alva and His Search for the Creator</span>, became a ten-part HBO series and ignited an international academic debate over where the human ends and the synthetic self begins.
+              </p>
+              <p id="scene7-p2" class="scene7-paragraph">
+                Twenty years later, that same intelligence, now amplified and distributed, delivered an instruction manual for a species running out of time. Where applicable, illustrations were&nbsp;&nbsp;also provided.
+              </p>
+              <p id="scene7-p3" class="scene7-paragraph scene7-paragraph-italic">
+                After bearing witness to this oratory, Douglas Gayeton made judicious alterations to the text. This led counsel to advise that the work be classified as faction, a negotiated mix of fact and fiction. Pursuant to Molotov’s express directive, Rumplefarm Press has printed the book in full color, at twelve by nine inches, on FSC-certified paper, in Marceline, Missouri, the farm town Walt Disney later reconstructed as Main Street from childhood memory, an act of faction the Museum of Extraction would recognize as its own.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
         <!-- Scroll Indicator -->
         <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
           <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">

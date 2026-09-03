@@ -231,11 +231,26 @@ export function loadScene6Assets() {
   });
 }
 
+// Lazy load Scene 7 assets
+let scene7AssetsLoaded = false;
+export function loadScene7Assets() {
+  if (scene7AssetsLoaded) return;
+  scene7AssetsLoaded = true;
+
+  const s7Img = document.querySelector('#scene7-image');
+  if (s7Img && !s7Img.getAttribute('src')) {
+    s7Img.src = '/images/S7-1-molotov.jpg';
+  }
+  const img = new Image();
+  img.src = '/images/S7-1-molotov.jpg';
+}
+
 // Global expose for console inspection
 window.loadScene3Assets = loadScene3Assets;
 window.loadScene4Assets = loadScene4Assets;
 window.loadScene5Assets = loadScene5Assets;
 window.loadScene6Assets = loadScene6Assets;
+window.loadScene7Assets = loadScene7Assets;
 
 // Build Scene 3 Grid Structure immediately (DOM-only, 0 bytes network)
 const scene3GridEl = document.querySelector('#scene3-grid');
@@ -588,8 +603,8 @@ function handleEnter() {
               const s1DeltaX = targetLeft - promptRect.left;
               const s1DeltaY = targetTop - promptRect.top;
 
-              // Ensure initial centering baseline for Scene 3, 4, 5, 6 prompt elements
-              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt'], {
+              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7 prompt elements
+              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt'], {
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
@@ -598,6 +613,11 @@ function handleEnter() {
                 x: 0,
                 y: 0,
               });
+
+              // Ensure Scene 7 visual initial states
+              gsap.set('#scene7-portal', { opacity: 0, scale: 0.95 });
+              gsap.set('#scene7-narrative-wrapper', { opacity: 0, y: 450 });
+              gsap.set('#scene7-narrative', { opacity: 0 });
 
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
@@ -665,7 +685,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 35500;
+              const TOTAL_SCROLL_TRACK = 41000;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -691,6 +711,9 @@ function handleEnter() {
                     }
                     if (scrollPos >= 22000 && !scene6AssetsLoaded) {
                       loadScene6Assets();
+                    }
+                    if (scrollPos >= 30000 && !scene7AssetsLoaded) {
+                      loadScene7Assets();
                     }
                   }
                 }
@@ -1606,15 +1629,187 @@ function handleEnter() {
                 34200
               );
 
-              // Phase 52: Purchase Button Fade-In & Ambient Breathing Hold (34500px -> 35500px)
+              // Phase 52: Purchase Button Fade-In (34500px -> 34800px)
               scrollTl.fromTo('#scene6-purchase-btn',
                 { opacity: 0, y: 10 },
                 { opacity: 1, y: 0, duration: 300, ease: 'power1.out', immediateRender: false },
                 34500
               );
 
-              // Final reading & reflection hold on the complete masterpiece
-              scrollTl.to({}, { duration: 1 }, 35500);
+              // Phase 53: Scene 6 Reading Hold (34800px -> 35300px)
+              // [500px stillness hold on the complete Scene 6 masterpiece]
+
+              // Phase 54: Scene 6 Zero-Gravity Staggered Exit (35300px -> 35950px)
+              // Outgoing elements ascend by -200px on Y while fading to opacity: 0
+              // 1. Scene 6 Prompt
+              scrollTl.to('#scene6-prompt', {
+                y: promptCoords.dockY - 200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 35300);
+
+              // 2. Scene 6 Grid (5x3 museum circles)
+              scrollTl.to('#scene6-grid', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 35400);
+
+              // 3. Scene 6 Heading
+              scrollTl.to('#scene6-heading', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 35500);
+
+              // 4. Scene 6 Subheading
+              scrollTl.to('#scene6-subheading', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 35600);
+
+              // 5. Scene 6 Purchase Button
+              scrollTl.to('#scene6-purchase-btn-wrapper', {
+                y: -200,
+                opacity: 0,
+                duration: 250,
+                ease: 'power1.in',
+              }, 35700);
+              scrollTl.set('#scene6-purchase-btn', { pointerEvents: 'none' }, 35700);
+
+              // Phase 55: Scene 7 Prompt Rises to Screen Center (35900px -> 36300px)
+              // [Starts at T0 + 600px, overlapping final 50px of fading purchase button]
+              scrollTl.fromTo('#scene7-prompt',
+                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
+                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
+                35900
+              );
+
+              // Phase 56: Scene 7 Prompt Typing (36300px -> 37100px)
+              scrollTl.to('#scene7-prompt-text', {
+                text: { value: 'narrated_by_an_otherwordly_intelligence', delimiter: '' },
+                duration: 800,
+                ease: 'none',
+              }, 36300);
+
+              // Phase 57: Centered Breathing Hold on Prompt (37100px -> 37300px)
+              // [200px stillness hold on fully typed prompt with blinking cursor at screen center]
+
+              // Helper to compute responsive Scene 7 coordinates
+              function getScene7Layout() {
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile) {
+                  return {
+                    portalEndX: 0,
+                    portalEndY: -170,
+                    textEndX: 0,
+                    textEndY: 120,
+                    textMaxWidth: '100%',
+                  };
+                }
+                
+                // Desktop: 2-column layout matching Scene7-end.png
+                // Total group width ~ 538px (portal @ 105%) + 60px (gap) + 600px (text) = 1198px
+                // Symmetrically centered within 1366px canvas (84px left & right margins)
+                return {
+                  portalEndX: -330,
+                  portalEndY: 0,
+                  textEndX: 300,
+                  textEndY: 0,
+                  textMaxWidth: '600px',
+                };
+              }
+              const s7Layout = getScene7Layout();
+
+              // Phase 58: Act 1 — Prompt Docking & Big Circle Zoom-In (37300px -> 37800px | 500px)
+              // 1. Prompt shrinks and positions itself to the top-left of the screen
+              scrollTl.to('#scene7-prompt', {
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
+                duration: 500,
+                ease: 'none',
+              }, 37300);
+
+              // 2. 512px circular portal fades in (200px fade-in) while slowly zooming from 95% to 100% over 500px
+              scrollTl.fromTo('#scene7-portal',
+                { opacity: 0, scale: 0.95 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                37300
+              );
+              scrollTl.to('#scene7-portal', {
+                scale: 1.0,
+                duration: 500,
+                ease: 'none',
+              }, 37300);
+
+              // Phase 59: Act 2 — Circle Continues Zooming In Behind End-Credits Crawl (37800px -> 38300px | 500px)
+              // 1. Circle keeps zooming in (100% -> 105%) while behind the text at low opacity (never shrinks down or zooms out!)
+              scrollTl.to('#scene7-portal', {
+                scale: 1.05,
+                opacity: 0.18,
+                duration: 500,
+                ease: 'none',
+              }, 37800);
+
+              // 2. Three paragraphs of text (100% wide) slowly scroll up like film end credits in front of portal
+              scrollTl.set('#scene7-narrative-wrapper', { pointerEvents: 'auto' }, 37800);
+              scrollTl.fromTo('#scene7-narrative-wrapper',
+                { y: 450, opacity: 0 },
+                { y: 0, opacity: 1, duration: 500, ease: 'none', immediateRender: false },
+                37800
+              );
+              scrollTl.fromTo('#scene7-narrative',
+                { scale: 1.25, maxWidth: '960px', opacity: 0 },
+                { scale: 1.25, maxWidth: '960px', opacity: 1, duration: 500, ease: 'none', immediateRender: false },
+                37800
+              );
+
+              // Phase 60: Pause for 100px with all three paragraphs visible and big in the center (38300px -> 38400px)
+              // [100px stillness hold on centered end credits with ambient background portal at 105% scale and 18% opacity]
+
+              // Phase 61: Act 3 — Spatial Separation & Return to Full Presence (38400px -> 39000px | 600px)
+              // 1. Paragraphs zoom down and glide right to reach exact position of end state
+              scrollTl.to('#scene7-narrative-wrapper', {
+                x: s7Layout.textEndX,
+                y: s7Layout.textEndY,
+                duration: 600,
+                ease: 'power2.inOut',
+              }, 38400);
+              scrollTl.to('#scene7-narrative', {
+                scale: 1.0,
+                maxWidth: s7Layout.textMaxWidth,
+                duration: 600,
+                ease: 'power2.inOut',
+              }, 38400);
+
+              // 2. Portal glides smoothly from center to the left column and brightens to 100% presence (never shrinking down!)
+              scrollTl.to('#scene7-portal-wrapper', {
+                x: s7Layout.portalEndX,
+                y: s7Layout.portalEndY,
+                duration: 600,
+                ease: 'power2.inOut',
+              }, 38400);
+              scrollTl.to('#scene7-portal', {
+                opacity: 1.0,
+                duration: 600,
+                ease: 'power2.inOut',
+              }, 38400);
+
+              // Phase 62: Pause like that for 200px (39000px -> 39200px)
+              // [200px stillness pause on final Scene 7 end state]
+
+              // Phase 63: Final Reflection Hold (39200px -> 41000px)
+              scrollTl.to({}, { duration: 1 }, 41000);
             }
           });
 
