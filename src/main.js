@@ -245,12 +245,23 @@ export function loadScene7Assets() {
   img.src = '/images/S7-1-molotov.jpg';
 }
 
+// Lazy load Scene 9 assets
+let scene9AssetsLoaded = false;
+export function loadScene9Assets() {
+  if (scene9AssetsLoaded) return;
+  scene9AssetsLoaded = true;
+
+  const img = new Image();
+  img.src = '/images/S9-01-book.jpg';
+}
+
 // Global expose for console inspection
 window.loadScene3Assets = loadScene3Assets;
 window.loadScene4Assets = loadScene4Assets;
 window.loadScene5Assets = loadScene5Assets;
 window.loadScene6Assets = loadScene6Assets;
 window.loadScene7Assets = loadScene7Assets;
+window.loadScene9Assets = loadScene9Assets;
 
 // Build Scene 3 Grid Structure immediately (DOM-only, 0 bytes network)
 const scene3GridEl = document.querySelector('#scene3-grid');
@@ -603,8 +614,8 @@ function handleEnter() {
               const s1DeltaX = targetLeft - promptRect.left;
               const s1DeltaY = targetTop - promptRect.top;
 
-              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8 prompt elements
-              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt'], {
+              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8, 9 prompt elements
+              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt', '#scene9-prompt'], {
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
@@ -623,6 +634,17 @@ function handleEnter() {
               gsap.set('#scene8-prompt', { opacity: 0 });
               gsap.set(['#scene8-fly-1', '#scene8-fly-2', '#scene8-fly-3', '#scene8-fly-4'], { opacity: 0 });
               gsap.set(['#scene8-card-1', '#scene8-card-2', '#scene8-card-3', '#scene8-card-4'], { opacity: 0 });
+
+              // Ensure Scene 9 visual initial states
+              gsap.set('#scene9-prompt', { opacity: 0 });
+              gsap.set('#scene9-book-wrapper', { opacity: 0, scale: 0, x: 0, y: 0 });
+              gsap.set('#scene9-content-wrapper', { opacity: 0, x: 0, y: 335, textAlign: 'left', alignItems: 'flex-start' });
+              gsap.set(['#scene9-heading', '#scene9-subtitle'], { textAlign: 'left' });
+              gsap.set(['#scene9-heading-1', '#scene9-heading-2'], { opacity: 0, y: 30 });
+              gsap.set(['#scene9-sub-1', '#scene9-sub-2', '#scene9-sub-3', '#scene9-sub-4', '#scene9-sub-5', '#scene9-sub-6'], { opacity: 0 });
+              gsap.set('#scene9-purchase-btn', { opacity: 0, y: 20, pointerEvents: 'none' });
+              gsap.set('#scene9-footer-wrapper', { opacity: 0, pointerEvents: 'none' });
+              gsap.set('#scene9-transmission', { opacity: 0 });
 
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
@@ -690,7 +712,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 48500;
+              const TOTAL_SCROLL_TRACK = 58500;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -719,6 +741,9 @@ function handleEnter() {
                     }
                     if (scrollPos >= 30000 && !scene7AssetsLoaded) {
                       loadScene7Assets();
+                    }
+                    if (scrollPos >= 42000 && !scene9AssetsLoaded) {
+                      loadScene9Assets();
                     }
                   }
                 }
@@ -2003,7 +2028,223 @@ function handleEnter() {
               // [200px stillness pause on final Scene 8 end-state matching Scene8-end.png]
 
               // Phase 73: Scene 8 Final Reading Hold (46600px -> 48500px | 1900px)
-              scrollTl.to({}, { duration: 1 }, 48500);
+              // [Reading hold before Scene 8 exit]
+
+              // --------------------------------------------------------------------------
+              // Scene 8 Zero-Gravity Exit & Scene 9 Grand Climax (48500px -> 59000px)
+              // --------------------------------------------------------------------------
+
+              // Phase 74: Scene 8 Zero-Gravity Staggered Ascension Exit (48500px -> 49150px | 650px)
+              // Outgoing Scene 8 elements drift upward by -200px and dissolve into the void
+              scrollTl.to('#scene8-prompt', {
+                y: promptCoords.dockY - 200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 48500);
+
+              scrollTl.to('#scene8-card-1', {
+                y: -200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 48600);
+
+              scrollTl.to('#scene8-card-2', {
+                y: -200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 48650);
+
+              scrollTl.to('#scene8-card-3', {
+                y: -200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 48700);
+
+              scrollTl.to('#scene8-card-4', {
+                y: -200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 48750);
+
+              // Phase 75: Scene 9 Prompt Rise from Bottom to Center (49100px -> 49500px | 400px)
+              scrollTl.fromTo('#scene9-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                49100
+              );
+
+              // Phase 76: Scene 9 Prompt Typing (49500px -> 50500px | 1000px)
+              // Types: ">: instructions_for_toppling_goliath_provided_"
+              scrollTl.to('#scene9-prompt-text', {
+                text: {
+                  value: 'instructions_for_toppling_goliath_provided',
+                  delimiter: '',
+                },
+                duration: 1000,
+                ease: 'none',
+              }, 49500);
+
+              // Phase 77: Centered Breathing Hold on Prompt (50500px -> 50700px | 200px)
+              // [200px stillness pause on typed prompt in center]
+
+              // Phase 78: Scene 9 Prompt Corner Docking (50700px -> 51200px | 500px)
+              // Shrinks and docks to top-left corner
+              scrollTl.to('#scene9-prompt', {
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
+                scale: promptCoords.scale,
+                duration: 500,
+                ease: 'power2.inOut',
+              }, 50700);
+
+              // Phase 79: The 600px Book Circle Entrance (51200px -> 51700px | 500px)
+              // Native 600px circle in dead center scales from 0 to 600px (scale: 0 -> 1.0)
+              // Ease-out profile: fast when small, softens acceleration as it reaches 600px
+              scrollTl.fromTo('#scene9-book-wrapper',
+                { scale: 0, opacity: 0, x: 0, y: 0 },
+                { scale: 1.0, opacity: 1, x: 0, y: 0, duration: 500, ease: 'power2.out', immediateRender: false },
+                51200
+              );
+
+              // Phase 80: Heading & Subtitle Reveal Under the Image with Upward Cluster Balancing (51700px -> 52500px | 800px)
+              // Content wrapper activates positioned strictly underneath the circle, centered as a block, text left-aligned
+              scrollTl.set('#scene9-content-wrapper', { opacity: 1, x: 0, y: 335, textAlign: 'left', alignItems: 'flex-start' }, 51700);
+
+              // Push the book up to y: -160px while heading lines enter below it, so the text is strictly below the circle
+              scrollTl.to('#scene9-book-wrapper', {
+                y: -160,
+                duration: 800,
+                ease: 'power1.out',
+              }, 51700);
+
+              // Heading Line 1: "First Edition,"
+              scrollTl.fromTo('#scene9-heading-1',
+                { y: 25, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                51700
+              );
+
+              // Heading Line 2: "signed and numbered."
+              scrollTl.fromTo('#scene9-heading-2',
+                { y: 25, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                52100
+              );
+
+              // Phase 81: Subtitle Batched Fade-In Underneath Heading (52500px -> 53700px | 1200px | 200px each)
+              // Line 1: Batches 1 to 5
+              // Batch 1: "272 pages,"
+              scrollTl.fromTo('#scene9-sub-1',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                52500
+              );
+
+              // Batch 2: " full color,"
+              scrollTl.fromTo('#scene9-sub-2',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                52700
+              );
+
+              // Batch 3: " twelve by nine inches."
+              scrollTl.fromTo('#scene9-sub-3',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                52900
+              );
+
+              // Batch 4: " Five hundred copies,"
+              scrollTl.fromTo('#scene9-sub-4',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                53100
+              );
+
+              // Batch 5: " each numbered by hand."
+              scrollTl.fromTo('#scene9-sub-5',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                53300
+              );
+
+              // Line 2: Batch 6: "Rumplefarm Press, 2026."
+              scrollTl.fromTo('#scene9-sub-6',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                53500
+              );
+
+              // Phase 82: Ease-In-Ease-Out Layout Reconfiguration (53700px -> 54500px | 800px)
+              // The 600px circle scales down to ~320px (scale: 0.5333) and glides left,
+              // while the heading & subtitle group glides right, matching Scene9-end.png
+              const isS9Mobile = window.innerWidth <= 768;
+              const s9BookFinalX = isS9Mobile ? 0 : -300;
+              const s9BookFinalY = isS9Mobile ? -140 : -20;
+              const s9BookFinalScale = isS9Mobile ? 0.42 : 0.5333; // 600 * 0.5333 = ~320px
+
+              const s9TextFinalX = isS9Mobile ? 0 : 230;
+              const s9TextFinalY = isS9Mobile ? 120 : -20;
+
+              scrollTl.to('#scene9-book-wrapper', {
+                x: s9BookFinalX,
+                y: s9BookFinalY,
+                scale: s9BookFinalScale,
+                duration: 800,
+                ease: 'power2.inOut',
+              }, 53700);
+
+              scrollTl.to('#scene9-content-wrapper', {
+                x: s9TextFinalX,
+                y: s9TextFinalY,
+                duration: 800,
+                ease: 'power2.inOut',
+              }, 53700);
+
+              // Phase 83: Purchase Button Entrance & Pause (54500px -> 55100px | 600px)
+              // Fades in from bottom, exact green outline & font matching Scene 6
+              scrollTl.fromTo('#scene9-purchase-btn',
+                { y: 20, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                54500
+              );
+              scrollTl.set('#scene9-purchase-btn', { pointerEvents: 'auto' }, 54900);
+
+              // 200px Stillness Pause on Purchase button (54900px -> 55100px)
+
+              // Phase 84: Lower Section Simultaneous Fade-In (55100px -> 55700px | 600px)
+              // Email capture form, dividing line, and 3 links fade in together 150px higher
+              scrollTl.fromTo('#scene9-footer-wrapper',
+                { opacity: 0 },
+                { opacity: 1, duration: 600, ease: 'power1.out', immediateRender: false },
+                55100
+              );
+              scrollTl.set('#scene9-footer-wrapper', { pointerEvents: 'auto' }, 55700);
+
+              // Phase 85: End of Transmission Typing (55700px -> 56500px | 800px)
+              // Types ">: end_of_transmission" in subtle muted grey prompt font, followed by cursor blinking forever
+              scrollTl.to('#scene9-transmission', {
+                opacity: 1,
+                duration: 100,
+                ease: 'none',
+              }, 55700);
+
+              scrollTl.to('#scene9-transmission-text', {
+                text: {
+                  value: 'end_of_transmission',
+                  delimiter: '',
+                },
+                duration: 700,
+                ease: 'none',
+              }, 55800);
+
+              // Phase 86: Final Master Reflection & Reading Hold (56500px -> 58500px | 2000px)
+              scrollTl.to({}, { duration: 1 }, 58500);
             }
           });
 

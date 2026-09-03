@@ -192,3 +192,51 @@ To ensure all terminal prompts dock to the upper-left corner across all viewport
 - **End-State Stillness Pause**: `46,400px` -> `46,600px` (200px hold on complete 2x2 grid matching `Scene8-end.png`).
 - **Scene 8 Final Reading Hold**: `46,600px` -> `48,500px` (1,900px deep reflection hold).
 
+---
+
+### Scene 8 Zero-Gravity Staggered Ascension Exit (48,500px – 49,150px)
+- Staggered ascension exit:
+  - `#scene8-prompt`: starts at `48,500px`, floats upward (`y: promptCoords.dockY - 200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene8-card-1`: starts at `48,600px`, floats upward (`y: -200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene8-card-2`: starts at `48,650px`, floats upward (`y: -200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene8-card-3`: starts at `48,700px`, floats upward (`y: -200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene8-card-4`: starts at `48,750px`, floats upward (`y: -200`, `opacity: 0`, duration `450px`, `power1.in`).
+
+---
+
+### Scene 9: "instructions_for_toppling_goliath_provided" (49,100px – 58,500px)
+- **Prompt Rise**: `49,100px` -> `49,500px` (400px scrub, `{ y: 180, opacity: 0 } -> { y: 0, opacity: 1 }`, `power1.out`).
+- **Prompt Typing**: `49,500px` -> `50,500px` (1,000px scrub, types `instructions_for_toppling_goliath_provided` via `TextPlugin`).
+- **Centered Breathing Hold**: `50,500px` -> `50,700px` (200px stillness hold on typed prompt at center with blinking cursor).
+- **Prompt Corner Docking**: `50,700px` -> `51,200px` (500px scrub, shrinks to `scale: 0.5` / `0.65` and docks to top-left corner).
+- **600px Book Circle Entrance**: `51,200px` -> `51,700px` (500px scrub):
+  - `#scene9-book-wrapper` dead center scales from `0px` to `600px` diameter (`scale: 0 -> 1.0`, `opacity: 0 -> 1`).
+  - Easing: `power2.out` (fast when small, softening acceleration as it settles at 600px diameter).
+- **Heading Lines Rise Under Image with Upward Cluster Balancing**: `51,700px` -> `52,500px` (800px scrub):
+  - Book circle glides up from `y: 0` to `y: -120px` (`power1.out`) to make room for text while keeping the cluster vertically centered.
+  - Heading lines appear underneath the book, center-aligned, fading up from bottom:
+    - Line 1 `First Edition,`: `51,700px` -> `52,100px` (`y: 30 -> 0`, `opacity: 0 -> 1`).
+    - Line 2 `signed and numbered.`: `52,100px` -> `52,500px` (`y: 30 -> 0`, `opacity: 0 -> 1`).
+- **Batched Subtitle Reveal Underneath Heading**: `52,500px` -> `53,700px` (1,200px scrub | 200px each):
+  - Batch 1 (`52,500px` – `52,700px`): `272 pages,`
+  - Batch 2 (`52,700px` – `52,900px`): `full color,`
+  - Batch 3 (`52,900px` – `53,100px`): `twelve by nine inches.`
+  - Batch 4 (`53,100px` – `53,300px`): `Five hundred copies,`
+  - Batch 5 (`53,300px` – `53,500px`): `each numbered by hand.`
+  - Batch 6 (`53,500px` – `53,700px`): `Rumplefarm Press, 2026.`
+- **Ease-In-Ease-Out Layout Reconfiguration**: `53,700px` -> `54,500px` (800px scrub, `power2.inOut`):
+  - Book circle scales down from 600px to ~320px (`scale: 1.0 -> 0.5333`) and moves left (`x: -300px`, `y: -20px`).
+  - Heading and subtitle group glides right (`x: +230px`, `y: -20px`) and transitions from center-alignment to flush left-alignment (`text-left`), matching `Scene9-end.png`.
+- **Purchase Button Entrance & Pause**: `54,500px` -> `55,100px` (600px scrub):
+  - Fades in from bottom (`y: 20 -> 0`, `opacity: 0 -> 1`, 400px).
+  - Exact green outline, font, and glow matching Scene 6 (`.purchase-btn`).
+  - 200px stillness hold (`54,900px` – `55,100px`).
+- **Lower Section Simultaneous Fade-In**: `55,100px` -> `55,700px` (600px scrub):
+  - Positioned 150px higher (`-translate-y-[150px]`).
+  - Email capture form (`you@example.com` in terminal font + green `Notify me.` button in terminal font), horizontal dividing line, and 3 footer links (`Rumplefarm Press`, `RestoreSix`, `Contact`) fade in together as one piece.
+- **End of Transmission Typing**: `55,700px` -> `56,500px` (800px scrub):
+  - Types `>: end_of_transmission` in lowercase grey font, with cursor blinking indefinitely.
+- **Final Master Reflection & Reading Hold**: `56,500px` -> `58,500px` (2,000px scrub):
+  - Complete stillness hold allowing the user to interact with the Purchase button, email capture form, and footer links.
+
+

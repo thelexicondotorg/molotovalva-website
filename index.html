@@ -433,6 +433,94 @@
 
             </div>
           </div>
+        </div>
+
+        <!-- Scene 9: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene9-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene9-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene9-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
+        </div>
+
+        <!-- Scene 9: Grand Climax Container -->
+        <div id="scene9-container" class="absolute inset-0 flex flex-col items-center justify-between pointer-events-none z-20 px-6 sm:px-10 lg:px-16 pt-16 pb-8 sm:pb-10">
+          
+          <!-- Upper Stage: Book Circle & Book Information -->
+          <div id="scene9-stage" class="w-full flex-1 flex items-center justify-center relative">
+            
+            <!-- Book Circle (600px diameter, scaled to 0 initially, eases out to 600px dead center) -->
+            <div id="scene9-book-wrapper" class="absolute w-[600px] h-[600px] max-w-[85vw] max-h-[85vw] rounded-full overflow-hidden flex items-center justify-center pointer-events-none z-10 opacity-0" style="transform-origin: center center;">
+              <div id="scene9-book-image" class="w-full h-full bg-cover bg-center rounded-full" style="background-image: url('/images/S9-01-book.jpg');"></div>
+            </div>
+
+            <!-- Content Group (Heading, Subtitle, Purchase Button) -->
+            <div id="scene9-content-wrapper" class="absolute flex flex-col items-start text-left z-20 w-fit max-w-[620px] pointer-events-none opacity-0" style="transform-origin: center center;">
+              <h2 id="scene9-heading" class="scene-heading text-left select-none text-[#c9a35e]">
+                <span id="scene9-heading-1" class="block opacity-0">First Edition,</span>
+                <span id="scene9-heading-2" class="block opacity-0">signed and numbered.</span>
+              </h2>
+
+              <p id="scene9-subtitle" class="scene9-subtitle mt-4 text-left select-none">
+                <span class="block whitespace-normal sm:whitespace-nowrap">
+                  <span id="scene9-sub-1" class="opacity-0">272 pages,</span>
+                  <span id="scene9-sub-2" class="opacity-0"> full color,</span>
+                  <span id="scene9-sub-3" class="opacity-0"> twelve by nine inches.</span>
+                  <span id="scene9-sub-4" class="opacity-0"> Five hundred copies,</span>
+                  <span id="scene9-sub-5" class="opacity-0"> each numbered by hand.</span>
+                </span>
+                <span class="block mt-1">
+                  <span id="scene9-sub-6" class="opacity-0">Rumplefarm Press, 2026.</span>
+                </span>
+              </p>
+
+              <div id="scene9-purchase-btn-wrapper" class="mt-6 flex justify-start w-full">
+                <a href="#" id="scene9-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Lower Stage: Email Capture Form, Divider, Footer Links, Transmission (Raised 150px higher) -->
+          <div id="scene9-footer-wrapper" class="w-full max-w-[840px] flex flex-col items-center pointer-events-none opacity-0 z-25 -translate-y-[150px]">
+            
+            <!-- Email Capture Form -->
+            <form id="scene9-email-form" class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[560px] pointer-events-auto" onsubmit="event.preventDefault();">
+              <input 
+                type="email" 
+                id="scene9-email-input" 
+                class="scene9-email-input flex-1 w-full" 
+                placeholder="you@example.com" 
+                required 
+              />
+              <button 
+                type="submit" 
+                id="scene9-notify-btn" 
+                class="scene9-notify-btn whitespace-nowrap"
+              >
+                notify_me<span class="terminal-cursor">_</span>
+              </button>
+            </form>
+
+            <!-- Subtle Horizontal Divider -->
+            <div id="scene9-divider" class="w-full border-t border-[#262626] my-6"></div>
+
+            <!-- Footer Links -->
+            <div id="scene9-links-row" class="flex items-center justify-center gap-8 sm:gap-14 text-sm pointer-events-auto select-none">
+              <a href="#" class="scene9-footer-link">Rumplefarm Press</a>
+              <a href="#" class="scene9-footer-link">RestoreSix</a>
+              <a href="#" class="scene9-footer-link">Contact</a>
+            </div>
+
+            <!-- End of Transmission Typing -->
+            <div id="scene9-transmission-wrapper" class="mt-5 text-center select-none">
+              <div id="scene9-transmission" class="scene9-transmission font-mono text-xs sm:text-sm tracking-wider opacity-0">
+                &gt;: <span id="scene9-transmission-text"></span><span class="terminal-cursor">_</span>
+              </div>
+            </div>
+
+          </div>
 
         </div>
 

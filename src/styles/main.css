@@ -410,4 +410,99 @@ body {
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Scene 9 Grand Climax Styles                                               */
+/* -------------------------------------------------------------------------- */
+.scene9-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #c4c4c4;
+  text-align: left;
+}
+
+.scene9-email-input {
+  background: rgba(20, 20, 20, 0.85);
+  border: 1px solid #383838;
+  border-radius: 9999px;
+  padding: 0.75rem 1.6rem;
+  color: #ffffff;
+  font-family: var(--font-terminal);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.scene9-email-input:focus {
+  border-color: var(--color-terminal);
+  box-shadow: 0 0 12px rgba(0, 233, 0, 0.25);
+}
+
+.scene9-email-input::placeholder {
+  font-family: var(--font-terminal);
+  letter-spacing: 0.05em;
+  color: #666666;
+}
+
+.scene9-notify-btn {
+  background-color: var(--color-terminal);
+  color: #000000;
+  font-family: var(--font-terminal);
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 2.2rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 0 15px rgba(0, 233, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scene9-notify-btn .terminal-cursor {
+  color: inherit;
+  margin-left: 2px;
+  animation: cursor-blink 0.8s infinite steps(1, start);
+}
+
+.scene9-notify-btn:hover {
+  background-color: #00ff00;
+  box-shadow: 0 0 25px rgba(0, 233, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+.scene9-footer-link {
+  color: #888888;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  pointer-events: auto;
+}
+
+.scene9-footer-link:hover {
+  color: #ffffff;
+}
+
+.scene9-transmission {
+  color: #737373;
+  font-family: var(--font-terminal);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+}
+
+.scene9-transmission .terminal-cursor {
+  color: inherit;
+  margin-left: 2px;
+  animation: cursor-blink 0.8s infinite steps(1, start);
+}
+
+@media (max-width: 768px) {
+  .scene9-subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
 
