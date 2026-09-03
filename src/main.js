@@ -603,8 +603,8 @@ function handleEnter() {
               const s1DeltaX = targetLeft - promptRect.left;
               const s1DeltaY = targetTop - promptRect.top;
 
-              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7 prompt elements
-              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt'], {
+              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8 prompt elements
+              gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt'], {
                 position: 'absolute',
                 left: '50%',
                 top: '50%',
@@ -618,6 +618,11 @@ function handleEnter() {
               gsap.set('#scene7-portal', { opacity: 0, scale: 0.95 });
               gsap.set('#scene7-narrative-wrapper', { opacity: 0, y: 450 });
               gsap.set('#scene7-narrative', { opacity: 0 });
+
+              // Ensure Scene 8 visual initial states
+              gsap.set('#scene8-prompt', { opacity: 0 });
+              gsap.set(['#scene8-fly-1', '#scene8-fly-2', '#scene8-fly-3', '#scene8-fly-4'], { opacity: 0 });
+              gsap.set(['#scene8-card-1', '#scene8-card-2', '#scene8-card-3', '#scene8-card-4'], { opacity: 0 });
 
               // Scene 3 Deer Portal Delta calculation
               const deerFocusEl = document.querySelector('#scene3-deer-focus');
@@ -685,7 +690,7 @@ function handleEnter() {
               }
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
-              const TOTAL_SCROLL_TRACK = 41000;
+              const TOTAL_SCROLL_TRACK = 48500;
               const scrollTrackEl = document.querySelector('#scroll-track');
               if (scrollTrackEl) {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
@@ -1808,8 +1813,197 @@ function handleEnter() {
               // Phase 62: Pause like that for 200px (39000px -> 39200px)
               // [200px stillness pause on final Scene 7 end state]
 
-              // Phase 63: Final Reflection Hold (39200px -> 41000px)
+              // Phase 63: Final Reflection Hold on Scene 7 (39200px -> 41000px)
               scrollTl.to({}, { duration: 1 }, 41000);
+
+              // =========================================================================
+              // SCENE 7 ZERO-GRAVITY EXIT (41000px -> 41650px)
+              // =========================================================================
+              // Phase 64: Staggered Zero-Gravity Ascension Exit
+              // 1. Prompt floats upwards into the void
+              scrollTl.to('#scene7-prompt', {
+                y: promptCoords.dockY - 200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 41000);
+
+              // 2. Colophon text floats upwards into the void
+              scrollTl.to('#scene7-narrative-wrapper', {
+                y: s7Layout.textEndY - 200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 41100);
+
+              // 3. Circular portal floats upwards into the void
+              scrollTl.to('#scene7-portal-wrapper', {
+                y: s7Layout.portalEndY - 200,
+                opacity: 0,
+                duration: 450,
+                ease: 'power1.in',
+              }, 41200);
+
+              // =========================================================================
+              // SCENE 8: REVIEWED BY MACHINES (41600px -> 48500px)
+              // =========================================================================
+              // Phase 65: Scene 8 Prompt Rises to Screen Center (41600px -> 42000px | 400px)
+              scrollTl.fromTo('#scene8-prompt',
+                { y: 180, opacity: 0 },
+                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                41600
+              );
+
+              // Phase 66: Computer Prompt Typing (42000px -> 42800px | 800px)
+              scrollTl.to('#scene8-prompt-text', {
+                text: { value: 'reviewed_by_machines', delimiter: '' },
+                duration: 800,
+                ease: 'none',
+              }, 42000);
+
+              // Phase 67: Centered Breathing Hold on Prompt (42800px -> 43000px | 200px)
+              // [200px stillness hold on fully typed prompt with blinking cursor at screen center]
+
+              // Phase 68: Scene 8 Prompt Docking to Top-Left Corner (43000px -> 43500px | 500px)
+              scrollTl.to('#scene8-prompt', {
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
+                x: promptCoords.dockX,
+                y: promptCoords.dockY,
+                duration: 500,
+                ease: 'none',
+              }, 43000);
+
+              // Phase 69: The Dreamy Cinematic Fly-In of Quotes (43500px -> 45550px)
+              const flyW = window.innerWidth || 1400;
+              const flyH = window.innerHeight || 900;
+              const sideOffsetY = window.innerHeight ? Math.min(160, Math.round(window.innerHeight * 0.18)) : 150;
+
+              // Quote 1: Fly in from Left at higher vertical track (43500px -> 44500px | 1000px)
+              // Flies from offscreen left at higher vertical position (y: -sideOffsetY), scales 300% -> 200%, fades in
+              scrollTl.fromTo('#scene8-fly-1',
+                { x: -flyW, y: -sideOffsetY, scale: 3.0, opacity: 0 },
+                { x: 0, y: -sideOffsetY, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                43500
+              );
+              // Fade out Quote 1 smoothly as Quote 2 arrives
+              scrollTl.to('#scene8-fly-1', {
+                opacity: 0,
+                duration: 400,
+                ease: 'power1.in',
+              }, 44100);
+
+              // Quote 2: Fly in from Right at lower vertical track (43833px -> 44833px | 1000px)
+              // Starts at 1/3 progress of Quote 1, flies at lower vertical position (y: +sideOffsetY), scales 300% -> 200%
+              scrollTl.fromTo('#scene8-fly-2',
+                { x: flyW, y: sideOffsetY, scale: 3.0, opacity: 0 },
+                { x: 0, y: sideOffsetY, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                43833
+              );
+              // Fade out Quote 2 smoothly as Quote 3 arrives and superimposes
+              scrollTl.to('#scene8-fly-2', {
+                opacity: 0,
+                duration: 400,
+                ease: 'power1.in',
+              }, 44433);
+
+              // Quote 3: Fly in from Top (44167px -> 45167px | 1000px)
+              // Starts at 1/3 progress of Quote 2, superimposes over Quote 2
+              scrollTl.fromTo('#scene8-fly-3',
+                { x: 0, y: -flyH, scale: 3.0, opacity: 0 },
+                { x: 0, y: 0, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                44167
+              );
+              // Fade out Quote 3 smoothly as Quote 4 arrives and superimposes
+              scrollTl.to('#scene8-fly-3', {
+                opacity: 0,
+                duration: 400,
+                ease: 'power1.in',
+              }, 44767);
+
+              // Quote 4: Fly in from Bottom (44500px -> 45500px | 1000px)
+              // Starts at 1/3 progress of Quote 3, reaches center at scale 2.0
+              scrollTl.fromTo('#scene8-fly-4',
+                { x: 0, y: flyH, scale: 3.0, opacity: 0 },
+                { x: 0, y: 0, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                44500
+              );
+
+              // Phase 70: Quote 4 Center Stillness Pause (45500px -> 45600px | 100px)
+              // [100px pause with Quote 4 centered and prominent at 200% scale]
+
+              // Phase 71: Settle into 2x2 Grid (45600px -> 46400px | 800px)
+              // Helper to compute Card 4 delta relative to fly-layer center
+              function getScene8Card4Delta() {
+                const card4 = document.querySelector('#scene8-card-4');
+                const flyLayer = document.querySelector('#scene8-fly-layer');
+                if (card4 && flyLayer) {
+                  const cardRect = card4.getBoundingClientRect();
+                  const flyRect = flyLayer.getBoundingClientRect();
+                  const flyCenterX = flyRect.left + flyRect.width / 2;
+                  const flyCenterY = flyRect.top + flyRect.height / 2;
+                  const cardCenterX = cardRect.left + cardRect.width / 2;
+                  const cardCenterY = cardRect.top + cardRect.height / 2;
+                  return {
+                    deltaX: cardCenterX - flyCenterX,
+                    deltaY: cardCenterY - flyCenterY,
+                  };
+                }
+                const isMobile = window.innerWidth <= 768;
+                return isMobile ? { deltaX: 0, deltaY: 280 } : { deltaX: 300, deltaY: 180 };
+              }
+              const s8Delta = getScene8Card4Delta();
+
+              // 1. Quote 4 moves and scales to reach final position in grid (scale 2.0 -> 1.0)
+              scrollTl.to('#scene8-fly-4', {
+                x: s8Delta.deltaX,
+                y: s8Delta.deltaY,
+                scale: 1.0,
+                duration: 800,
+                ease: 'power2.inOut',
+              }, 45600);
+
+              // Cross-fade seamlessly into final card 4 at its exact slot
+              scrollTl.fromTo('#scene8-card-4',
+                { opacity: 0 },
+                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
+                46200
+              );
+              scrollTl.to('#scene8-fly-4', {
+                opacity: 0,
+                duration: 200,
+                ease: 'power1.in',
+              }, 46200);
+
+              // 2. The other three quotes randomly fade in at their end positions (scale 1.0)
+              // Card 2 (Top-Right): fades in first
+              scrollTl.fromTo('#scene8-card-2',
+                { opacity: 0 },
+                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                45750
+              );
+
+              // Card 1 (Top-Left): fades in next
+              scrollTl.fromTo('#scene8-card-1',
+                { opacity: 0 },
+                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                45900
+              );
+
+              // Card 3 (Bottom-Left): fades in last
+              scrollTl.fromTo('#scene8-card-3',
+                { opacity: 0 },
+                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
+                46050
+              );
+
+              // Phase 72: End-State Stillness Pause (46400px -> 46600px | 200px)
+              // [200px stillness pause on final Scene 8 end-state matching Scene8-end.png]
+
+              // Phase 73: Scene 8 Final Reading Hold (46600px -> 48500px | 1900px)
+              scrollTl.to({}, { duration: 1 }, 48500);
             }
           });
 

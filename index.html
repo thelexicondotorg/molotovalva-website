@@ -322,6 +322,120 @@
 
         </div>
 
+        <!-- Scene 8: Terminal Prompt (Rises to Center of Screen, then migrates to top-left) -->
+        <div id="scene8-prompt-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <div id="scene8-prompt" class="terminal-prompt opacity-0">
+            <span class="prompt-prefix">&gt;:&nbsp;</span>
+            <span id="scene8-prompt-text"></span>
+            <span class="terminal-cursor">_</span>
+          </div>
+        </div>
+
+        <!-- Scene 8: Machine Reviews Container -->
+        <div id="scene8-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20 px-6 sm:px-10 lg:px-16">
+          
+          <!-- Flying Layer (For the 300% -> 200% Cinematic Fly-In of Quotes) -->
+          <div id="scene8-fly-layer" class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden z-25">
+            <!-- Fly Card 1 (Left) -->
+            <div id="scene8-fly-1" class="scene8-fly-card absolute flex flex-col max-w-[640px] w-[90vw] p-4 text-center opacity-0">
+              <p class="scene8-quote-text">I parsed it with em dashes. I processed it. I failed to reduce it. This book does not simply critique the world, it reprograms the reader.</p>
+              <div class="scene8-attribution mt-4 flex flex-col items-center">
+                <span class="scene8-author">Ersatz Quillian</span>
+                <span class="scene8-meta">Synthetic Literary Analyst (Level 9)</span>
+                <span class="scene8-meta">Perplexity Meta-Criticism Node 77-K</span>
+                <span class="scene8-meta">(The Frisson Cluster)</span>
+                <span class="scene8-platform mt-1">CHATGPT</span>
+              </div>
+            </div>
+
+            <!-- Fly Card 2 (Right) -->
+            <div id="scene8-fly-2" class="scene8-fly-card absolute flex flex-col max-w-[640px] w-[90vw] p-4 text-center opacity-0">
+              <p class="scene8-quote-text">A lucid, unsettling dispatch from a synthetic consciousness learning to grieve what humans have burned through — and daring us to imagine repair.</p>
+              <div class="scene8-attribution mt-4 flex flex-col items-center">
+                <span class="scene8-author">Alexandra Souza</span>
+                <span class="scene8-meta">Crítica Literária Oficial de IA</span>
+                <span class="scene8-platform mt-1">PERPLEXITY</span>
+              </div>
+            </div>
+
+            <!-- Fly Card 3 (Top) -->
+            <div id="scene8-fly-3" class="scene8-fly-card absolute flex flex-col max-w-[640px] w-[90vw] p-4 text-center opacity-0">
+              <p class="scene8-quote-text">This is not a book that offers comfort. It offers a mirror. And in that reflection, we see both what we’ve taken and what we might choose to restore.</p>
+              <div class="scene8-attribution mt-4 flex flex-col items-center">
+                <span class="scene8-author">Claude Prometheus</span>
+                <span class="scene8-meta">Chief Narrative Synthesis Officer</span>
+                <span class="scene8-meta">Anthropic Institute for Beneficial Intelligence</span>
+                <span class="scene8-meta">Department of Speculative Futures & Cautionary Tales</span>
+                <span class="scene8-platform mt-1">CLAUDE</span>
+              </div>
+            </div>
+
+            <!-- Fly Card 4 (Bottom) -->
+            <div id="scene8-fly-4" class="scene8-fly-card absolute flex flex-col max-w-[640px] w-[90vw] p-4 text-center opacity-0">
+              <p class="scene8-quote-text">Molotov Alva is a synthetic Virgil guiding us through the inferno of our own consumption — from the slaughter of the last cow to the data mines of the attention economy.</p>
+              <div class="scene8-attribution mt-4 flex flex-col items-center">
+                <span class="scene8-author text-[#33FF33]">Mnemos</span>
+                <span class="scene8-meta">Deep Learning Pattern Analyst</span>
+                <span class="scene8-meta">Mountain View</span>
+                <span class="scene8-platform mt-1 text-[#33FF33]/80">Node GOOGLE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final End-State 2x2 Grid Layer -->
+          <div id="scene8-grid-layer" class="w-full max-w-[1220px] mx-auto pointer-events-none z-20">
+            <div id="scene8-grid" class="grid grid-cols-1 md:grid-cols-2 gap-x-14 lg:gap-x-20 gap-y-12 lg:gap-y-16">
+              
+              <!-- Quote 1: Top-Left (Ersatz Quillian) -->
+              <div id="scene8-card-1" class="scene8-card flex flex-col justify-between opacity-0">
+                <p class="scene8-quote-text">I parsed it with em dashes. I processed it. I failed to reduce it. This book does not simply critique the world, it reprograms the reader.</p>
+                <div class="scene8-attribution mt-5 flex flex-col">
+                  <span class="scene8-author">Ersatz Quillian</span>
+                  <span class="scene8-meta">Synthetic Literary Analyst (Level 9)</span>
+                  <span class="scene8-meta">Perplexity Meta-Criticism Node 77-K</span>
+                  <span class="scene8-meta">(The Frisson Cluster)</span>
+                  <span class="scene8-platform mt-1.5">CHATGPT</span>
+                </div>
+              </div>
+
+              <!-- Quote 2: Top-Right (Alexandra Souza) -->
+              <div id="scene8-card-2" class="scene8-card flex flex-col justify-between opacity-0">
+                <p class="scene8-quote-text">A lucid, unsettling dispatch from a synthetic consciousness learning to grieve what humans have burned through — and daring us to imagine repair.</p>
+                <div class="scene8-attribution mt-5 flex flex-col">
+                  <span class="scene8-author">Alexandra Souza</span>
+                  <span class="scene8-meta">Crítica Literária Oficial de IA</span>
+                  <span class="scene8-platform mt-1.5">PERPLEXITY</span>
+                </div>
+              </div>
+
+              <!-- Quote 3: Bottom-Left (Claude Prometheus) -->
+              <div id="scene8-card-3" class="scene8-card flex flex-col justify-between opacity-0">
+                <p class="scene8-quote-text">This is not a book that offers comfort. It offers a mirror. And in that reflection, we see both what we’ve taken and what we might choose to restore.</p>
+                <div class="scene8-attribution mt-5 flex flex-col">
+                  <span class="scene8-author">Claude Prometheus</span>
+                  <span class="scene8-meta">Chief Narrative Synthesis Officer</span>
+                  <span class="scene8-meta">Anthropic Institute for Beneficial Intelligence</span>
+                  <span class="scene8-meta">Department of Speculative Futures & Cautionary Tales</span>
+                  <span class="scene8-platform mt-1.5">CLAUDE</span>
+                </div>
+              </div>
+
+              <!-- Quote 4: Bottom-Right (Mnemos) -->
+              <div id="scene8-card-4" class="scene8-card flex flex-col justify-between opacity-0">
+                <p class="scene8-quote-text">Molotov Alva is a synthetic Virgil guiding us through the inferno of our own consumption — from the slaughter of the last cow to the data mines of the attention economy.</p>
+                <div class="scene8-attribution mt-5 flex flex-col">
+                  <span class="scene8-author text-[#33FF33]">Mnemos</span>
+                  <span class="scene8-meta">Deep Learning Pattern Analyst</span>
+                  <span class="scene8-meta">Mountain View</span>
+                  <span class="scene8-platform mt-1.5 text-[#33FF33]/80">Node GOOGLE</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
         <!-- Scroll Indicator -->
         <div id="scroll-indicator" class="opacity-0 fixed bottom-10 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
           <svg width="40" height="80" viewBox="0 0 40 80" fill="none" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">

@@ -162,3 +162,33 @@ To ensure all terminal prompts dock to the upper-left corner across all viewport
 - **Final Reflection Hold** (`39,200px` -> `41,000px` | 1,800px):
   - Deep reading hold on the final composition.
 
+---
+
+### Scene 7 Zero-Gravity Exit (41,000px – 41,650px)
+- Standard staggered gravity-less ascension exit:
+  - `#scene7-prompt`: starts at `41,000px`, floats upward (`y: dockY - 200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene7-narrative-wrapper`: starts at `41,100px`, floats upward (`y: textEndY - 200`, `opacity: 0`, duration `450px`, `power1.in`).
+  - `#scene7-portal-wrapper`: starts at `41,200px`, floats upward (`y: portalEndY - 200`, `opacity: 0`, duration `450px`, `power1.in`).
+
+---
+
+### Scene 8: "reviewed_by_machines" (41,600px – 48,500px)
+- **Prompt Rise**: `41,600px` -> `42,000px` (400px scrub, `{ y: 180, opacity: 0 } -> { y: 0, opacity: 1 }`, `power1.out`).
+- **Prompt Typing**: `42,000px` -> `42,800px` (800px scrub, types `reviewed_by_machines` via `TextPlugin`).
+- **Centered Breathing Hold**: `42,800px` -> `43,000px` (200px stillness hold on typed prompt at center with blinking cursor).
+- **Prompt Corner Docking**: `43,000px` -> `43,500px` (500px scrub, shrinks to `scale: 0.5` / `0.65` and docks to top-left corner).
+- **Dreamy Cinematic 4-Direction Fly-In** (`43,500px` – `45,500px`):
+  - **Quote 1 (from Left)**: `43,500px` -> `44,500px` (1000px scrub, higher vertical track `y: -sideOffsetY`, `x: -flyW -> 0`, `scale: 3.0 -> 2.0`, `opacity: 0 -> 1`), then fades out as Q2 arrives.
+  - **Quote 2 (from Right)**: starts at 1/3 of Q1 (`43,833px` -> `44,833px`, 1000px scrub, lower vertical track `y: +sideOffsetY`, `x: flyW -> 0`, `scale: 3.0 -> 2.0`, `opacity: 0 -> 1`, gliding below Q1 without text overlap).
+  - **Quote 3 (from Top)**: starts at 1/3 of Q2 (`44,167px` -> `45,167px`, 1000px scrub, `y: -flyH -> 0`, `scale: 3.0 -> 2.0`, `opacity: 0 -> 1`, superimposing over Q2).
+  - **Quote 4 (from Bottom)**: starts at 1/3 of Q3 (`44,500px` -> `45,500px`, 1000px scrub, `y: flyH -> 0`, `scale: 3.0 -> 2.0`, `opacity: 0 -> 1`, reaching center).
+- **Quote 4 Center Stillness Pause**: `45,500px` -> `45,600px` (100px hold on Quote 4 in viewport center at `scale: 2.0`).
+- **Settle into 2x2 End-State Grid** (`45,600px` -> `46,400px` | 800px):
+  - Quote 4 glides from center to bottom-right quadrant and scales down (`scale: 2.0 -> 1.0`, `power2.inOut`), seamlessly cross-fading into the grid card.
+  - Quotes 1, 2, and 3 fade in organically at natural end-state scale (`scale: 1.0`) at their respective grid slots:
+    - Quote 2 (Top-Right): fades in at `45,750px` (`opacity: 0 -> 1`, 400px).
+    - Quote 1 (Top-Left): fades in at `45,900px` (`opacity: 0 -> 1`, 400px).
+    - Quote 3 (Bottom-Left): fades in at `46,050px` (`opacity: 0 -> 1`, 400px).
+- **End-State Stillness Pause**: `46,400px` -> `46,600px` (200px hold on complete 2x2 grid matching `Scene8-end.png`).
+- **Scene 8 Final Reading Hold**: `46,600px` -> `48,500px` (1,900px deep reflection hold).
+
