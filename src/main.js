@@ -612,13 +612,15 @@ function handleEnter() {
               // Scales smoothly on compact laptops (1366x768 and 1440x900) so vertical clusters never clip
               function getDesktopHeightScale() {
                 if (window.innerWidth < 1024) return 1.0;
-                return Math.min(1.0, Math.max(0.72, (window.innerHeight - 60) / 920));
+                return Math.min(1.0, Math.max(0.60, (window.innerHeight - 60) / 920));
               }
               const desktopHeightScale = getDesktopHeightScale();
 
               // Scene 9 Dynamic Height-Aware Layout Coordinates
               const s9BookInitialScale = 1.0 * desktopHeightScale;
-              const s9BookElevateY = -160 * desktopHeightScale;
+              const s9BookElevateY = window.innerHeight >= 850
+                ? -160 * desktopHeightScale
+                : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60)));
               const s9ContentY = 335 * desktopHeightScale;
               const s9FooterElevationY = window.innerHeight >= 1050
                 ? -150
@@ -1766,10 +1768,24 @@ function handleEnter() {
                     textEndX: 0,
                     textEndY: 120,
                     textMaxWidth: '100%',
+                    portalScale: 1.05,
+                  };
+                }
+
+                // Tier 2: Compact Laptops & Landscape Tablets (1024px to 1365px)
+                // Symmetrically balanced inside 976px usable canvas (57px margins, 40px gap)
+                if (window.innerWidth < 1366) {
+                  return {
+                    portalEndX: -250,
+                    portalEndY: 0,
+                    textEndX: 225,
+                    textEndY: 0,
+                    textMaxWidth: '460px',
+                    portalScale: 0.80,
                   };
                 }
                 
-                // Desktop: 2-column layout matching Scene7-end.png
+                // Tier 1: Full Desktop Spectrum (1366px up to 4K) - 100% UNTOUCHED
                 // Total group width ~ 538px (portal @ 105%) + 60px (gap) + 600px (text) = 1198px
                 // Symmetrically centered within 1366px canvas (84px left & right margins)
                 return {
@@ -1778,6 +1794,7 @@ function handleEnter() {
                   textEndX: 300,
                   textEndY: 0,
                   textMaxWidth: '600px',
+                  portalScale: 1.05,
                 };
               }
               const s7Layout = getScene7Layout();
@@ -1837,6 +1854,7 @@ function handleEnter() {
               scrollTl.to('#scene7-narrative-wrapper', {
                 x: s7Layout.textEndX,
                 y: s7Layout.textEndY,
+                maxWidth: s7Layout.textMaxWidth,
                 duration: 600,
                 ease: 'power2.inOut',
               }, 38400);
@@ -1855,6 +1873,7 @@ function handleEnter() {
                 ease: 'power2.inOut',
               }, 38400);
               scrollTl.to('#scene7-portal', {
+                scale: s7Layout.portalScale,
                 opacity: 1.0,
                 duration: 600,
                 ease: 'power2.inOut',
@@ -1929,13 +1948,44 @@ function handleEnter() {
               // Phase 69: The Dreamy Cinematic Fly-In of Quotes (43500px -> 45550px)
               const flyW = window.innerWidth || 1400;
               const flyH = window.innerHeight || 900;
-              const sideOffsetY = window.innerHeight ? Math.min(160, Math.round(window.innerHeight * 0.18)) : 150;
+
+              // Helper to compute responsive fly-in scale and offsets
+              function getScene8FlyMetrics() {
+                const w = window.innerWidth || 1400;
+                const h = window.innerHeight || 900;
+                
+                // Full Desktop Spectrum (Tier 1: 1366px up to 4K, tall screens): 100% UNTOUCHED
+                if (w >= 1366 && h >= 850) {
+                  return {
+                    scale: 2.0,
+                    startScale: 3.0,
+                    sideOffsetY: Math.min(160, Math.round(h * 0.18)),
+                  };
+                }
+
+                // Tier 2 (1024px to 1365px) and compact heights (<850px):
+                // Dynamically fit so 640px card never touches or exceeds screen edges
+                const maxScaleByWidth = Math.max(1.2, (w - 120) / 640);
+                const maxScaleByHeight = Math.max(1.2, (h - 220) / 280);
+                const scale = Math.min(2.0, Math.min(maxScaleByWidth, maxScaleByHeight));
+                const sideOffsetY = Math.min(140, Math.round(h * 0.13));
+
+                return {
+                  scale: Number(scale.toFixed(2)),
+                  startScale: Number((scale * 1.5).toFixed(2)),
+                  sideOffsetY,
+                };
+              }
+              const s8Metrics = getScene8FlyMetrics();
+              const s8FlyScale = s8Metrics.scale;
+              const s8StartScale = s8Metrics.startScale;
+              const sideOffsetY = s8Metrics.sideOffsetY;
 
               // Quote 1: Fly in from Left at higher vertical track (43500px -> 44500px | 1000px)
-              // Flies from offscreen left at higher vertical position (y: -sideOffsetY), scales 300% -> 200%, fades in
+              // Flies from offscreen left at higher vertical position (y: -sideOffsetY), scales startScale -> flyScale, fades in
               scrollTl.fromTo('#scene8-fly-1',
-                { x: -flyW, y: -sideOffsetY, scale: 3.0, opacity: 0 },
-                { x: 0, y: -sideOffsetY, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                { x: -flyW, y: -sideOffsetY, scale: s8StartScale, opacity: 0 },
+                { x: 0, y: -sideOffsetY, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
                 43500
               );
               // Fade out Quote 1 smoothly as Quote 2 arrives
@@ -1946,10 +1996,10 @@ function handleEnter() {
               }, 44100);
 
               // Quote 2: Fly in from Right at lower vertical track (43833px -> 44833px | 1000px)
-              // Starts at 1/3 progress of Quote 1, flies at lower vertical position (y: +sideOffsetY), scales 300% -> 200%
+              // Starts at 1/3 progress of Quote 1, flies at lower vertical position (y: +sideOffsetY), scales startScale -> flyScale
               scrollTl.fromTo('#scene8-fly-2',
-                { x: flyW, y: sideOffsetY, scale: 3.0, opacity: 0 },
-                { x: 0, y: sideOffsetY, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                { x: flyW, y: sideOffsetY, scale: s8StartScale, opacity: 0 },
+                { x: 0, y: sideOffsetY, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
                 43833
               );
               // Fade out Quote 2 smoothly as Quote 3 arrives and superimposes
@@ -1962,8 +2012,8 @@ function handleEnter() {
               // Quote 3: Fly in from Top (44167px -> 45167px | 1000px)
               // Starts at 1/3 progress of Quote 2, superimposes over Quote 2
               scrollTl.fromTo('#scene8-fly-3',
-                { x: 0, y: -flyH, scale: 3.0, opacity: 0 },
-                { x: 0, y: 0, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                { x: 0, y: -flyH, scale: s8StartScale, opacity: 0 },
+                { x: 0, y: 0, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
                 44167
               );
               // Fade out Quote 3 smoothly as Quote 4 arrives and superimposes
@@ -1974,10 +2024,10 @@ function handleEnter() {
               }, 44767);
 
               // Quote 4: Fly in from Bottom (44500px -> 45500px | 1000px)
-              // Starts at 1/3 progress of Quote 3, reaches center at scale 2.0
+              // Starts at 1/3 progress of Quote 3, reaches center at scale s8FlyScale
               scrollTl.fromTo('#scene8-fly-4',
-                { x: 0, y: flyH, scale: 3.0, opacity: 0 },
-                { x: 0, y: 0, scale: 2.0, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+                { x: 0, y: flyH, scale: s8StartScale, opacity: 0 },
+                { x: 0, y: 0, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
                 44500
               );
 
@@ -2212,11 +2262,12 @@ function handleEnter() {
               // The book circle scales down to side-by-side scale and glides left,
               // while the heading & subtitle group glides right, matching Scene9-end.png
               const isS9Mobile = window.innerWidth <= 768;
-              const s9BookFinalX = isS9Mobile ? 0 : -300 * Math.min(1.0, desktopHeightScale * 1.05);
+              const isTier2 = window.innerWidth >= 1024 && window.innerWidth < 1366;
+              const s9BookFinalX = isS9Mobile ? 0 : (isTier2 ? -220 : -300) * Math.min(1.0, desktopHeightScale * 1.05);
               const s9BookFinalY = isS9Mobile ? -140 : -20 * desktopHeightScale;
               const s9BookFinalScale = (isS9Mobile ? 0.42 : 0.5333) * desktopHeightScale;
 
-              const s9TextFinalX = isS9Mobile ? 0 : 230 * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9TextFinalX = isS9Mobile ? 0 : (isTier2 ? 180 : 230) * Math.min(1.0, desktopHeightScale * 1.05);
               const s9TextFinalY = isS9Mobile ? 120 : -20 * desktopHeightScale;
 
               scrollTl.to('#scene9-book-wrapper', {

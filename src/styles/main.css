@@ -336,6 +336,17 @@ body {
   color: #c4c4c4;
 }
 
+@media (min-width: 1024px) and (max-width: 1365px) {
+  .scene7-paragraph {
+    font-size: 1.12rem;
+    line-height: 1.6;
+  }
+  .scene7-paragraph-italic {
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+}
+
 @media (max-width: 768px) {
   .scene7-paragraph {
     font-size: 1.05rem;
