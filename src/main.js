@@ -607,6 +607,23 @@ function handleEnter() {
                 };
               }
 
+              // Dynamic Height-Aware Scaling Factor for Desktop (1024px+)
+              // Preserves 1.0 (100% current design) on 4K & tall screens (>= 980px usable height)
+              // Scales smoothly on compact laptops (1366x768 and 1440x900) so vertical clusters never clip
+              function getDesktopHeightScale() {
+                if (window.innerWidth < 1024) return 1.0;
+                return Math.min(1.0, Math.max(0.72, (window.innerHeight - 60) / 920));
+              }
+              const desktopHeightScale = getDesktopHeightScale();
+
+              // Scene 9 Dynamic Height-Aware Layout Coordinates
+              const s9BookInitialScale = 1.0 * desktopHeightScale;
+              const s9BookElevateY = -160 * desktopHeightScale;
+              const s9ContentY = 335 * desktopHeightScale;
+              const s9FooterElevationY = window.innerHeight >= 1050
+                ? -150
+                : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5));
+
               const promptCoords = getPromptDockCoordinates();
               const promptRect = promptEl.getBoundingClientRect();
               const targetLeft = promptCoords.canvasRect.left + promptCoords.padX;
@@ -638,12 +655,12 @@ function handleEnter() {
               // Ensure Scene 9 visual initial states
               gsap.set('#scene9-prompt', { opacity: 0 });
               gsap.set('#scene9-book-wrapper', { opacity: 0, scale: 0, x: 0, y: 0 });
-              gsap.set('#scene9-content-wrapper', { opacity: 0, x: 0, y: 335, textAlign: 'left', alignItems: 'flex-start' });
+              gsap.set('#scene9-content-wrapper', { opacity: 0, x: 0, y: s9ContentY, textAlign: 'left', alignItems: 'flex-start' });
               gsap.set(['#scene9-heading', '#scene9-subtitle'], { textAlign: 'left' });
               gsap.set(['#scene9-heading-1', '#scene9-heading-2'], { opacity: 0, y: 30 });
               gsap.set(['#scene9-sub-1', '#scene9-sub-2', '#scene9-sub-3', '#scene9-sub-4', '#scene9-sub-5', '#scene9-sub-6'], { opacity: 0 });
               gsap.set('#scene9-purchase-btn', { opacity: 0, y: 20, pointerEvents: 'none' });
-              gsap.set('#scene9-footer-wrapper', { opacity: 0, pointerEvents: 'none' });
+              gsap.set('#scene9-footer-wrapper', { opacity: 0, y: s9FooterElevationY, pointerEvents: 'none' });
               gsap.set('#scene9-transmission', { opacity: 0 });
 
               // Scene 3 Deer Portal Delta calculation
@@ -681,6 +698,14 @@ function handleEnter() {
               }
 
               // Scene 6 Still Portals Delta calculation (400px -> 124px into Slot 2,0 and Slot 2,1)
+              // Scene 6 Grid Scale for compact laptop viewports (<820px height)
+              const s6GridScale = (window.innerWidth >= 1024 && window.innerHeight < 820)
+                ? Math.min(1.0, Math.max(0.80, (window.innerHeight - 80) / 720))
+                : 1.0;
+              if (s6GridScale < 1.0) {
+                gsap.set('#scene6-grid', { scale: s6GridScale, transformOrigin: 'center center' });
+              }
+
               const s6StillLeftEl = document.querySelector('#scene6-still-portal-left');
               const s6SlotLeftEl = document.querySelector('#scene6-circle-2-0');
               let s6LeftDeltaX = -300;
@@ -2095,29 +2120,32 @@ function handleEnter() {
               // Phase 78: Scene 9 Prompt Corner Docking (50700px -> 51200px | 500px)
               // Shrinks and docks to top-left corner
               scrollTl.to('#scene9-prompt', {
+                scale: promptCoords.scale,
+                transformOrigin: '0% 0%',
+                xPercent: 0,
+                yPercent: 0,
                 x: promptCoords.dockX,
                 y: promptCoords.dockY,
-                scale: promptCoords.scale,
                 duration: 500,
-                ease: 'power2.inOut',
+                ease: 'none',
               }, 50700);
 
-              // Phase 79: The 600px Book Circle Entrance (51200px -> 51700px | 500px)
-              // Native 600px circle in dead center scales from 0 to 600px (scale: 0 -> 1.0)
-              // Ease-out profile: fast when small, softens acceleration as it reaches 600px
+              // Phase 79: The Book Circle Entrance (51200px -> 51700px | 500px)
+              // Native 600px circle in dead center scales from 0 to peak scale (scale: 0 -> s9BookInitialScale)
+              // Ease-out profile: fast when small, softens acceleration as it reaches peak scale
               scrollTl.fromTo('#scene9-book-wrapper',
                 { scale: 0, opacity: 0, x: 0, y: 0 },
-                { scale: 1.0, opacity: 1, x: 0, y: 0, duration: 500, ease: 'power2.out', immediateRender: false },
+                { scale: s9BookInitialScale, opacity: 1, x: 0, y: 0, duration: 500, ease: 'power2.out', immediateRender: false },
                 51200
               );
 
               // Phase 80: Heading & Subtitle Reveal Under the Image with Upward Cluster Balancing (51700px -> 52500px | 800px)
               // Content wrapper activates positioned strictly underneath the circle, centered as a block, text left-aligned
-              scrollTl.set('#scene9-content-wrapper', { opacity: 1, x: 0, y: 335, textAlign: 'left', alignItems: 'flex-start' }, 51700);
+              scrollTl.set('#scene9-content-wrapper', { opacity: 1, x: 0, y: s9ContentY, textAlign: 'left', alignItems: 'flex-start' }, 51700);
 
-              // Push the book up to y: -160px while heading lines enter below it, so the text is strictly below the circle
+              // Push the book up to s9BookElevateY while heading lines enter below it, so the text is strictly below the circle
               scrollTl.to('#scene9-book-wrapper', {
-                y: -160,
+                y: s9BookElevateY,
                 duration: 800,
                 ease: 'power1.out',
               }, 51700);
@@ -2181,15 +2209,15 @@ function handleEnter() {
               );
 
               // Phase 82: Ease-In-Ease-Out Layout Reconfiguration (53700px -> 54500px | 800px)
-              // The 600px circle scales down to ~320px (scale: 0.5333) and glides left,
+              // The book circle scales down to side-by-side scale and glides left,
               // while the heading & subtitle group glides right, matching Scene9-end.png
               const isS9Mobile = window.innerWidth <= 768;
-              const s9BookFinalX = isS9Mobile ? 0 : -300;
-              const s9BookFinalY = isS9Mobile ? -140 : -20;
-              const s9BookFinalScale = isS9Mobile ? 0.42 : 0.5333; // 600 * 0.5333 = ~320px
+              const s9BookFinalX = isS9Mobile ? 0 : -300 * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9BookFinalY = isS9Mobile ? -140 : -20 * desktopHeightScale;
+              const s9BookFinalScale = (isS9Mobile ? 0.42 : 0.5333) * desktopHeightScale;
 
-              const s9TextFinalX = isS9Mobile ? 0 : 230;
-              const s9TextFinalY = isS9Mobile ? 120 : -20;
+              const s9TextFinalX = isS9Mobile ? 0 : 230 * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9TextFinalY = isS9Mobile ? 120 : -20 * desktopHeightScale;
 
               scrollTl.to('#scene9-book-wrapper', {
                 x: s9BookFinalX,
@@ -2218,10 +2246,10 @@ function handleEnter() {
               // 200px Stillness Pause on Purchase button (54900px -> 55100px)
 
               // Phase 84: Lower Section Simultaneous Fade-In (55100px -> 55700px | 600px)
-              // Email capture form, dividing line, and 3 links fade in together 150px higher
+              // Email capture form, dividing line, and 3 links fade in together at s9FooterElevationY
               scrollTl.fromTo('#scene9-footer-wrapper',
-                { opacity: 0 },
-                { opacity: 1, duration: 600, ease: 'power1.out', immediateRender: false },
+                { opacity: 0, y: s9FooterElevationY },
+                { opacity: 1, y: s9FooterElevationY, duration: 600, ease: 'power1.out', immediateRender: false },
                 55100
               );
               scrollTl.set('#scene9-footer-wrapper', { pointerEvents: 'auto' }, 55700);
