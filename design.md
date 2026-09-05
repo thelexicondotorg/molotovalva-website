@@ -76,6 +76,22 @@ Industrial, high-contrast, minimalist terminal aesthetic. Deep black canvas with
 - **Subheading Style:** Serif narrative subtitle (`.scene-subheading`), Adobe Garamond Pro Regular/Italic, `1.3rem`, `#A3A3A3`
 - **Placement:** Centered horizontally, stacked directly below the visual grid with standardized `mt-6` (`24px`) top margin
 
+## Responsive Viewport Architecture (The 4 Tiers)
+
+To preserve the cinematic fidelity and prevent visual clipping, overlapping, or horizontal scrolling across all screen sizes, the layout and animation system is partitioned into four mathematically isolated tiers:
+
+| Tier | Category | Viewport Range | Primary Layout Paradigm | Reference Script |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tier 1** | Full Desktop Spectrum | $\ge 1366\text{px}$ up to 4K | Unconstrained side-by-side splits; 100% baseline grid & aperture scale | [`animation-script.md`](./animation-script.md) |
+| **Tier 2** | Compact Laptops & Landscape Tablets | $1024\text{px} \le w < 1366\text{px}$ | Symmetrically fitted side-by-side splits; height-aware card & grid scaling | [`animation-script-tier2.md`](./animation-script-tier2.md) |
+| **Tier 3** | Tablet Portrait Spectrum | $768\text{px} \le w < 1024\text{px}$ | Centered vertical stacked layouts for Scene 7 & 9; dynamic circle row spacing | [`animation-script-tier3.md`](./animation-script-tier3.md) |
+| **Tier 4** | Mobile Phones Spectrum | $< 768\text{px}$ ($320\text{px} - 767\text{px}$) | Single-column stacked layouts; container-level proportional scaling; compact typography | [`animation-script-tier4.md`](./animation-script-tier4.md) |
+
+### Strict Non-Regression & Isolation Principles
+1. **Mathematical Isolation**: Code or media query modifications for lower tiers (e.g. Tier 4 or Tier 3) must be strictly guarded by max-width media queries (`@media (max-width: 767px)`) or JavaScript bounds (`window.innerWidth < 768`) to guarantee zero regression on higher tiers.
+2. **Canonical Baseline Integrity**: Tier 1 Desktop coordinates and timings remain the primary cinematic reference baseline.
+3. **Height-Aware Layouts**: For compact heights ($h < 850\text{px}$), vertical positions and scales are calculated dynamically relative to `window.innerHeight`.
+
 ## Invariant Design Rules (Never Change Across Iterations)
 1. Canvas MUST remain pure black (`#000000`). Never replace with slate, dark gray, or gradient fills.
 2. Terminal text and interactive CTA buttons MUST use Platelet font and `#00E900` neon green accent.

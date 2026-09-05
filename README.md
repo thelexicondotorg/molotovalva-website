@@ -25,13 +25,14 @@ npm run dev
 npm run build
 ```
 
-## Structure
-```
-├── index.html          # Semantic HTML layout (Header, Hero, About, Projects, Services, Contact, Footer)
-├── src/
-│   ├── main.js         # GSAP & Lenis initialization and scroll synchronization
-│   └── styles/
-│       └── main.css    # Tailwind CSS imports & Lenis base rules
-├── package.json
-└── vite.config.js
-```
+## Responsive Architecture (The 4 Tiers)
+
+The layout, typography, and animation choreographies are mathematically partitioned into four isolated tiers to ensure zero clipping, no horizontal overflow, and strict non-regression:
+
+- **[Tier 1: Full Desktop Spectrum (`≥ 1366px` up to 4K)](./animation-script.md)**: Baseline canonical screenplay; unconstrained side-by-side splits and full-scale apertures.
+- **[Tier 2: Compact Laptops & Landscape Tablets (`1024px – 1365px`)](./animation-script-tier2.md)**: Symmetrically compressed horizontal splits; dynamic height-aware card fitting.
+- **[Tier 3: Tablet Portrait Spectrum (`768px – 1023px`)](./animation-script-tier3.md)**: Centered vertical stacked layouts; dynamic circle row stepping.
+- **[Tier 4: Mobile Spectrum (`320px – 767px`)](./animation-script-tier4.md)**: Single-column vertical stacks; container-level proportional scaling; compact typography.
+
+Design system tokens and invariant guidelines are documented in [`design.md`](./design.md).
+

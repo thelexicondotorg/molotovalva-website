@@ -1,12 +1,20 @@
 # Molotov Alva — Master Animation Script
-**Version**: 1.1 (Canonical Baseline — Desktop 1366px to 4K)  
-**Target Environment**: **Desktop Only** (1366px to 4K viewports). Mobile and tablet adaptations will follow separate media queries.  
+**Version**: 2.0 (Canonical 4-Tier Architectural Baseline)  
+**Target Environment**: **Desktop Baseline** (1366px to 4K viewports)  
 **Total Scroll Track**: `58,500px`  
 **Smooth Scroll Controller**: Lenis (`scrub: true` via GSAP ScrollTrigger)  
 **Purpose**: Living screenplay and storyboard reference of all visual timings, pixel coordinates, easings, and narrative holds across the entire experience.
 
 > [!IMPORTANT]
-> **Scope Note**: This script captures the approved **Desktop animation choreography (1366px up to 4K)**. All coordinates, multi-circle constellations, flying card vectors, and spatial transitions documented below are calibrated for desktop viewports. When responsive rules for laptops, tablets, and mobiles are introduced, this document will be maintained as the desktop reference baseline.
+> **4-Tier Responsive Architecture Hierarchy**:
+> This document serves as the **Tier 1 (Desktop 1366px–4K)** canonical reference. To preserve zero-clipping and flawless layout across all form factors without regressing desktop baseline choreography, the animation scripts are divided into four dedicated specifications:
+>
+> | Tier | Category | Viewport Spectrum | Primary Layout Behavior | Dedicated Specification |
+> | :---: | :--- | :--- | :--- | :--- |
+> | **Tier 1** | Full Desktop Spectrum | $\ge 1366\text{px}$ up to 4K | Unconstrained side-by-side splits; 100% baseline grid & aperture scale | This document ([`animation-script.md`](./animation-script.md)) |
+> | **Tier 2** | Compact Laptops & Landscape Tablets | $1024\text{px} \le w < 1366\text{px}$ | Symmetrically fitted side-by-side splits; height-aware card & grid scaling | [`animation-script-tier2.md`](./animation-script-tier2.md) |
+> | **Tier 3** | Tablet Portrait Spectrum | $768\text{px} \le w < 1024\text{px}$ | Centered vertical stacked layouts for S7 & S9; dynamic circle row spacing | [`animation-script-tier3.md`](./animation-script-tier3.md) |
+> | **Tier 4** | Mobile Phones Spectrum | $< 768\text{px}$ ($320\text{px} - 767\text{px}$) | Single-column stacked layouts; container-level proportional scaling; compact typography | [`animation-script-tier4.md`](./animation-script-tier4.md) |
 
 ---
 
