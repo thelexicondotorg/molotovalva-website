@@ -617,14 +617,21 @@ function handleEnter() {
               const desktopHeightScale = getDesktopHeightScale();
 
               // Scene 9 Dynamic Height-Aware Layout Coordinates
+              const isMobileS9 = window.innerWidth < 768;
               const s9BookInitialScale = 1.0 * desktopHeightScale;
-              const s9BookElevateY = window.innerHeight >= 850
-                ? -160 * desktopHeightScale
-                : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60)));
-              const s9ContentY = 335 * desktopHeightScale;
-              const s9FooterElevationY = window.innerHeight >= 1050
-                ? -150
-                : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5));
+              const s9BookElevateY = isMobileS9 && window.innerHeight < 750
+                ? -Math.round(Math.min(110, Math.max(70, (window.innerHeight - 500) * 0.2 + 60)))
+                : (window.innerHeight >= 850
+                    ? -160 * desktopHeightScale
+                    : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60))));
+              const s9ContentY = isMobileS9 && window.innerHeight < 750
+                ? Math.min(200, Math.round((window.innerHeight - 280) * 0.45 + 40))
+                : 335 * desktopHeightScale;
+              const s9FooterElevationY = window.innerWidth < 1024
+                ? 0
+                : (window.innerHeight >= 1050
+                    ? -150
+                    : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5)));
 
               const promptCoords = getPromptDockCoordinates();
               const promptRect = promptEl.getBoundingClientRect();
@@ -643,6 +650,31 @@ function handleEnter() {
                 x: 0,
                 y: 0,
               });
+
+              // Responsive grid scaling for Tier 3 tablets and Tier 4 mobile
+              const isTier3 = window.innerWidth >= 768 && window.innerWidth < 1024;
+              const isMobile = window.innerWidth < 768;
+              const s3GridScale = isMobile
+                ? Math.min(1.0, (window.innerWidth - 32) / 846)
+                : (isTier3 ? Math.min(1.0, (window.innerWidth - 64) / 846) : 1.0);
+              const s4GridScale = isMobile
+                ? Math.min(1.0, (window.innerWidth - 32) / 796)
+                : (isTier3 ? Math.min(1.0, (window.innerWidth - 64) / 796) : 1.0);
+              const s5ContainerScale = isMobile
+                ? Math.min(1.0, (window.innerHeight - 80) / 760, (window.innerWidth - 32) / 340)
+                : 1.0;
+              const s6ContainerScale = isMobile
+                ? Math.min(1.0, (window.innerHeight - 80) / 820, (window.innerWidth - 32) / 724)
+                : 1.0;
+              gsap.set('#scene3-grid', { scale: s3GridScale, transformOrigin: 'center center' });
+              gsap.set('#scene4-grid', { scale: s4GridScale, transformOrigin: 'center center' });
+              gsap.set('#scene5-container', { scale: s5ContainerScale, transformOrigin: 'center center' });
+              gsap.set('#scene6-container', { scale: s6ContainerScale, transformOrigin: 'center center' });
+
+              const s8GridScale = (isMobile && window.innerHeight < 920)
+                ? Math.min(1.0, (window.innerHeight - 80) / 880)
+                : 1.0;
+              gsap.set('#scene8-grid-layer', { scale: s8GridScale, transformOrigin: 'center center' });
 
               // Ensure Scene 7 visual initial states
               gsap.set('#scene7-portal', { opacity: 0, scale: 0.95 });
@@ -815,9 +847,16 @@ function handleEnter() {
               scrollTl.fromTo('#circle-5', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 2500);
 
               // Phase 2: Circle 5 glides to Slot 5 (Far Right) & lifts upward to y: -95 (2700px -> 3000px)
-              const rowScale = 170 / 300; // 0.5667
+              const isS2Mobile = window.innerWidth < 768;
+              const isS2Tier3 = window.innerWidth >= 768 && window.innerWidth < 1024;
+              const rowScale = isS2Mobile
+                ? Math.min(0.24, (window.innerWidth - 48) / 5 / 300 * 1.35)
+                : (isS2Tier3 ? (136 / 300) : (170 / 300));
+              const rowStep = isS2Mobile
+                ? Math.round((window.innerWidth - 48) / 4 * 0.88)
+                : (isS2Tier3 ? Math.round((window.innerWidth - 160) / 4 * 0.92) : 194);
               scrollTl.to('#circle-5', {
-                x: 388,
+                x: 2 * rowStep,
                 y: -95,
                 scale: rowScale,
                 duration: 300,
@@ -832,24 +871,24 @@ function handleEnter() {
                 3000
               );
 
-              // 2nd: Circle 1 into Slot 1 (Far Left: x = -388, y = -95) from 3200px -> 3400px
+              // 2nd: Circle 1 into Slot 1 (Far Left: x = -2 * rowStep, y = -95) from 3200px -> 3400px
               scrollTl.fromTo('#circle-1',
-                { x: -388, y: -95, scale: rowScale, opacity: 0 },
-                { x: -388, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: -2 * rowStep, y: -95, scale: rowScale, opacity: 0 },
+                { x: -2 * rowStep, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3200
               );
 
-              // 3rd: Circle 4 into Slot 4 (Right Center: x = +194, y = -95) from 3400px -> 3600px
+              // 3rd: Circle 4 into Slot 4 (Right Center: x = +rowStep, y = -95) from 3400px -> 3600px
               scrollTl.fromTo('#circle-4',
-                { x: 194, y: -95, scale: rowScale, opacity: 0 },
-                { x: 194, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: rowStep, y: -95, scale: rowScale, opacity: 0 },
+                { x: rowStep, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3400
               );
 
-              // 4th: Circle 2 into Slot 2 (Left Center: x = -194, y = -95) from 3600px -> 3800px
+              // 4th: Circle 2 into Slot 2 (Left Center: x = -rowStep, y = -95) from 3600px -> 3800px
               scrollTl.fromTo('#circle-2',
-                { x: -194, y: -95, scale: rowScale, opacity: 0 },
-                { x: -194, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
+                { x: -rowStep, y: -95, scale: rowScale, opacity: 0 },
+                { x: -rowStep, y: -95, scale: rowScale, opacity: 1, duration: 200, ease: 'none', immediateRender: false },
                 3600
               );
 
@@ -1759,16 +1798,26 @@ function handleEnter() {
 
               // Helper to compute responsive Scene 7 coordinates
               function getScene7Layout() {
-                const isMobile = window.innerWidth <= 768;
-                
-                if (isMobile) {
+                // Tier 3 (768px to 1023px) & Mobile (<768px): Centered Stacked Layout
+                if (window.innerWidth < 1024) {
+                  const isMobile = window.innerWidth < 768;
+                  if (isMobile) {
+                    return {
+                      portalEndX: 0,
+                      portalEndY: -Math.round(window.innerHeight * 0.24),
+                      textEndX: 0,
+                      textEndY: Math.round(window.innerHeight * 0.12),
+                      textMaxWidth: 'min(440px, 92vw)',
+                      portalScale: Math.min(0.55, Math.max(0.42, (window.innerHeight - 380) / 512)),
+                    };
+                  }
                   return {
                     portalEndX: 0,
-                    portalEndY: -170,
+                    portalEndY: -190,
                     textEndX: 0,
-                    textEndY: 120,
-                    textMaxWidth: '100%',
-                    portalScale: 1.05,
+                    textEndY: 160,
+                    textMaxWidth: '600px',
+                    portalScale: 0.85,
                   };
                 }
 
@@ -1953,6 +2002,16 @@ function handleEnter() {
               function getScene8FlyMetrics() {
                 const w = window.innerWidth || 1400;
                 const h = window.innerHeight || 900;
+
+                // Tier 4: Mobile Spectrum (<768px)
+                if (w < 768) {
+                  const scale = Math.min(1.0, Math.max(0.65, (w - 32) / 420));
+                  return {
+                    scale: Number(scale.toFixed(2)),
+                    startScale: Number((scale * 1.3).toFixed(2)),
+                    sideOffsetY: Math.min(50, Math.round(h * 0.07)),
+                  };
+                }
                 
                 // Full Desktop Spectrum (Tier 1: 1366px up to 4K, tall screens): 100% UNTOUCHED
                 if (w >= 1366 && h >= 850) {
@@ -2261,14 +2320,14 @@ function handleEnter() {
               // Phase 82: Ease-In-Ease-Out Layout Reconfiguration (53700px -> 54500px | 800px)
               // The book circle scales down to side-by-side scale and glides left,
               // while the heading & subtitle group glides right, matching Scene9-end.png
-              const isS9Mobile = window.innerWidth <= 768;
+              const isS9Stacked = window.innerWidth < 1024;
               const isTier2 = window.innerWidth >= 1024 && window.innerWidth < 1366;
-              const s9BookFinalX = isS9Mobile ? 0 : (isTier2 ? -220 : -300) * Math.min(1.0, desktopHeightScale * 1.05);
-              const s9BookFinalY = isS9Mobile ? -140 : -20 * desktopHeightScale;
-              const s9BookFinalScale = (isS9Mobile ? 0.42 : 0.5333) * desktopHeightScale;
+              const s9BookFinalX = isS9Stacked ? 0 : (isTier2 ? -220 : -300) * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9BookFinalY = isS9Stacked ? (window.innerWidth < 768 ? -140 : -160) : -20 * desktopHeightScale;
+              const s9BookFinalScale = (isS9Stacked ? (window.innerWidth < 768 ? 0.42 : 0.48) : 0.5333) * desktopHeightScale;
 
-              const s9TextFinalX = isS9Mobile ? 0 : (isTier2 ? 180 : 230) * Math.min(1.0, desktopHeightScale * 1.05);
-              const s9TextFinalY = isS9Mobile ? 120 : -20 * desktopHeightScale;
+              const s9TextFinalX = isS9Stacked ? 0 : (isTier2 ? 180 : 230) * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9TextFinalY = isS9Stacked ? (window.innerWidth < 768 ? 120 : 160) : -20 * desktopHeightScale;
 
               scrollTl.to('#scene9-book-wrapper', {
                 x: s9BookFinalX,

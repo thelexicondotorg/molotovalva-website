@@ -347,15 +347,18 @@ body {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+  #scene7-narrative {
+    gap: 12px;
+  }
   .scene7-paragraph {
-    font-size: 1.05rem;
-    line-height: 1.55;
+    font-size: 0.88rem;
+    line-height: 1.45;
     text-align: center;
   }
   .scene7-paragraph-italic {
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.82rem;
+    line-height: 1.40;
   }
 }
 
