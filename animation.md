@@ -3,6 +3,9 @@
 ## Overview
 This document outlines the canonical animation choreography, timing conventions, and standard inter-scene transition rules across the Molotov Alva website. All animations are scrubbed via GSAP ScrollTrigger and Lenis smooth scrolling.
 
+> [!NOTE]
+> For the complete, chronologically sequenced screenplay with exact pixel ranges and phase-by-phase animations from Scene 1 to Scene 9 (Desktop 1366px to 4K), see [animation-script.md](file:///Users/PG2/Documents/ANTIGRAVITY/MOLOTOVALVA%20WEBSITE/animation-script.md).
+
 ---
 
 ## 1. Core Principles
