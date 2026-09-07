@@ -64,8 +64,8 @@
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
-| **Phase 0** | `0px – 500px` | 500px | `#prompt` migrates from vertical middle straight up to top-left corner (`padY: 24px`), maintaining full size (`scale: 1.0`, never scales down). Scroll indicator fades to `opacity: 0`. |
-| **Phase 1A** | `500px – 1,000px` | 500px | **Circle 1** appears dead center at `500px`, holds center `500px – 700px` (200px hold), dissolves `700px – 1,000px` (300px fade). |
+| **Phase 0** | `0px – 500px` | 500px | `#prompt` migrates from vertical middle straight up to top-left corner (`padY: 24px`), maintaining full size (`scale: 1.0`, never scales down). Scroll indicator fades to `opacity: 0`. Simultaneously, **Circle 1** is dragged up from the bottom of the screen into dead center, exactly tracking the upward motion of the prompt. |
+| **Phase 1A** | `500px – 1,000px` | 500px | **Circle 1** holds dead center `500px – 700px` (200px hold), then dissolves `700px – 1,000px` (300px fade). |
 | **Phase 1B** | `1,000px – 1,500px` | 500px | **Circle 2** appears dead center at `1,000px`, holds center `1,000px – 1,200px`, dissolves `1,200px – 1,500px`. |
 | **Phase 1C** | `1,500px – 2,000px` | 500px | **Circle 3** appears dead center at `1,500px`, holds center `1,500px – 1,700px`, dissolves `1,700px – 2,000px`. |
 | **Phase 1D** | `2,000px – 2,500px` | 500px | **Circle 4** appears dead center at `2,000px`, holds center `2,000px – 2,200px`, dissolves `2,200px – 2,500px`. |

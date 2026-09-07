@@ -599,6 +599,7 @@ function handleEnter() {
 
               const promptCoords = getPromptDockCoordinates();
               const s1DockY = -(promptCoords.canvasRect.height / 2 - promptCoords.padY);
+              const circle1StartY = Math.round(Math.max(window.innerHeight, promptCoords.canvasRect.height) / 2 + 200);
 
               // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8, 9 prompt elements
               gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt', '#scene9-prompt'], {
@@ -785,8 +786,12 @@ function handleEnter() {
               }
 
               // Phase 1: Sequential Center Flashes (500px -> 2500px)
-              // Circle 1: Appears at 500px, holds 200px (500-700), fades out in 300px (700-1000)
-              scrollTl.fromTo('#circle-1', { opacity: 0, x: 0, y: 0, scale: 1 }, { opacity: 1, x: 0, y: 0, scale: 1, duration: 0.001, ease: 'none' }, 500);
+              // Circle 1: Dragged up from bottom of screen into dead center (0px -> 500px), holds center (500-700), fades out (700-1000)
+              scrollTl.fromTo('#circle-1',
+                { opacity: 1, x: 0, y: circle1StartY, scale: 1 },
+                { opacity: 1, x: 0, y: 0, scale: 1, duration: 500, ease: 'none', immediateRender: false },
+                0
+              );
               scrollTl.to('#circle-1', { opacity: 0, duration: 300, ease: 'none' }, 700);
 
               // Circle 2: Appears at 1000px, holds 200px (1000-1200), fades out in 300px (1200-1500)
