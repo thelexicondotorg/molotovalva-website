@@ -177,7 +177,8 @@ body {
 }
 
 #terminal-prompt {
-  margin-top: 2rem;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .terminal-prompt.static-prompt {
@@ -194,10 +195,6 @@ body {
   color: var(--color-terminal);
   animation: cursor-blink 0.8s infinite steps(1, start);
   margin-left: 2px;
-}
-
-.letter {
-  display: inline-block;
 }
 
 @keyframes cursor-blink {

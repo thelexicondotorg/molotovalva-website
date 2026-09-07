@@ -22,7 +22,7 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Primary Visual / Interaction |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Hero circular portal, looping video, prompt typing, matrix rain click-to-enter |
+| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Hero circular portal, looping video, prompt typing, un-typing click-to-enter |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | 5 center flashes $\to$ 5-circle row $\to$ Word-by-word heading $\to$ Staggered exit |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
@@ -39,18 +39,20 @@
 
 - **Trigger**: Window `DOMContentLoaded` / Asset load.
 - **Phase 1.1 — Terminal Initialization**:
-  - Prompt text `#prompt-text` types: `click_to_enter` over `0.8s` (delay `0.4s`, `ease: none`).
+  - Prompt `#terminal-prompt` is stationed at vertical middle of screen, flush left with canvas anchor (`left: 24px`, `top: 50%`, `yPercent: -50`).
+  - Terminal text types: `click_to_enter` over `0.8s` (delay `0.4s`, `ease: none`, full size `scale: 1.0`).
   - Terminal cursor blinks in green (`#00e900`).
-- **Phase 1.2 — Portal & Prompt Drop (`+0.3s`)**:
-  - `#prompt` smoothly glides downward to baseline center (`y: 0`, `duration: 0.8s`, `power2.inOut`).
-  - Circular portal `#portal` fades in and drops into center (`opacity: 0 -> 1`, `y: 0`, `duration: 0.8s`, `power2.inOut`).
+- **Phase 1.2 — Portal Entrance (`+0.3s`)**:
+  - Circular portal `#portal` fades in and drops into center (`opacity: 0 -> 1`, `y: -800 -> 0`, `duration: 0.8s`, `power2.inOut`).
   - Video loop plays seamlessly inside the circular aperture.
+  - **Prompt remains stationary**: Flush left at vertical middle; never moves down.
 - **Phase 1.3 — User Click-to-Enter**:
   - User clicks anywhere on the portal or prompt.
-  - **Portal Iris-Out**: `clipPath` shrinks from `circle(50% at 50% 50%)` to `circle(0% at 50% 50%)` over `1.0s` (`power1.in`).
-  - **Matrix Rain Text Fall**: Prompt letters disintegrate downward (`y: random(200, 500)`, `opacity: 0`, staggered `0.8s`, `power1.in`).
+  - **Portal Iris-Out**: `clipPath` shrinks from `circle(50% at 50% 50%)` to `circle(0% at 50% 50%)` over `0.9s` (`power1.in`).
+  - **Prompt Un-typing**: `click_to_enter` un-types character by character from right to left (backspacing) back to empty over `0.4s` (twice as fast as the 0.8s type-in, `ease: none`), leaving only prefix `>:` and blinking cursor `_` visible.
+  - **Prompt remains stationary**: Flush left at vertical middle; never moves up.
 - **Phase 1.4 — Molotov Arrival & Scroll Unlock**:
-  - Prompt resets to center and types `hello_this_is_molotov_` (`duration: 1.5s`).
+  - Prompt at vertical middle, flush left types `hello_this_is_molotov_` (`duration: 1.5s`).
   - Animated chevron scroll indicator bounces at bottom center (`opacity: 0 -> 1`).
   - Lenis smooth scroll engages; scroll track becomes active (`TOTAL_SCROLL_TRACK = 58500px`).
 
@@ -62,7 +64,7 @@
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
-| **Phase 0** | `0px – 500px` | 500px | `#prompt` shrinks (`scale: 0.5`) and migrates to top-left corner (`padX: 24px, padY: 24px`). Scroll indicator fades to `opacity: 0`. |
+| **Phase 0** | `0px – 500px` | 500px | `#prompt` migrates from vertical middle straight up to top-left corner (`padY: 24px`), maintaining full size (`scale: 1.0`, never scales down). Scroll indicator fades to `opacity: 0`. |
 | **Phase 1A** | `500px – 1,000px` | 500px | **Circle 1** appears dead center at `500px`, holds center `500px – 700px` (200px hold), dissolves `700px – 1,000px` (300px fade). |
 | **Phase 1B** | `1,000px – 1,500px` | 500px | **Circle 2** appears dead center at `1,000px`, holds center `1,000px – 1,200px`, dissolves `1,200px – 1,500px`. |
 | **Phase 1C** | `1,500px – 2,000px` | 500px | **Circle 3** appears dead center at `1,500px`, holds center `1,500px – 1,700px`, dissolves `1,700px – 2,000px`. |

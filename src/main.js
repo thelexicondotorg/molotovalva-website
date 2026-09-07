@@ -408,23 +408,6 @@ function initIntroVideoCrossfadeLoop() {
 
 initIntroVideoCrossfadeLoop();
 
-// Calculate the vertical offset to place the prompt at the exact center of the screen
-function calculateCenterOffset() {
-  if (!portalEl || !promptEl) return -166;
-  const section = portalEl.parentElement;
-  if (!section) return -166;
-
-  const sectionRect = section.getBoundingClientRect();
-  const promptRect = promptEl.getBoundingClientRect();
-
-  const sectionCenterY = sectionRect.top + sectionRect.height / 2;
-  const promptCenterY = promptRect.top + promptRect.height / 2;
-
-  return sectionCenterY - promptCenterY;
-}
-
-const promptInitialY = calculateCenterOffset();
-
 // 1. Initial State
 if (portalEl) {
   gsap.set(portalEl, {
@@ -435,7 +418,11 @@ if (portalEl) {
 
 if (promptEl) {
   gsap.set(promptEl, {
-    y: promptInitialY, // positioned at the exact vertical center
+    yPercent: -50,
+    x: 0,
+    y: 0,
+    scale: 1,
+    transformOrigin: '0% 0%',
   });
 }
 
@@ -455,22 +442,9 @@ if (promptTextEl) {
   });
 }
 
-// Step 2: 0.3s after typing ends:
-// - Move the prompt down to its resting position
-// - Fade in and drop the circular portal into place
+// Step 2: 0.3s after typing ends: Fade in and drop the circular portal into place
+// Prompt remains stationary at vertical middle, flush left (never moves down)
 introTl.addLabel('reveal', '+=0.3');
-
-if (promptEl) {
-  introTl.to(
-    promptEl,
-    {
-      y: 0,
-      duration: 0.8,
-      ease: 'power2.inOut',
-    },
-    'reveal'
-  );
-}
 
 if (portalEl) {
   introTl.to(
@@ -491,6 +465,11 @@ function handleEnter() {
   if (isEntering) return;
   isEntering = true;
 
+  // Kill in-flight intro timeline to prevent conflicting text tweens
+  if (introTl) {
+    introTl.kill();
+  }
+
   // Stop intro video looping
   if (cancelIntroVideoLoop) {
     cancelIntroVideoLoop();
@@ -499,60 +478,45 @@ function handleEnter() {
   // Just-In-Time: Trigger prefetch for Scene 3 assets as soon as Scene 1 is exited
   loadScene3Assets();
 
-  // Prepare prompt letters, prefix, and cursor for animation
-  const prefix = promptEl.querySelector('.prompt-prefix');
-  const cursor = promptEl.querySelector('.terminal-cursor');
-  const letters = Array.from(promptTextEl.querySelectorAll('.letter'));
-  const elementsToFall = [prefix, ...letters, cursor];
+  const exitTl = gsap.timeline();
 
-    promptTextEl.innerHTML = promptTextEl.innerText
-      .split('')
-      .map((char) => `<span class="letter">${char}</span>`)
-      .join('');
-
-    // Refresh letters after innerHTML change
-    const newLetters = Array.from(promptTextEl.querySelectorAll('.letter'));
-    const allElements = [prefix, ...newLetters, cursor];
-
-    const exitTl = gsap.timeline();
-
-    // Shrink mask (Iris-out transition)
-    if (portalEl) {
-      gsap.set(portalEl, { clipPath: 'circle(50% at 50% 50%)' });
-      exitTl.to(portalEl, {
-        clipPath: 'circle(0% at 50% 50%)',
-        duration: 1.0,
-        ease: 'power1.in',
-      }, 0);
-    }
-
-    // Letters, prefix, and cursor fall down and fade out (Matrix rain)
-    exitTl.to(allElements, {
-      y: () => gsap.utils.random(200, 500),
-      opacity: 0,
-      duration: () => gsap.utils.random(0.5, 1.5),
-      stagger: {
-        amount: 0.8,
-        from: 'random',
-      },
+  // 1. Shrink mask (Iris-out transition)
+  if (portalEl) {
+    gsap.set(portalEl, { clipPath: 'circle(50% at 50% 50%)' });
+    exitTl.to(portalEl, {
+      clipPath: 'circle(0% at 50% 50%)',
+      duration: 0.9,
       ease: 'power1.in',
     }, 0);
+  }
 
-    // Reset cursor position and move to center for Scene 2
-    exitTl.call(() => {
-      promptTextEl.innerHTML = '';
-      gsap.set(allElements, { clearProps: 'all' });
+  // 2. Un-type prompt text right-to-left (backspacing) twice as fast as type-in (0.4s vs 0.8s)
+  if (promptTextEl) {
+    const currentText = promptTextEl.textContent || 'click_to_enter';
+    const backspaceState = { len: currentText.length };
+    exitTl.to(backspaceState, {
+      len: 0,
+      duration: 0.4,
+      ease: 'none',
+      onUpdate: () => {
+        const remaining = Math.max(0, Math.ceil(backspaceState.len));
+        promptTextEl.textContent = currentText.substring(0, remaining);
+      },
+      onComplete: () => {
+        promptTextEl.textContent = '';
+      },
+    }, 0);
+  }
 
-      gsap.to(promptEl, {
-        y: promptInitialY,
-        opacity: 1,
-        duration: 0.5,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          // Scene 2: Type "hello_this_is_molotov"
-          const scene2Tl = gsap.timeline({
-            onComplete: () => {
-              promptEl.classList.add('static-prompt');
+  // 3. Begin Scene 2 typing (Prompt remains stationary at vertical middle, flush left)
+  exitTl.call(() => {
+    promptTextEl.innerHTML = '';
+
+    // Scene 2: Type "hello_this_is_molotov"
+    const scene2Tl = gsap.timeline({
+      delay: 0.2,
+      onComplete: () => {
+        promptEl.classList.add('static-prompt');
 
               // 1. Fade in scroll indicator
               if (scrollIndicator) {
@@ -634,11 +598,7 @@ function handleEnter() {
                     : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5)));
 
               const promptCoords = getPromptDockCoordinates();
-              const promptRect = promptEl.getBoundingClientRect();
-              const targetLeft = promptCoords.canvasRect.left + promptCoords.padX;
-              const targetTop = promptCoords.canvasRect.top + promptCoords.padY;
-              const s1DeltaX = targetLeft - promptRect.left;
-              const s1DeltaY = targetTop - promptRect.top;
+              const s1DockY = -(promptCoords.canvasRect.height / 2 - promptCoords.padY);
 
               // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8, 9 prompt elements
               gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt', '#scene9-prompt'], {
@@ -808,12 +768,10 @@ function handleEnter() {
                 }
               });
 
-              // Phase 0 (0px -> 500px): Prompt shrinks & moves to top-left, scroll indicator fades out
+              // Phase 0 (0px -> 500px): Prompt moves to top-left (no scale down, stays scale 1.0), scroll indicator fades out
               scrollTl.to(promptEl, {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                x: s1DeltaX,
-                y: promptInitialY + s1DeltaY,
+                yPercent: 0,
+                y: s1DockY,
                 duration: 500,
                 ease: 'none',
               }, 0);
@@ -925,7 +883,7 @@ function handleEnter() {
               // Phase 7: Staggered "Zero Gravity" Rise & Fade Out of Scene 2 Elements (5000px -> 5550px)
               // 1st to go: "hello_this_is_molotov_" prompt (5000px -> 5250px)
               scrollTl.to(promptEl, {
-                y: promptInitialY + s1DeltaY - 200,
+                y: s1DockY - 200,
                 opacity: 0,
                 duration: 250,
                 ease: 'power1.in',
@@ -2396,9 +2354,7 @@ function handleEnter() {
             duration: 1.0,
             ease: "none"
           }, "+=0.2");
-        }
-      });
-    });
+  });
 }
 
 if (promptEl) {

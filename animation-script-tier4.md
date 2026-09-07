@@ -27,7 +27,7 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Tier 4 Specific Adaptation |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Responsive central portal; prompt types `click_to_enter`; matrix rain disintegration |
+| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Responsive central portal; prompt stationary at vertical middle flush left; un-typing click transition |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | **Micro 5-Circle Row**: `rowScale <= 0.24`, `rowStep = Math.round((w - 48) / 4 * 0.88)` |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | **Grid Fitting**: `s3GridScale = Math.min(1.0, (w - 32) / 846)` ($0.405$ on 375px) |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | **Grid Fitting**: `s4GridScale = Math.min(1.0, (w - 32) / 796)` ($0.431$ on 375px) |

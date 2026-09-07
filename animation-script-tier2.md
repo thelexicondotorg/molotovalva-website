@@ -27,7 +27,7 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Tier 2 Specific Adaptation |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Standard 300px aperture; terminal prompt drops to center; matrix rain click |
+| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Standard 300px aperture; terminal prompt stationary at vertical middle flush left; un-typing click transition |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | Standard 5-circle row (`rowStep: 194px`, `rowScale: 0.5667`); fits inside 1024px with 126px margins |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | 40-circle grid (846px width) fits unscaled inside 1024px (89px margins) |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 10-circle grid (796px width) fits unscaled inside 1024px (114px margins) |
