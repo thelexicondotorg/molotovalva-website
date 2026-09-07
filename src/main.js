@@ -598,19 +598,111 @@ function handleEnter() {
                     : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5)));
 
               const promptCoords = getPromptDockCoordinates();
-              const s1DockY = -(promptCoords.canvasRect.height / 2 - promptCoords.padY);
               const circle1StartY = Math.round(Math.max(window.innerHeight, promptCoords.canvasRect.height) / 2 + 200);
 
-              // Ensure initial centering baseline for Scene 3, 4, 5, 6, 7, 8, 9 prompt elements
+              // Ensure initial baseline for Scene 3, 4, 5, 6, 7, 8, 9 prompt elements (hidden until activated)
               gsap.set(['#scene3-prompt', '#scene4-prompt', '#scene5-prompt', '#scene6-prompt', '#scene7-prompt', '#scene8-prompt', '#scene9-prompt'], {
                 position: 'absolute',
-                left: '50%',
-                top: '50%',
-                xPercent: -50,
-                yPercent: -50,
                 x: 0,
                 y: 0,
+                xPercent: 0,
+                yPercent: -50,
+                transformOrigin: '0% 0%',
+                display: 'none',
+                autoAlpha: 0,
               });
+
+              // Unified deterministic un-typing: text right-to-left, then cursor vanishes, prefix un-types, then container hides
+              function applyPromptUntype(promptEl, prefixEl, textEl, cursorEl, fullText, p) {
+                const progress = Math.max(0, Math.min(1, p));
+
+                if (progress <= 0) {
+                  if (promptEl) {
+                    promptEl.style.display = 'inline-flex';
+                    promptEl.style.visibility = 'visible';
+                    promptEl.style.opacity = '1';
+                  }
+                  if (prefixEl) prefixEl.textContent = '>:\u00A0';
+                  if (textEl) textEl.textContent = fullText;
+                  if (cursorEl) {
+                    cursorEl.style.display = 'inline-block';
+                    cursorEl.style.visibility = 'visible';
+                    cursorEl.style.opacity = '1';
+                  }
+                  return;
+                }
+
+                if (progress >= 1) {
+                  if (textEl) textEl.textContent = '';
+                  if (prefixEl) prefixEl.textContent = '';
+                  if (cursorEl) {
+                    cursorEl.style.display = 'none';
+                    cursorEl.style.visibility = 'hidden';
+                    cursorEl.style.opacity = '0';
+                  }
+                  if (promptEl) {
+                    promptEl.style.display = 'none';
+                    promptEl.style.visibility = 'hidden';
+                    promptEl.style.opacity = '0';
+                  }
+                  return;
+                }
+
+                // Active un-typing range (0 < progress < 1)
+                if (promptEl) {
+                  promptEl.style.display = 'inline-flex';
+                  promptEl.style.visibility = 'visible';
+                  promptEl.style.opacity = '1';
+                }
+
+                // 0 -> 0.75: Text un-types right-to-left
+                if (progress < 0.75) {
+                  const textProgress = progress / 0.75;
+                  const remainingChars = Math.max(0, Math.round(fullText.length * (1 - textProgress)));
+                  if (textEl) textEl.textContent = fullText.substring(0, remainingChars);
+                  if (prefixEl) prefixEl.textContent = '>:\u00A0';
+                  if (cursorEl) {
+                    cursorEl.style.display = 'inline-block';
+                    cursorEl.style.visibility = 'visible';
+                    cursorEl.style.opacity = '1';
+                  }
+                } else {
+                  // 0.75 -> 1.0: Text is empty, prefix and cursor un-type
+                  if (textEl) textEl.textContent = '';
+                  const prefixProgress = (progress - 0.75) / 0.25;
+                  if (prefixProgress < 0.33) {
+                    // Step 1: Cursor disappears first
+                    if (prefixEl) prefixEl.textContent = '>:\u00A0';
+                    if (cursorEl) {
+                      cursorEl.style.display = 'none';
+                      cursorEl.style.visibility = 'hidden';
+                      cursorEl.style.opacity = '0';
+                    }
+                  } else if (prefixProgress < 0.66) {
+                    // Step 2: Colon disappears -> ">"
+                    if (prefixEl) prefixEl.textContent = '>';
+                    if (cursorEl) {
+                      cursorEl.style.display = 'none';
+                      cursorEl.style.visibility = 'hidden';
+                      cursorEl.style.opacity = '0';
+                    }
+                  } else {
+                    // Step 3: Chevron disappears -> ""
+                    if (prefixEl) prefixEl.textContent = '';
+                    if (cursorEl) {
+                      cursorEl.style.display = 'none';
+                      cursorEl.style.visibility = 'hidden';
+                      cursorEl.style.opacity = '0';
+                    }
+                  }
+                }
+              }
+
+              // Helper: Prompt entrance lifecycle is coordinated synchronously by syncPromptStates across scroll
+              function initPromptEntrance(timeline, config) {}
+
+              // Helper: Prompt un-typing lifecycle is coordinated synchronously by syncPromptStates across scroll
+              function addPromptUntype(timeline, config) {}
 
               // Responsive grid scaling for Tier 3 tablets and Tier 4 mobile
               const isTier3 = window.innerWidth >= 768 && window.innerWidth < 1024;
@@ -738,6 +830,200 @@ function handleEnter() {
                 scrollTrackEl.style.height = `${TOTAL_SCROLL_TRACK + window.innerHeight}px`;
               }
 
+              // Master configuration for all scene prompts across the scroll track
+              const promptSpecs = [
+                {
+                  id: 'scene2',
+                  promptSelector: '#terminal-prompt',
+                  textSelector: '#prompt-text',
+                  fullText: 'hello_this_is_molotov',
+                  entrancePx: 0,
+                  typeStartPx: 0,
+                  typeEndPx: 0,
+                  untypeStartPx: 0,
+                  untypeEndPx: 500,
+                },
+                {
+                  id: 'scene3',
+                  promptSelector: '#scene3-prompt',
+                  textSelector: '#scene3-prompt-text',
+                  fullText: 'you_look_through_the_wrong_end_of_telescopes',
+                  entrancePx: 5500,
+                  typeStartPx: 5900,
+                  typeEndPx: 6500,
+                  untypeStartPx: 6700,
+                  untypeEndPx: 7200,
+                },
+                {
+                  id: 'scene4',
+                  promptSelector: '#scene4-prompt',
+                  textSelector: '#scene4-prompt-text',
+                  fullText: 'you_think_in_fractions_then_call_the_consequences_unexpected',
+                  entrancePx: 10900,
+                  typeStartPx: 11300,
+                  typeEndPx: 12500,
+                  untypeStartPx: 12700,
+                  untypeEndPx: 13200,
+                  typeFn: (p) => {
+                    const part1 = 'you_think_in_fractions';
+                    const full = 'you_think_in_fractions_then_call_the_consequences_unexpected';
+                    const currentPx = 11300 + p * 1200;
+                    if (currentPx < 11700) {
+                      const subP = (currentPx - 11300) / 400;
+                      return part1.substring(0, Math.round(subP * part1.length));
+                    } else if (currentPx < 11800) {
+                      return part1;
+                    } else {
+                      const subP = (currentPx - 11800) / 700;
+                      const remaining = full.length - part1.length;
+                      return part1 + full.substring(part1.length, part1.length + Math.round(subP * remaining));
+                    }
+                  }
+                },
+                {
+                  id: 'scene5',
+                  promptSelector: '#scene5-prompt',
+                  textSelector: '#scene5-prompt-text',
+                  fullText: 'you_say_no_instead_of_yes',
+                  entrancePx: 18900,
+                  typeStartPx: 19300,
+                  typeEndPx: 20000,
+                  untypeStartPx: 20500,
+                  untypeEndPx: 21000,
+                },
+                {
+                  id: 'scene6',
+                  promptSelector: '#scene6-prompt',
+                  textSelector: '#scene6-prompt-text',
+                  fullText: 'our_future_without_food_illustratively_explained_by_ai',
+                  entrancePx: 25100,
+                  typeStartPx: 25500,
+                  typeEndPx: 26500,
+                  untypeStartPx: 27000,
+                  untypeEndPx: 27500,
+                },
+                {
+                  id: 'scene7',
+                  promptSelector: '#scene7-prompt',
+                  textSelector: '#scene7-prompt-text',
+                  fullText: 'narrated_by_an_otherwordly_intelligence',
+                  entrancePx: 35900,
+                  typeStartPx: 36300,
+                  typeEndPx: 37100,
+                  untypeStartPx: 37300,
+                  untypeEndPx: 37800,
+                },
+                {
+                  id: 'scene8',
+                  promptSelector: '#scene8-prompt',
+                  textSelector: '#scene8-prompt-text',
+                  fullText: 'reviewed_by_machines',
+                  entrancePx: 41600,
+                  typeStartPx: 42000,
+                  typeEndPx: 42800,
+                  untypeStartPx: 43000,
+                  untypeEndPx: 43500,
+                },
+                {
+                  id: 'scene9',
+                  promptSelector: '#scene9-prompt',
+                  textSelector: '#scene9-prompt-text',
+                  fullText: 'instructions_for_toppling_goliath_provided',
+                  entrancePx: 49100,
+                  typeStartPx: 49500,
+                  typeEndPx: 50500,
+                  untypeStartPx: 50700,
+                  untypeEndPx: 51200,
+                },
+              ];
+
+              // Master synchronized prompt state machine: guaranteed zero superimposition and 100% clean eradication
+              function syncPromptStates(scrollPos) {
+                for (let i = 0; i < promptSpecs.length; i++) {
+                  const spec = promptSpecs[i];
+                  const el = document.querySelector(spec.promptSelector);
+                  if (!el) continue;
+                  const txt = spec.textSelector ? document.querySelector(spec.textSelector) : null;
+                  const pfx = el.querySelector('.prompt-prefix');
+                  const cur = el.querySelector('.terminal-cursor');
+
+                  // Case 1: Strictly outside active range -> completely hidden and cleared
+                  if (scrollPos < spec.entrancePx || scrollPos >= spec.untypeEndPx) {
+                    if (el.style.display !== 'none') el.style.display = 'none';
+                    if (el.style.opacity !== '0') el.style.opacity = '0';
+                    if (el.style.visibility !== 'hidden') el.style.visibility = 'hidden';
+                    if (txt && txt.textContent !== '') txt.textContent = '';
+                    if (pfx) pfx.textContent = (scrollPos < spec.entrancePx) ? '>:\u00A0' : '';
+                    if (cur && cur.style.display !== 'none') {
+                      cur.style.display = 'none';
+                      cur.style.visibility = 'hidden';
+                    }
+                    continue;
+                  }
+
+                  // Inside [entrancePx, untypeEndPx): ensure visible container
+                  if (el.style.display !== 'inline-flex') el.style.display = 'inline-flex';
+                  if (el.style.visibility !== 'visible') el.style.visibility = 'visible';
+
+                  // Case 2: Entrance fade-in (before typing starts)
+                  if (scrollPos < spec.typeStartPx) {
+                    const enterSpan = Math.max(1, spec.typeStartPx - spec.entrancePx);
+                    const enterP = Math.min(1, Math.max(0, (scrollPos - spec.entrancePx) / enterSpan));
+                    el.style.opacity = String(enterP);
+                    if (txt) txt.textContent = '';
+                    if (pfx) pfx.textContent = '>:\u00A0';
+                    if (cur) {
+                      cur.style.display = 'inline-block';
+                      cur.style.visibility = 'visible';
+                      cur.style.opacity = '1';
+                    }
+                    continue;
+                  }
+
+                  // Inside typing, hold, or untyping: opacity is 1
+                  if (el.style.opacity !== '1') el.style.opacity = '1';
+
+                  // Case 3: Forward typing (from typeStartPx to typeEndPx)
+                  if (scrollPos < spec.typeEndPx) {
+                    const span = Math.max(1, spec.typeEndPx - spec.typeStartPx);
+                    const typeP = Math.min(1, Math.max(0, (scrollPos - spec.typeStartPx) / span));
+                    if (txt) {
+                      if (spec.typeFn) {
+                        txt.textContent = spec.typeFn(typeP);
+                      } else {
+                        const chars = Math.round(typeP * spec.fullText.length);
+                        txt.textContent = spec.fullText.substring(0, chars);
+                      }
+                    }
+                    if (pfx) pfx.textContent = '>:\u00A0';
+                    if (cur) {
+                      cur.style.display = 'inline-block';
+                      cur.style.visibility = 'visible';
+                      cur.style.opacity = '1';
+                    }
+                    continue;
+                  }
+
+                  // Case 4: Stillness hold (from typeEndPx to untypeStartPx)
+                  if (scrollPos < spec.untypeStartPx) {
+                    if (txt) txt.textContent = spec.fullText;
+                    if (pfx) pfx.textContent = '>:\u00A0';
+                    if (cur) {
+                      cur.style.display = 'inline-block';
+                      cur.style.visibility = 'visible';
+                      cur.style.opacity = '1';
+                    }
+                    continue;
+                  }
+
+                  // Case 5: Scrubbable Un-typing (from untypeStartPx to untypeEndPx)
+                  const untypeSpan = Math.max(1, spec.untypeEndPx - spec.untypeStartPx);
+                  const untypeP = Math.min(1, Math.max(0, (scrollPos - spec.untypeStartPx) / untypeSpan));
+
+                  applyPromptUntype(el, pfx, txt, cur, spec.fullText, untypeP);
+                }
+              }
+
               const scrollTl = gsap.timeline({
                 scrollTrigger: {
                   trigger: '#scroll-track',
@@ -747,6 +1033,10 @@ function handleEnter() {
                   invalidateOnRefresh: true,
                   onUpdate: (self) => {
                     const scrollPos = self.progress * TOTAL_SCROLL_TRACK;
+
+                    // Synchronize master prompt states
+                    syncPromptStates(scrollPos);
+
                     if (scrollPos >= 1500 && !scene3AssetsLoaded) {
                       loadScene3Assets();
                     }
@@ -769,13 +1059,23 @@ function handleEnter() {
                 }
               });
 
-              // Phase 0 (0px -> 500px): Prompt moves to top-left (no scale down, stays scale 1.0), scroll indicator fades out
-              scrollTl.to(promptEl, {
-                yPercent: 0,
-                y: s1DockY,
+              // Initial synchronization of master prompt states at scroll 0
+              syncPromptStates(0);
+              lenis.on('scroll', ({ scroll }) => {
+                syncPromptStates(scroll);
+              });
+              ScrollTrigger.addEventListener('refresh', () => {
+                syncPromptStates(window.scrollY);
+              });
+
+              // Phase 0 (0px -> 500px): Prompt un-types text right-to-left, then '>:' and cursor '_', so nothing remains on screen
+              addPromptUntype(scrollTl, {
+                promptSelector: '#terminal-prompt',
+                textSelector: '#prompt-text',
+                fullText: 'hello_this_is_molotov',
+                startPx: 0,
                 duration: 500,
-                ease: 'none',
-              }, 0);
+              });
 
               if (scrollIndicator) {
                 scrollTl.to(scrollIndicator, {
@@ -886,13 +1186,7 @@ function handleEnter() {
               // 500px stillness hold with all Scene 2 elements at 100% opacity.
 
               // Phase 7: Staggered "Zero Gravity" Rise & Fade Out of Scene 2 Elements (5000px -> 5550px)
-              // 1st to go: "hello_this_is_molotov_" prompt (5000px -> 5250px)
-              scrollTl.to(promptEl, {
-                y: s1DockY - 200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 5000);
+              // (Note: "#terminal-prompt" already un-typed and cleared at 500px)
 
               // 2nd to go: 5 Circles row (5100px -> 5350px)
               scrollTl.to('#scene2-portals', {
@@ -918,34 +1212,17 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 5300);
 
-              // Phase 8: Scene 3 Prompt Rises cleanly to the Center (5500px -> 5900px)
-              scrollTl.fromTo('#scene3-prompt',
-                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
-                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
-                5500
-              );
+              // Phase 8: Scene 3 Prompt in-place activation (5500px -> 5900px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 9: Scene 3 Prompt Typing Sequence (5900px -> 6500px)
-              scrollTl.to('#scene3-prompt-text', {
-                text: { value: 'you_look_through_the_wrong_end_of_telescopes', delimiter: '' },
-                duration: 600,
-                ease: 'none',
-              }, 5900);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 10: Scene 3 Prompt Centered Hold (6500px -> 6700px)
-              // 200px stillness hold at screen center before migrating to corner
+              // 200px stillness hold at vertical center, flush left (coordinated by syncPromptStates)
 
-              // Phase 11: Scene 3 Prompt Shrinks & Moves to Upper-Left Corner (6700px -> 7200px)
-              scrollTl.to('#scene3-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 6700);
+              // Phase 11: Scene 3 Prompt Un-types Right-to-Left completely (6700px -> 7200px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 12: Scene 3 Step 1 — Large Deer Focus & Initial Clause "You see the deer" (7200px -> 7500px)
               // 1. Deer Portal fades in centered over 100px (7200 -> 7300), holds for 200px (7300 -> 7500)
@@ -1130,55 +1407,28 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 10100);
 
-              // 4. Scene 3 Pinned Prompt floats up & dissolves
-              scrollTl.to('#scene3-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 10150);
+              // (Note: "#scene3-prompt" already un-typed and cleared at 7200px)
 
               // Phase 18: Pure Black Space (10600px -> 10900px)
               // [300px pitch-black contemplation runway before Scene 4]
 
-              // Phase 19: Scene 4 Prompt Rises to Screen Center (10900px -> 11300px)
-              scrollTl.fromTo('#scene4-prompt',
-                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
-                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
-                10900
-              );
+              // Phase 19: Scene 4 Prompt in-place activation (10900px -> 11300px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 20: Scene 4 Prompt Clause 1 Typing (11300px -> 11700px)
-              scrollTl.to('#scene4-prompt-text', {
-                text: { value: 'you_think_in_fractions', delimiter: '' },
-                duration: 400,
-                ease: 'none',
-              }, 11300);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 21: Breathing Moment (11700px -> 11800px)
-              // [100px pause on "you_think_in_fractions_" with cursor blinking]
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 22: Scene 4 Prompt Clause 2 Typing (11800px -> 12500px)
-              scrollTl.to('#scene4-prompt-text', {
-                text: { value: 'you_think_in_fractions_then_call_the_consequences_unexpected', delimiter: '' },
-                duration: 700,
-                ease: 'none',
-              }, 11800);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 23: Scene 4 Prompt Centered Hold (12500px -> 12700px)
-              // [200px stillness hold at screen center before migrating to corner]
+              // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 24: Scene 4 Prompt Shrinks & Moves to Upper-Left Corner (12700px -> 13200px)
-              scrollTl.to('#scene4-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 12700);
+              // Phase 24: Scene 4 Prompt Un-types Right-to-Left completely (12700px -> 13200px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 25: 512x512 Centered Video Scrub (13200px -> 14600px)
               const s4Video = document.querySelector('#scene4-video');
@@ -1321,45 +1571,22 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 18100);
 
-              // 5. Scene 4 Pinned Prompt floats up & dissolves
-              scrollTl.to('#scene4-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 18150);
+              // (Note: "#scene4-prompt" already un-typed and cleared at 13200px)
 
               // Phase 32: Pure Black Space (18600px -> 18900px)
               // [300px pitch-black contemplation runway before Scene 5]
 
-              // Phase 33: Scene 5 Prompt Rises to Screen Center (18900px -> 19300px)
-              scrollTl.fromTo('#scene5-prompt',
-                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
-                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
-                18900
-              );
+              // Phase 33: Scene 5 Prompt in-place activation (18900px -> 19300px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 34: Scene 5 Prompt Typing (19300px -> 20000px)
-              scrollTl.to('#scene5-prompt-text', {
-                text: { value: 'you_say_no_instead_of_yes', delimiter: '' },
-                duration: 700,
-                ease: 'none',
-              }, 19300);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 35: Breathing Moment & Centered Hold (20000px -> 20500px)
-              // [500px stillness hold on centered "you_say_no_instead_of_yes_" with cursor blinking]
+              // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 36: Scene 5 Prompt Migration to Top-Left Corner (20500px -> 21000px)
-              scrollTl.to('#scene5-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 20500);
+              // Phase 36: Scene 5 Prompt Un-types Right-to-Left completely (20500px -> 21000px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 37: Option 2 - Randomized Orbital Gravitational Convergence (21000px -> 22400px)
               // 6 circles start from asymmetric randomized vectors across space and converge into 3x2 grid slots
@@ -1447,14 +1674,7 @@ function handleEnter() {
               // Phase 40: Scene 5 Complete Reading & Reflection Hold (24000px -> 24600px)
               // [600px stillness hold on complete 3x2 grid, heading, and full subheading]
 
-              // Phase 41: Scene 5 Standard Zero-Gravity Staggered Exit (24600px -> 25150px)
-              // 1. Top-Left Terminal Prompt departs (24600 -> 24850)
-              scrollTl.to('#scene5-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 24600);
+              // (Note: "#scene5-prompt" already un-typed and cleared at 21000px)
 
               // 2. Scene 5 3x2 Visuals / Grid departs (24700 -> 24950)
               scrollTl.to('#scene5-grid', {
@@ -1480,35 +1700,17 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 24900);
 
-              // Phase 42: Scene 6 Prompt Rises to Screen Center (25100px -> 25500px)
-              // [Starts at T0 + 500px, overlapping final 50px of fading subheading]
-              scrollTl.fromTo('#scene6-prompt',
-                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
-                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
-                25100
-              );
+              // Phase 42: Scene 6 Prompt in-place activation (25100px -> 25500px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 43: Scene 6 Prompt Typing (25500px -> 26500px)
-              scrollTl.to('#scene6-prompt-text', {
-                text: { value: 'our_future_without_food_illustratively_explained_by_ai', delimiter: '' },
-                duration: 1000,
-                ease: 'none',
-              }, 25500);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 44: Centered Breathing Hold on Prompt (26500px -> 27000px)
-              // [500px stillness hold on "our_future_without_food_illustratively_explained_by_ai_" with cursor blinking]
+              // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 45: Scene 6 Prompt Migration to Top-Left Corner (27000px -> 27500px)
-              scrollTl.to('#scene6-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 27000);
+              // Phase 45: Scene 6 Prompt Un-types Right-to-Left completely (27000px -> 27500px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 46: Scene 6 Video Playback & Mitosis Choreography (27500px -> 30500px)
               const s6Video1 = document.querySelector('#scene6-video-1');
@@ -1700,13 +1902,7 @@ function handleEnter() {
 
               // Phase 54: Scene 6 Zero-Gravity Staggered Exit (35300px -> 35950px)
               // Outgoing elements ascend by -200px on Y while fading to opacity: 0
-              // 1. Scene 6 Prompt
-              scrollTl.to('#scene6-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 35300);
+              // (Note: "#scene6-prompt" already un-typed and cleared at 27500px)
 
               // 2. Scene 6 Grid (5x3 museum circles)
               scrollTl.to('#scene6-grid', {
@@ -1741,23 +1937,14 @@ function handleEnter() {
               }, 35700);
               scrollTl.set('#scene6-purchase-btn', { pointerEvents: 'none' }, 35700);
 
-              // Phase 55: Scene 7 Prompt Rises to Screen Center (35900px -> 36300px)
-              // [Starts at T0 + 600px, overlapping final 50px of fading purchase button]
-              scrollTl.fromTo('#scene7-prompt',
-                { y: 180, opacity: 0, xPercent: -50, yPercent: -50, x: 0 },
-                { y: 0, opacity: 1, xPercent: -50, yPercent: -50, x: 0, duration: 400, ease: 'power1.out', immediateRender: false },
-                35900
-              );
+              // Phase 55: Scene 7 Prompt in-place activation (35900px -> 36300px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 56: Scene 7 Prompt Typing (36300px -> 37100px)
-              scrollTl.to('#scene7-prompt-text', {
-                text: { value: 'narrated_by_an_otherwordly_intelligence', delimiter: '' },
-                duration: 800,
-                ease: 'none',
-              }, 36300);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 57: Centered Breathing Hold on Prompt (37100px -> 37300px)
-              // [200px stillness hold on fully typed prompt with blinking cursor at screen center]
+              // (Coordinated dynamically by syncPromptStates)
 
               // Helper to compute responsive Scene 7 coordinates
               function getScene7Layout() {
@@ -1811,18 +1998,8 @@ function handleEnter() {
               }
               const s7Layout = getScene7Layout();
 
-              // Phase 58: Act 1 — Prompt Docking & Big Circle Zoom-In (37300px -> 37800px | 500px)
-              // 1. Prompt shrinks and positions itself to the top-left of the screen
-              scrollTl.to('#scene7-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 37300);
+              // Phase 58: Act 1 — Prompt Un-typing & Big Circle Zoom-In (37300px -> 37800px | 500px)
+              // 1. Prompt un-typing coordinated dynamically by syncPromptStates
 
               // 2. 512px circular portal fades in (200px fade-in) while slowly zooming from 95% to 100% over 500px
               scrollTl.fromTo('#scene7-portal',
@@ -1901,13 +2078,7 @@ function handleEnter() {
               // SCENE 7 ZERO-GRAVITY EXIT (41000px -> 41650px)
               // =========================================================================
               // Phase 64: Staggered Zero-Gravity Ascension Exit
-              // 1. Prompt floats upwards into the void
-              scrollTl.to('#scene7-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 450,
-                ease: 'power1.in',
-              }, 41000);
+              // (Note: "#scene7-prompt" already un-typed and cleared at 37800px)
 
               // 2. Colophon text floats upwards into the void
               scrollTl.to('#scene7-narrative-wrapper', {
@@ -1928,34 +2099,17 @@ function handleEnter() {
               // =========================================================================
               // SCENE 8: REVIEWED BY MACHINES (41600px -> 48500px)
               // =========================================================================
-              // Phase 65: Scene 8 Prompt Rises to Screen Center (41600px -> 42000px | 400px)
-              scrollTl.fromTo('#scene8-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
-                41600
-              );
+              // Phase 65: Scene 8 Prompt in-place activation (41600px -> 42000px | 400px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 66: Computer Prompt Typing (42000px -> 42800px | 800px)
-              scrollTl.to('#scene8-prompt-text', {
-                text: { value: 'reviewed_by_machines', delimiter: '' },
-                duration: 800,
-                ease: 'none',
-              }, 42000);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 67: Centered Breathing Hold on Prompt (42800px -> 43000px | 200px)
-              // [200px stillness hold on fully typed prompt with blinking cursor at screen center]
+              // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 68: Scene 8 Prompt Docking to Top-Left Corner (43000px -> 43500px | 500px)
-              scrollTl.to('#scene8-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 43000);
+              // Phase 68: Scene 8 Prompt Un-types Right-to-Left completely (43000px -> 43500px | 500px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 69: The Dreamy Cinematic Fly-In of Quotes (43500px -> 45550px)
               const flyW = window.innerWidth || 1400;
@@ -2133,12 +2287,7 @@ function handleEnter() {
 
               // Phase 74: Scene 8 Zero-Gravity Staggered Ascension Exit (48500px -> 49150px | 650px)
               // Outgoing Scene 8 elements drift upward by -200px and dissolve into the void
-              scrollTl.to('#scene8-prompt', {
-                y: promptCoords.dockY - 200,
-                opacity: 0,
-                duration: 450,
-                ease: 'power1.in',
-              }, 48500);
+              // (Note: "#scene8-prompt" already un-typed and cleared at 43500px)
 
               scrollTl.to('#scene8-card-1', {
                 y: -200,
@@ -2168,39 +2317,17 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 48750);
 
-              // Phase 75: Scene 9 Prompt Rise from Bottom to Center (49100px -> 49500px | 400px)
-              scrollTl.fromTo('#scene9-prompt',
-                { y: 180, opacity: 0 },
-                { y: 0, opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
-                49100
-              );
+              // Phase 75: Scene 9 Prompt in-place activation (49100px -> 49500px | 400px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 76: Scene 9 Prompt Typing (49500px -> 50500px | 1000px)
-              // Types: ">: instructions_for_toppling_goliath_provided_"
-              scrollTl.to('#scene9-prompt-text', {
-                text: {
-                  value: 'instructions_for_toppling_goliath_provided',
-                  delimiter: '',
-                },
-                duration: 1000,
-                ease: 'none',
-              }, 49500);
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 77: Centered Breathing Hold on Prompt (50500px -> 50700px | 200px)
-              // [200px stillness pause on typed prompt in center]
+              // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 78: Scene 9 Prompt Corner Docking (50700px -> 51200px | 500px)
-              // Shrinks and docks to top-left corner
-              scrollTl.to('#scene9-prompt', {
-                scale: promptCoords.scale,
-                transformOrigin: '0% 0%',
-                xPercent: 0,
-                yPercent: 0,
-                x: promptCoords.dockX,
-                y: promptCoords.dockY,
-                duration: 500,
-                ease: 'none',
-              }, 50700);
+              // Phase 78: Scene 9 Prompt Un-types Right-to-Left completely (50700px -> 51200px | 500px)
+              // (Coordinated dynamically by syncPromptStates)
 
               // Phase 79: The Book Circle Entrance (51200px -> 51700px | 500px)
               // Native 600px circle in dead center scales from 0 to peak scale (scale: 0 -> s9BookInitialScale)

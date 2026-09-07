@@ -169,21 +169,29 @@ body {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  text-align: left;
   user-select: none;
   white-space: nowrap;
   transition: opacity 0.15s ease;
 }
 
-#terminal-prompt {
-  justify-content: flex-start;
-  text-align: left;
-}
-
 .terminal-prompt.static-prompt {
   cursor: default;
   pointer-events: none;
+}
+
+/* Scene 3 through Scene 9 Prompts: Hidden by default until activated in their scene phases */
+#scene3-prompt,
+#scene4-prompt,
+#scene5-prompt,
+#scene6-prompt,
+#scene7-prompt,
+#scene8-prompt,
+#scene9-prompt {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .terminal-prompt:hover {
