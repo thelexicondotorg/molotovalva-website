@@ -52,13 +52,29 @@ export function loadScene3Assets() {
   const imgDetail = new Image();
   imgDetail.src = '/images/OhDeer-detail.jpg';
 
-  // 2. Attach high-resolution background to deer focus portal (Circle 2: pure OhDeer-detail.jpg)
+  // 2. Attach backgrounds to deer focus portal (Detail: pure OhDeer-detail.jpg; Base: OhDeer.jpg)
   const deerFocusEl = document.querySelector('#scene3-deer-focus');
   if (deerFocusEl) {
     deerFocusEl.style.backgroundImage = "url('/images/OhDeer-detail.jpg')";
     deerFocusEl.style.backgroundSize = '376px 376px';
     deerFocusEl.style.backgroundPosition = '-45px -34px';
     deerFocusEl.style.backgroundRepeat = 'no-repeat';
+  }
+
+  const deerFocusDetailEl = document.querySelector('#scene3-deer-focus-detail');
+  if (deerFocusDetailEl) {
+    deerFocusDetailEl.style.backgroundImage = "url('/images/OhDeer-detail.jpg')";
+    deerFocusDetailEl.style.backgroundSize = '376px 376px';
+    deerFocusDetailEl.style.backgroundPosition = '-45px -34px';
+    deerFocusDetailEl.style.backgroundRepeat = 'no-repeat';
+  }
+
+  const deerFocusBaseEl = document.querySelector('#scene3-deer-focus-base');
+  if (deerFocusBaseEl) {
+    deerFocusBaseEl.style.backgroundImage = "url('/images/OhDeer.jpg')";
+    deerFocusBaseEl.style.backgroundSize = '3525px 1397px';
+    deerFocusBaseEl.style.backgroundPosition = '-1075px -1096px';
+    deerFocusBaseEl.style.backgroundRepeat = 'no-repeat';
   }
 
   // 3. Attach backgrounds to 4x10 grid circles
@@ -730,6 +746,7 @@ function handleEnter() {
                 ? Math.min(1.0, (window.innerHeight - 80) / 880)
                 : 1.0;
               gsap.set('#scene8-grid-layer', { scale: s8GridScale, transformOrigin: 'center center' });
+              gsap.set('#scene3-deer-focus-detail', { opacity: 1 });
 
               // Ensure Scene 7 visual initial states
               gsap.set('#scene7-portal', { opacity: 0, scale: 0.95 });
@@ -1273,17 +1290,20 @@ function handleEnter() {
                   ease: 'power1.inOut',
                 }, 7500);
 
-                // Seamless switch to grid circle at 8100px
+                // Extend the head of the underlying old deer image (Slot [3,3]) to start at 8040px at 100% opacity
                 scrollTl.fromTo('#scene3-circle-3-3',
                   { opacity: 0 },
-                  { opacity: 1, duration: 20, ease: 'none', immediateRender: false },
-                  8080
+                  { opacity: 1, duration: 1, ease: 'none', immediateRender: false },
+                  8040
                 );
-                scrollTl.to('#scene3-deer-focus', {
-                  opacity: 0,
-                  duration: 20,
-                  ease: 'none',
-                }, 8080);
+
+                // Crossfade: The new deer circle on top fades from 1.0 to 0.0 over the 60px window (8040px -> 8100px)
+                // Because the underlying old deer is already 100% opaque underneath, zero black background is ever exposed!
+                scrollTl.fromTo('#scene3-deer-focus',
+                  { opacity: 1 },
+                  { opacity: 0, duration: 60, ease: 'power1.inOut', immediateRender: false },
+                  8040
+                );
 
                 // 2. Randomized reveal of remaining 19 circles of Columns 1-5 (Left Half)
                 const leftHalfCoords = [
