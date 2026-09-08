@@ -46,16 +46,18 @@ export function loadScene3Assets() {
   if (scene3AssetsLoaded) return;
   scene3AssetsLoaded = true;
 
-  // 1. Preload image into browser cache
+  // 1. Preload images into browser cache
   const img = new Image();
   img.src = '/images/OhDeer.jpg';
+  const imgDetail = new Image();
+  imgDetail.src = '/images/OhDeer-detail.jpg';
 
-  // 2. Attach background to deer focus portal
+  // 2. Attach high-resolution background to deer focus portal (Circle 2: pure OhDeer-detail.jpg)
   const deerFocusEl = document.querySelector('#scene3-deer-focus');
   if (deerFocusEl) {
-    deerFocusEl.style.backgroundImage = "url('/images/OhDeer.jpg')";
-    deerFocusEl.style.backgroundSize = '3525px 1397px';
-    deerFocusEl.style.backgroundPosition = '-1075px -1096px';
+    deerFocusEl.style.backgroundImage = "url('/images/OhDeer-detail.jpg')";
+    deerFocusEl.style.backgroundSize = '376px 376px';
+    deerFocusEl.style.backgroundPosition = '-45px -34px';
     deerFocusEl.style.backgroundRepeat = 'no-repeat';
   }
 
