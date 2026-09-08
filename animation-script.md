@@ -81,7 +81,7 @@
 
 ## Scene 3: "you_look_through_the_wrong_end_of_telescopes_"
 **Pixel Range**: `5,500px – 10,600px` (Total Span: `5,100px`)  
-**Elements**: `#scene3-prompt`, `#scene3-deer-focus`, `#scene3-grid` (40 circles), `#scene3-heading`, `#scene3-subheading-part1`, `#scene3-subheading-part2`
+**Elements**: `#scene3-prompt`, `#scene3-deer-focus`, `#scene3-grid` (40 circles; 1066px wide on 1366px desktop canvas within 50px general canvas padding), `#scene3-heading`, `#scene3-subheading-part1`, `#scene3-subheading-part2`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |

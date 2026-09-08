@@ -727,17 +727,17 @@ function handleEnter() {
               const isMobile = window.innerWidth < 768;
               const s3GridScale = isMobile
                 ? Math.min(1.0, (window.innerWidth - 32) / 846)
-                : (isTier3 ? Math.min(1.0, (window.innerWidth - 64) / 846) : 1.0);
+                : Math.min(1066 / 846, (window.innerWidth - 100) / 846);
               const s4GridScale = isMobile
                 ? Math.min(1.0, (window.innerWidth - 32) / 796)
-                : (isTier3 ? Math.min(1.0, (window.innerWidth - 64) / 796) : 1.0);
+                : Math.min(1.0, (window.innerWidth - 100) / 796);
               const s5ContainerScale = isMobile
                 ? Math.min(1.0, (window.innerHeight - 80) / 760, (window.innerWidth - 32) / 340)
                 : 1.0;
               const s6ContainerScale = isMobile
                 ? Math.min(1.0, (window.innerHeight - 80) / 820, (window.innerWidth - 32) / 724)
                 : 1.0;
-              gsap.set('#scene3-grid', { scale: s3GridScale, transformOrigin: 'center center' });
+              gsap.set('#scene3-grid', { scale: s3GridScale, y: -25, transformOrigin: 'center center' });
               gsap.set('#scene4-grid', { scale: s4GridScale, transformOrigin: 'center center' });
               gsap.set('#scene5-container', { scale: s5ContainerScale, transformOrigin: 'center center' });
               gsap.set('#scene6-container', { scale: s6ContainerScale, transformOrigin: 'center center' });
@@ -785,6 +785,24 @@ function handleEnter() {
                   deerScale = slotRect.width / focusRect.width;
                 }
               }
+
+              const updateScene3Docking = () => {
+                const mobile = window.innerWidth < 768;
+                const scale = mobile
+                  ? Math.min(1.0, (window.innerWidth - 32) / 846)
+                  : Math.min(1066 / 846, (window.innerWidth - 100) / 846);
+                gsap.set('#scene3-grid', { scale: scale, y: -25, transformOrigin: 'center center' });
+                if (deerFocusEl && deerSlotEl) {
+                  const focusRect = deerFocusEl.getBoundingClientRect();
+                  const slotRect = deerSlotEl.getBoundingClientRect();
+                  if (focusRect.width > 0 && slotRect.width > 0) {
+                    deerDeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
+                    deerDeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
+                    deerScale = slotRect.width / focusRect.width;
+                  }
+                }
+              };
+              window.addEventListener('resize', updateScene3Docking);
 
               // Scene 4 Still Portal Delta calculation (512px -> 140px into Slot 0,0)
               const s4StillFocusEl = document.querySelector('#scene4-still-focus');
@@ -1283,9 +1301,9 @@ function handleEnter() {
                 // [HEADING IS PAUSED ON "You see the deer"]
                 // 1. Deer Portal glides and scales down into Slot (Row 4, Column 4)
                 scrollTl.to('#scene3-deer-focus', {
-                  x: deerDeltaX,
-                  y: deerDeltaY,
-                  scale: deerScale,
+                  x: () => deerDeltaX,
+                  y: () => deerDeltaY,
+                  scale: () => deerScale,
                   duration: 600,
                   ease: 'power1.inOut',
                 }, 7500);

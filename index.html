@@ -17,10 +17,10 @@
     
     <!-- 1366px Main Canvas Wrapper (Fixed Viewport Stage) -->
     <div id="canvas-container" class="fixed inset-0 pointer-events-none flex justify-center z-10">
-      <div id="main-canvas" class="w-full max-w-[1366px] h-full relative px-6 flex flex-col items-center justify-center">
+      <div id="main-canvas" class="w-full max-w-[1366px] h-full relative px-4 md:px-[50px] flex flex-col items-center justify-center">
         
         <!-- Scene 1: Interactive Terminal Prompt (Vertical Middle, Flush Left at Canvas Left Anchor) -->
-        <div class="terminal-prompt absolute left-4 md:left-6 top-1/2 z-30 pointer-events-auto" role="button" tabindex="0" id="terminal-prompt">
+        <div class="terminal-prompt absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-auto" role="button" tabindex="0" id="terminal-prompt">
           <span class="prompt-prefix">&gt;:&nbsp;</span><span id="prompt-text"></span><span class="terminal-cursor">_</span>
         </div>
 
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Scene 3: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene3-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene3-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene3-prompt-text"></span>
           <span class="terminal-cursor">_</span>
@@ -96,12 +96,12 @@
         <!-- Scene 3: Visuals & Narrative Container -->
         <div id="scene3-container" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
           <!-- 4x10 Grid Container of 40 Circular Apertures (846px x 335px matching OhDeer.jpg aspect ratio) -->
-          <div id="scene3-grid" class="relative w-[846px] h-[335px] grid grid-cols-10 grid-rows-4 gap-x-[14px] gap-y-[15.67px] pointer-events-none" style="transform: translateY(-20px);">
+          <div id="scene3-grid" class="relative w-[846px] h-[335px] grid grid-cols-10 grid-rows-4 gap-x-[14px] gap-y-[15.67px] pointer-events-none" style="transform: translateY(-25px);">
             <!-- 40 circles populated by JS with seamless continuous offsets -->
           </div>
 
           <!-- Scene 3: Typography Area -->
-          <div id="scene3-typography" class="flex flex-col items-center justify-center mt-6 select-none" style="transform: translateY(-20px);">
+          <div id="scene3-typography" class="flex flex-col items-center justify-center mt-6 md:mt-[65px] select-none" style="transform: translateY(-25px);">
             <h2 id="scene3-heading" class="scene-heading text-center select-none">
               <span class="heading-word">You</span>
               <span class="heading-word">see</span>
@@ -129,7 +129,7 @@
         </div>
 
         <!-- Scene 4: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene4-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene4-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene4-prompt-text"></span>
           <span class="terminal-cursor">_</span>
@@ -197,14 +197,14 @@
         </div>
 
         <!-- Scene 5: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene5-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene5-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene5-prompt-text"></span>
           <span class="terminal-cursor">_</span>
         </div>
 
         <!-- Scene 6: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene6-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene6-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene6-prompt-text"></span>
           <span class="terminal-cursor">_</span>
@@ -281,7 +281,7 @@
         </div>
 
         <!-- Scene 7: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene7-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene7-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene7-prompt-text"></span>
           <span class="terminal-cursor">_</span>
@@ -315,7 +315,7 @@
         </div>
 
         <!-- Scene 8: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene8-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene8-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene8-prompt-text"></span>
           <span class="terminal-cursor">_</span>
@@ -426,7 +426,7 @@
         </div>
 
         <!-- Scene 9: Terminal Prompt (Vertical center, flush left) -->
-        <div id="scene9-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-6 top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
+        <div id="scene9-prompt" class="terminal-prompt opacity-0 absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none" style="display: none; opacity: 0; visibility: hidden;">
           <span class="prompt-prefix">&gt;:&nbsp;</span>
           <span id="scene9-prompt-text"></span>
           <span class="terminal-cursor">_</span>
