@@ -98,16 +98,16 @@ export function loadScene4Assets() {
 
   const s4Assets = [
     // Row 0
-    { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center', url: '/images/S4-01-woman-in-sea-of-bottles.jpg' },
-    { bg: "url('/images/S4-02-plane.jpg')", size: 'cover', pos: 'center', url: '/images/S4-02-plane.jpg' },
+    { bg: "url('/images/S4-05-wood.jpg')", size: 'cover', pos: 'center', url: '/images/S4-05-wood.jpg' },
+    { bg: "url('/images/S4-08-activists.jpg')", size: 'cover', pos: 'center', url: '/images/S4-08-activists.jpg' },
     { bg: "url('/images/S4-03-Water.jpg')", size: 'cover', pos: 'center', url: '/images/S4-03-Water.jpg' },
     { bg: "url('/images/S4-04-pumps.jpg')", size: 'cover', pos: 'center', url: '/images/S4-04-pumps.jpg' },
-    { bg: "url('/images/S4-05-wood.jpg')", size: 'cover', pos: 'center', url: '/images/S4-05-wood.jpg' },
+    { bg: "url('/images/S4-09-orangutan.jpg')", size: 'cover', pos: 'center', url: '/images/S4-09-orangutan.jpg' },
     // Row 1
     { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '0px center', url: '/images/S4-06_07-desert.jpg' },
     { bg: "url('/images/S4-06_07-desert.jpg')", size: '298px 140px', pos: '-158px center' },
-    { bg: "url('/images/S4-08-activists.jpg')", size: 'cover', pos: 'center', url: '/images/S4-08-activists.jpg' },
-    { bg: "url('/images/S4-09-orangutan.jpg')", size: 'cover', pos: 'center', url: '/images/S4-09-orangutan.jpg' },
+    { bg: "url('/images/S4-02-plane.jpg')", size: 'cover', pos: 'center', url: '/images/S4-02-plane.jpg' },
+    { bg: "url('/images/S4-01-woman-in-sea-of-bottles.jpg')", size: 'cover', pos: 'center', url: '/images/S4-01-woman-in-sea-of-bottles.jpg' },
     { bg: "url('/images/S4-10-diggers.jpg')", size: 'cover', pos: 'center', url: '/images/S4-10-diggers.jpg' },
   ];
 
@@ -804,22 +804,6 @@ function handleEnter() {
               };
               window.addEventListener('resize', updateScene3Docking);
 
-              // Scene 4 Still Portal Delta calculation (512px -> 140px into Slot 0,0)
-              const s4StillFocusEl = document.querySelector('#scene4-still-focus');
-              const s4StillSlotEl = document.querySelector('#scene4-circle-0-0');
-              let s4DeltaX = -328;
-              let s4DeltaY = -82;
-              let s4Scale = 140 / 512;
-
-              if (s4StillFocusEl && s4StillSlotEl) {
-                const focusRect = s4StillFocusEl.getBoundingClientRect();
-                const slotRect = s4StillSlotEl.getBoundingClientRect();
-                if (focusRect.width > 0 && slotRect.width > 0) {
-                  s4DeltaX = (slotRect.left + slotRect.width / 2) - (focusRect.left + focusRect.width / 2);
-                  s4DeltaY = (slotRect.top + slotRect.height / 2) - (focusRect.top + focusRect.height / 2);
-                  s4Scale = slotRect.width / focusRect.width;
-                }
-              }
 
               // Scene 6 Still Portals Delta calculation (400px -> 124px into Slot 2,0 and Slot 2,1)
               // Scene 6 Grid Scale for compact laptop viewports (<820px height)
@@ -1498,33 +1482,27 @@ function handleEnter() {
                 ease: 'none',
               }, 14450);
 
-              // Phase 26: Large Still Frame Substitution & 100px Hold (14600px -> 14800px)
-              // 1. Still frame fades in at center
-              scrollTl.fromTo('#scene4-still-focus',
-                { opacity: 0, scale: 1, x: 0, y: 0 },
-                { opacity: 1, scale: 1, x: 0, y: 0, duration: 100, ease: 'none', immediateRender: false },
-                14600
-              );
-              // [100px stillness hold at center from 14700px -> 14800px]
+              // Phase 26: 50px Transition Gap (14600px -> 14650px)
+              // [50px clean pause after video fade-out before grid assembly begins]
 
-              // Phase 27: Still Frame Glide & Scale to Grid Slot 1 (14800px -> 15400px)
-              scrollTl.to('#scene4-still-focus', {
-                x: s4DeltaX,
-                y: s4DeltaY,
-                scale: s4Scale,
-                duration: 600,
-                ease: 'power1.inOut',
-              }, 14800);
-
-              // Phase 28: Grid Random Population & Word-by-Word Heading (15400px -> 16600px)
-              const remainingS4Coords = [
-                [0, 2], [1, 3], [0, 4], [1, 0], [0, 1],
-                [1, 4], [1, 1], [0, 3], [1, 2]
+              // Phase 27: 10-Circle Grid Random Population & Word-by-Word Heading (14650px -> 16100px)
+              // Woman in sea of bottles at [1,3] appears 6th in sequence (mid-way) at 15300px
+              const s4GridCoords = [
+                [0, 2], // 1. Water (14650px)
+                [0, 4], // 2. Monkey / Orangutan - Grid Pos 5 (14780px)
+                [1, 1], // 3. Desert Right (14910px)
+                [0, 0], // 4. Wood - Grid Pos 1 (15040px)
+                [1, 0], // 5. Desert Left (15170px)
+                [1, 3], // 6. Woman in Sea of Bottles - Grid Pos 9 (15300px) [mid-sequence]
+                [0, 1], // 7. Activists - Grid Pos 2 (15430px)
+                [1, 4], // 8. Diggers (15560px)
+                [0, 3], // 9. Pumps (15690px)
+                [1, 2], // 10. Plane - Grid Pos 8 (15820px)
               ];
 
-              remainingS4Coords.forEach(([r, c], index) => {
+              s4GridCoords.forEach(([r, c], index) => {
                 const circleId = `#scene4-circle-${r}-${c}`;
-                const startTime = 15400 + index * 110;
+                const startTime = 14650 + index * 130;
                 scrollTl.fromTo(circleId,
                   { opacity: 0 },
                   { opacity: 1, duration: 180, ease: 'none', immediateRender: false },
@@ -1535,50 +1513,50 @@ function handleEnter() {
               // Heading words: "Nature thinks in wholes."
               const scene4HeadingWords = document.querySelectorAll('#scene4-heading .heading-word');
               if (scene4HeadingWords.length >= 4) {
-                // Word 0: "Nature" (15400 -> 15700)
+                // Word 0: "Nature" (14800 -> 15100)
                 scrollTl.fromTo(scene4HeadingWords[0],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  14800
+                );
+                // Word 1: "thinks" (15100 -> 15400)
+                scrollTl.fromTo(scene4HeadingWords[1],
+                  { opacity: 0, y: 12 },
+                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                  15100
+                );
+                // Word 2: "in" (15400 -> 15700)
+                scrollTl.fromTo(scene4HeadingWords[2],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
                   15400
                 );
-                // Word 1: "thinks" (15700 -> 16000)
-                scrollTl.fromTo(scene4HeadingWords[1],
+                // Word 3: "wholes." (15700 -> 16000)
+                scrollTl.fromTo(scene4HeadingWords[3],
                   { opacity: 0, y: 12 },
                   { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
                   15700
                 );
-                // Word 2: "in" (16000 -> 16300)
-                scrollTl.fromTo(scene4HeadingWords[2],
-                  { opacity: 0, y: 12 },
-                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
-                  16000
-                );
-                // Word 3: "wholes." (16300 -> 16600)
-                scrollTl.fromTo(scene4HeadingWords[3],
-                  { opacity: 0, y: 12 },
-                  { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
-                  16300
-                );
               }
 
-              // Phase 29: Two-Line Subheading Reveal (16600px -> 17400px)
-              // Line 1: (16600 -> 17000)
+              // Phase 28: Two-Line Subheading Reveal (16100px -> 16900px)
+              // Line 1: (16100 -> 16500)
               scrollTl.fromTo('#scene4-subheading-line1',
                 { opacity: 0, y: 6 },
                 { opacity: 1, y: 0, duration: 400, ease: 'none', immediateRender: false },
-                16600
+                16100
               );
-              // Line 2: (17000 -> 17400)
+              // Line 2: (16500 -> 16900)
               scrollTl.fromTo('#scene4-subheading-line2',
                 { opacity: 0, y: 6 },
                 { opacity: 1, y: 0, duration: 400, ease: 'none', immediateRender: false },
-                17000
+                16500
               );
 
-              // Phase 30: Final Scene 4 Stillness Hold (17400px -> 18000px)
-              // [600px hold with complete grid, heading, and subheading visible]
+              // Phase 29: Final Scene 4 Stillness Hold (16900px -> 18000px)
+              // [1100px hold with complete 10-circle grid, heading, and subheading visible]
 
-              // Phase 31: Scene 4 Zero-Gravity Float-Away Exit (18000px -> 18600px)
+              // Phase 30: Scene 4 Zero-Gravity Float-Away Exit (18000px -> 18600px)
               // 1. Subheading floats up & fades
               scrollTl.to('#scene4-subheading', {
                 y: -40,
@@ -1598,14 +1576,6 @@ function handleEnter() {
               // 3. 10-Circle Grid floats up & fades
               scrollTl.to('#scene4-grid', {
                 y: -80,
-                opacity: 0,
-                duration: 450,
-                ease: 'power1.in',
-              }, 18100);
-
-              // 4. Docked Still aperture floats up & fades synchronously with grid
-              scrollTl.to('#scene4-still-focus', {
-                y: s4DeltaY - 80,
                 opacity: 0,
                 duration: 450,
                 ease: 'power1.in',

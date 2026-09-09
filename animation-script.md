@@ -101,7 +101,7 @@
 
 ## Scene 4: "you_think_in_fractions_then_call_the_consequences_unexpected_"
 **Pixel Range**: `10,600px – 18,600px` (Total Span: `8,000px`)  
-**Elements**: `#scene4-prompt`, `#scene4-video-portal` (`#scene4-video`), `#scene4-still-focus`, `#scene4-grid` (10 circles), `#scene4-heading`, `#scene4-subheading-line1`, `#scene4-subheading-line2`
+**Elements**: `#scene4-prompt`, `#scene4-video-portal` (`#scene4-video`), `#scene4-grid` (10 circles), `#scene4-heading`, `#scene4-subheading-line1`, `#scene4-subheading-line2`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
@@ -112,13 +112,12 @@
 | **Phase 23** | `12,500px – 12,700px` | 200px | Centered stillness hold on full prompt. |
 | **Phase 24** | `12,700px – 13,200px` | 500px | Prompt un-types right-to-left (`12,700px – 13,075px`), then `>:` prefix and cursor `_` delete completely (`13,075px – 13,200px`), fading to `opacity: 0` so nothing remains on screen. |
 | **Phase 25** | `13,200px – 14,600px` | 1,400px | **Centered Video Scrub ($6.04\text{s}$)**:<br>• Fades in `13,200px – 13,350px` (150px).<br>• Video plays 0.0s to 6.04s scrubbed linearly.<br>• Fades out `14,450px – 14,600px` (150px). |
-| **Phase 26** | `14,600px – 14,800px` | 200px | **Still Frame Substitution**: Still frame fades in at center (`14,600px – 14,700px`), holds 100px (`14,700px – 14,800px`). |
-| **Phase 27** | `14,800px – 15,400px` | 600px | Still frame glides and scales to Grid Slot 1 (`s4DeltaX`, `s4DeltaY`, `s4Scale`, `power1.inOut`). |
-| **Phase 28** | `15,400px – 16,600px` | 1,200px | **Grid Assembly & Heading**:<br>• 9 remaining circles fade in randomly (110px stagger, 180px dur).<br>• Heading words "Nature thinks in wholes." fade up (300px per word). |
-| **Phase 29** | `16,600px – 17,400px` | 800px | **Subheading reveal**: Line 1 (`16,600px – 17,000px`), Line 2 (`17,000px – 17,400px`). |
-| **Phase 30** | `17,400px – 18,000px` | 600px | **Final Scene 4 Reading Hold**: 600px complete stillness hold. |
-| **Phase 31** | `18,000px – 18,600px` | 600px | **Zero-Gravity Float-Away Exit**: Subheading (`y: -40`), Heading (`y: -60`), Grid + docked still (`y: -80`). *(Prompt was already un-typed and cleared at 13,200px)*. |
-| **Phase 32** | `18,600px – 18,900px` | 300px | **Black Void Runway**: 300px pitch-black contemplation space before Scene 5. |
+| **Phase 26** | `14,600px – 14,650px` | 50px | **Transition Gap**: Clean 50px pause after video fade-out before grid assembly. |
+| **Phase 27** | `14,650px – 16,100px` | 1,450px | **10-Circle Grid Assembly & Heading**:<br>• 10 circles fade in randomly (130px stagger, 180px dur).<br>• Position 1 has Wood (`[0,0]`), Position 2 has Activists (`[0,1]`), Position 5 has Orangutan (`[0,4]`), Position 8 has Plane (`[1,2]`).<br>• Position 9 has Woman in Sea of Bottles (`[1,3]`), appearing 6th in sequence (mid-way) at `15,300px`.<br>• Heading words "Nature thinks in wholes." fade up (`14,800px – 16,000px`, 300px per word). |
+| **Phase 28** | `16,100px – 16,900px` | 800px | **Subheading reveal**: Line 1 (`16,100px – 16,500px`), Line 2 (`16,500px – 16,900px`). |
+| **Phase 29** | `16,900px – 18,000px` | 1,100px | **Final Scene 4 Reading Hold**: 1,100px complete stillness hold on full 10-circle grid, heading, and subheading. |
+| **Phase 30** | `18,000px – 18,600px` | 600px | **Zero-Gravity Float-Away Exit**: Subheading (`y: -40`), Heading (`y: -60`), Grid (`y: -80`). *(Prompt was already un-typed and cleared at 13,200px)*. |
+| **Phase 31** | `18,600px – 18,900px` | 300px | **Black Void Runway**: 300px pitch-black contemplation space before Scene 5. |
 
 ---
 
