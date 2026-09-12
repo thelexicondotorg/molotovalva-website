@@ -27,22 +27,16 @@
         <!-- Central Portal Section -->
         <section class="flex flex-col items-center justify-center text-center pointer-events-auto">
           
-          <!-- Central Media Portal: 300px x 300px Circular Mask with Dual Looping Video -->
+          <!-- Central Media Portal: 300px x 300px Circular Mask with Looping Video -->
           <div class="media-portal border border-neutral-900 shadow-2xl relative overflow-hidden" id="media-portal">
             <video 
-              id="intro-video-a" 
+              id="intro-video" 
               playsinline 
               muted 
               autoplay
-              src="/images/S0-Intro-Video-v2.mp4" 
+              loop
+              src="/images/S0-Intro-Video-v3.mp4" 
               class="w-full h-full object-cover absolute inset-0 opacity-100"
-            ></video>
-            <video 
-              id="intro-video-b" 
-              playsinline 
-              muted 
-              src="/images/S0-Intro-Video-v2.mp4" 
-              class="w-full h-full object-cover absolute inset-0 opacity-0"
             ></video>
           </div>
 
@@ -210,20 +204,15 @@
           <span class="terminal-cursor">_</span>
         </div>
 
-        <!-- Scene 6: Video Portals (400px Central Apertures) -->
+        <!-- Scene 6: Centered Video Portal (512px x 512px) - src injected dynamically in Scene 5 -->
         <div id="scene6-video-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-          <!-- Left / Primary Video Circle -->
-          <div id="scene6-video-portal-left" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
-            <video id="scene6-video-1" playsinline muted class="w-[800px] h-full max-w-none object-cover object-center absolute top-0 left-0"></video>
-          </div>
-          <!-- Right / Cloned Video Circle (Mitosis generated) -->
-          <div id="scene6-video-portal-right" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute flex items-center justify-center border border-neutral-900 shadow-2xl">
-            <video id="scene6-video-2" playsinline muted class="w-[800px] h-full max-w-none object-cover object-center absolute top-0 left-0"></video>
+          <div id="scene6-video-portal" class="w-[512px] h-[512px] max-w-[85vw] max-h-[85vw] rounded-full overflow-hidden opacity-0 pointer-events-none relative border border-neutral-900 shadow-2xl">
+            <video id="scene6-video" playsinline muted class="w-full h-full object-cover"></video>
           </div>
         </div>
 
-        <!-- Scene 6: Large Still Dual Focus (400px -> migrates to Grid Slots 11 & 12) -->
-        <div id="scene6-still-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+        <!-- Scene 6: Large Still Dual Focus (obsolete - hidden) -->
+        <div id="scene6-still-focus-wrapper" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20 hidden">
           <div id="scene6-still-portal-left" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute border border-neutral-900 shadow-2xl bg-no-repeat" style="background-size: 200% 100%; background-position: left center;"></div>
           <div id="scene6-still-portal-right" class="w-[400px] h-[400px] rounded-full overflow-hidden opacity-0 pointer-events-none absolute border border-neutral-900 shadow-2xl bg-no-repeat" style="background-size: 200% 100%; background-position: right center;"></div>
         </div>

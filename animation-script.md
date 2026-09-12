@@ -27,7 +27,7 @@
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
 | **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | Orbital gravitational convergence (6 circles) $\to$ 3x2 grid $\to$ Heading $\to$ Exit |
-| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Dual video mitosis ($6.5\text{s}$) $\to$ 15-circle constellation $\to$ Purchase CTA $\to$ Exit |
+| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Centered video scrub ($6.0\text{s}$) $\to$ 15-circle constellation $\to$ Purchase CTA $\to$ Exit |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | 512px avatar zoom $\to$ End-credits text crawl $\to$ Split layout separation $\to$ Exit |
 | **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | 4-directional flying quote cards ($300\% \to 200\%$) $\to$ 2x2 grid settle $\to$ Exit |
 | **Scene 9** | `instructions_for_toppling_goliath_provided_` | `49,100px – 58,500px` | 9,400px | 600px book circle $\to$ Under-book text $\to$ Side-by-side finale $\to$ Footer form |
@@ -141,7 +141,7 @@
 
 ## Scene 6: "our_future_without_food_illustratively_explained_by_ai_"
 **Pixel Range**: `25,100px – 35,950px` (Total Span: `10,850px`)  
-**Elements**: `#scene6-prompt`, `#scene6-video-portal-left`, `#scene6-video-portal-right`, `#scene6-still-portal-left`, `#scene6-still-portal-right`, `#scene6-grid` (15 circles), `#scene6-heading`, `#scene6-subheading-line1`, `#scene6-subheading-line2`, `#scene6-purchase-btn`
+**Elements**: `#scene6-prompt`, `#scene6-video-portal` (`#scene6-video`), `#scene6-grid` (15 circles), `#scene6-heading`, `#scene6-subheading-line1`, `#scene6-subheading-line2`, `#scene6-purchase-btn`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
@@ -149,15 +149,14 @@
 | **Phase 43** | `25,500px – 26,500px` | 1,000px | Prompt types: `our_future_without_food_illustratively_explained_by_ai`. |
 | **Phase 44** | `26,500px – 27,000px` | 500px | Centered breathing hold on prompt with cursor blinking. |
 | **Phase 45** | `27,000px – 27,500px` | 500px | Prompt un-types right-to-left (`27,000px – 27,375px`), then `>:` prefix and cursor `_` delete completely (`27,375px – 27,500px`), fading to `opacity: 0` so nothing remains on screen. |
-| **Phase 46** | `27,500px – 30,500px` | 3,000px | **Video Mitosis Split Choreography ($6.5\text{s}$)**:<br>• `27,500px – 28,400px`: Shot 1 inside 400px aperture (`x: 0`).<br>• `28,400px – 29,300px`: Shot 2 single aperture continues.<br>• `29,300px – 29,800px`: Shot 3a 1s hold.<br>• `29,800px – 30,300px`: Mitosis split — Left portal shifts `x: -200`, Right portal emerges and shifts `x: +200`. Videos counter-slide inside apertures.<br>• `30,350px – 30,500px`: Videos fade out. |
-| **Phase 47** | `30,400px – 30,800px` | 400px | **Dual Still Focus Handoff**: Left and Right still frames fade in at `x: ±200` (`30,450px`), hold until `30,800px`. |
-| **Phase 48** | `30,800px – 31,500px` | 700px | Dual stills migrate and scale into Grid Slots 11 & 12 (`power2.inOut`); swap to grid at `31,500px`. |
-| **Phase 49** | `31,500px – 33,000px` | 1,500px | **Assembly of Remaining 13 Museum Circles**: 13 circles fly in with rotation and scale into 5x3 constellation (`power2.out`). |
-| **Phase 50** | `33,000px – 33,800px` | 800px | Heading words "A museum for what we lost." fade up (100px each). |
-| **Phase 51** | `33,800px – 34,600px` | 800px | **Subheading reveal**:<br>• Line 1: "As witnessed by Douglas Gayeton." (`33,800px – 34,100px`)<br>• 100px pause (`34,100px – 34,200px`)<br>• Line 2: "272 pages. Signed and numbered edition of 500." (`34,200px – 34,500px`). |
-| **Phase 52** | `34,500px – 34,800px` | 300px | **Purchase Button Entrance**: `#scene6-purchase-btn` fades up (`y: 10 -> 0`, `opacity: 0 -> 1`, green terminal outline/glow). |
-| **Phase 53** | `34,800px – 35,300px` | 500px | **Reading Hold**: 500px complete stillness on museum grid, typography, and CTA. |
-| **Phase 54** | `35,300px – 35,950px` | 650px | **Zero-Gravity Staggered Exit** (`y: -200`, `opacity: 0`):<br>• 15-circle Grid (`35,400px – 35,650px`)<br>• Heading (`35,500px – 35,750px`)<br>• Subheading (`35,600px – 35,850px`)<br>• Purchase CTA (`35,700px – 35,950px`).<br>*(Prompt was already un-typed and cleared at 27,500px)*. |
+| **Phase 46** | `27,500px – 28,900px` | 1,400px | **Centered Video Scrub ($6.0\text{s}$)** (`S6-03-fires.mp4`):<br>• `27,500px – 27,650px`: Video portal fades in (`opacity: 0 -> 1`) inside 512px circular aperture.<br>• `27,500px – 28,900px`: Video plays linearly 0.0s to 6.0s.<br>• `28,750px – 28,900px`: Video portal fades out (`opacity: 1 -> 0`). |
+| **Phase 47** | `28,900px – 28,950px` | 50px | **Transition Gap**: Clean 50px darkness hold before grid assembly begins. |
+| **Phase 48** | `28,950px – 30,450px` | 1,500px | **Assembly of All 15 Museum Circles**: All 15 circles fly in with rotation and scale into 5x3 constellation (`power2.out`).<br>• Burning forest circle (`#scene6-circle-0-2`, Row 0 Col 2) flies in 8th (**mid-sequence**) at `29,700px`. |
+| **Phase 49** | `30,450px – 31,250px` | 800px | Heading words reveal: *"Molotov Alva and the Museum of Extraction."* fade up (100px each). |
+| **Phase 50** | `31,250px – 32,050px` | 800px | **Subheading reveal**:<br>• Line 1: "As witnessed by Douglas Gayeton." (`31,250px – 31,550px`)<br>• 100px pause (`31,550px – 31,650px`)<br>• Line 2: "272 pages. Signed and numbered edition of 500." (`31,650px – 31,950px`). |
+| **Phase 51** | `32,050px – 32,350px` | 300px | **Purchase Button Entrance**: `#scene6-purchase-btn` fades up (`y: 10 -> 0`, `opacity: 0 -> 1`, pointer-events unlocked). |
+| **Phase 52** | `32,350px – 35,300px` | 2,950px | **Reading & Interactive Hold**: 2,950px stillness on museum grid, typography, and active CTA button. |
+| **Phase 53** | `35,300px – 35,950px` | 650px | **Zero-Gravity Staggered Exit** (`y: -200`, `opacity: 0`):<br>• 15-circle Grid (`35,400px – 35,650px`)<br>• Heading (`35,500px – 35,750px`)<br>• Subheading (`35,600px – 35,850px`)<br>• Purchase CTA (`35,700px – 35,950px`).<br>*(Prompt was already un-typed and cleared at 27,500px)*. |
 
 ---
 
