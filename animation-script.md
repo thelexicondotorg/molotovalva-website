@@ -29,7 +29,7 @@
 | **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | Orbital gravitational convergence (6 circles) $\to$ 3x2 grid $\to$ Heading $\to$ Exit |
 | **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Centered video scrub ($6.0\text{s}$) $\to$ 15-circle constellation $\to$ Purchase CTA $\to$ Exit |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | 512px avatar zoom $\to$ End-credits text crawl $\to$ Split layout separation $\to$ Exit |
-| **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | 4-directional flying quote cards ($300\% \to 200\%$) $\to$ 2x2 grid settle $\to$ Exit |
+| **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | Staggered lateral card entrance (Quotes 1 & 3 from left, 2 & 4 from right) at 100% scale $\to$ 2x2 grid reading hold $\to$ Exit |
 | **Scene 9** | `instructions_for_toppling_goliath_provided_` | `49,100px – 58,500px` | 9,400px | 600px book circle $\to$ Under-book text $\to$ Side-by-side finale $\to$ Footer form |
 
 ---
@@ -181,7 +181,7 @@
 
 ## Scene 8: "reviewed_by_machines_"
 **Pixel Range**: `41,600px – 49,150px` (Total Span: `7,550px`)  
-**Elements**: `#scene8-prompt`, `#scene8-fly-1` to `#scene8-fly-4`, `#scene8-card-1` to `#scene8-card-4`
+**Elements**: `#scene8-prompt`, `#scene8-card-1` to `#scene8-card-4`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
@@ -189,12 +189,9 @@
 | **Phase 66** | `42,000px – 42,800px` | 800px | Prompt types: `reviewed_by_machines`. |
 | **Phase 67** | `42,800px – 43,000px` | 200px | Centered breathing hold on prompt with cursor blinking. |
 | **Phase 68** | `43,000px – 43,500px` | 500px | Prompt un-types right-to-left (`43,000px – 43,375px`), then `>:` prefix and cursor `_` delete completely (`43,375px – 43,500px`), fading to `opacity: 0` so nothing remains on screen. |
-| **Phase 69** | `43,500px – 45,500px` | 2,000px | **4-Directional Flying Quotes** ($300\% \to 200\%$ scale):<br>• **Quote 1 (from Left)**: `43,500px – 44,500px` (higher track `y: -sideOffsetY`, `x: -flyW -> 0`, `scale: 3 -> 2`). Fades out `44,100px – 44,500px`.<br>• **Quote 2 (from Right)**: `43,833px – 44,833px` (starts at 1/3 of Q1, lower track `y: +sideOffsetY`, `x: +flyW -> 0`). Fades out `44,433px – 44,833px`.<br>• **Quote 3 (from Top)**: `44,167px – 45,167px` (starts at 1/3 of Q2, `y: -flyH -> 0`). Fades out `44,767px – 45,167px`.<br>• **Quote 4 (from Bottom)**: `44,500px – 45,500px` (starts at 1/3 of Q3, `y: +flyH -> 0`, reaches center at `scale: 2.0`). |
-| **Phase 70** | `45,500px – 45,600px` | 100px | **Quote 4 Center Pause**: 100px stillness hold on Quote 4 centered at `scale: 2.0`. |
-| **Phase 71** | `45,600px – 46,400px` | 800px | **Settle into 2x2 Grid**:<br>• Quote 4 glides from center to bottom-right slot (`scale: 2.0 -> 1.0`, `power2.inOut`), cross-fading into Card 4 (`46,200px – 46,400px`).<br>• Card 2 (Top-Right) fades in at `45,750px – 46,150px`.<br>• Card 1 (Top-Left) fades in at `45,900px – 46,300px`.<br>• Card 3 (Bottom-Left) fades in at `46,050px – 46,450px`. |
-| **Phase 72** | `46,400px – 46,600px` | 200px | End-state stillness pause on 2x2 grid matching `Scene8-end.png`. |
-| **Phase 73** | `46,600px – 48,500px` | 1,900px | **Final Reading Hold**: 1,900px deep reflection hold on complete reviews. |
-| **Phase 74** | `48,500px – 49,150px` | 650px | **Zero-Gravity Staggered Exit** (`y: -200`, `opacity: 0`, `power1.in`):<br>• Card 1 (`48,600px – 49,050px`)<br>• Card 2 (`48,650px – 49,100px`)<br>• Card 3 (`48,700px – 49,150px`)<br>• Card 4 (`48,750px – 49,200px`).<br>*(Prompt was already un-typed and cleared at 43,500px)*. |
+| **Phase 69** | `43,500px – 45,200px` | 1,700px | **Staggered Lateral Reviews Entrance at 100% Scale** (`power2.out`):<br>• Cards remain locked at 100% end-state scale throughout.<br>• **Quote 1 (Top-Left)**: `43,500px – 44,300px` (800px) glides in from Left (`x: -slideDist -> 0`, `opacity: 0 -> 1`).<br>• **Quote 2 (Top-Right)**: `43,800px – 44,600px` (800px) glides in from Right (`x: +slideDist -> 0`, `opacity: 0 -> 1`).<br>• **Quote 3 (Bottom-Left)**: `44,100px – 44,900px` (800px) glides in from Left (`x: -slideDist -> 0`, `opacity: 0 -> 1`).<br>• **Quote 4 (Bottom-Right)**: `44,400px – 45,200px` (800px) glides in from Right (`x: +slideDist -> 0`, `opacity: 0 -> 1`). |
+| **Phase 70** | `45,200px – 48,500px` | 3,300px | **End-State Stillness & Reflection Hold**: Full 2x2 grid settled in place matching `Scene8-end.png`. |
+| **Phase 71** | `48,500px – 49,150px` | 650px | **Zero-Gravity Staggered Ascension Exit** (`y: -200`, `opacity: 0`, `power1.in`):<br>• Card 1 (`48,600px – 49,050px`)<br>• Card 2 (`48,650px – 49,100px`)<br>• Card 3 (`48,700px – 49,150px`)<br>• Card 4 (`48,750px – 49,200px`).<br>*(Prompt was already un-typed and cleared at 43,500px)*. |
 
 ---
 

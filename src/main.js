@@ -673,9 +673,11 @@ function handleEnter() {
               gsap.set('#scene7-narrative', { opacity: 0 });
 
               // Ensure Scene 8 visual initial states
+              const s8InitialSlideDist = Math.max(window.innerWidth || 1400, 1200);
               gsap.set('#scene8-prompt', { opacity: 0 });
               gsap.set(['#scene8-fly-1', '#scene8-fly-2', '#scene8-fly-3', '#scene8-fly-4'], { opacity: 0 });
-              gsap.set(['#scene8-card-1', '#scene8-card-2', '#scene8-card-3', '#scene8-card-4'], { opacity: 0 });
+              gsap.set(['#scene8-card-1', '#scene8-card-3'], { opacity: 0, x: -s8InitialSlideDist, y: 0 });
+              gsap.set(['#scene8-card-2', '#scene8-card-4'], { opacity: 0, x: s8InitialSlideDist, y: 0 });
 
               // Ensure Scene 9 visual initial states
               gsap.set('#scene9-prompt', { opacity: 0 });
@@ -1949,175 +1951,42 @@ function handleEnter() {
               // Phase 68: Scene 8 Prompt Un-types Right-to-Left completely (43000px -> 43500px | 500px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 69: The Dreamy Cinematic Fly-In of Quotes (43500px -> 45550px)
-              const flyW = window.innerWidth || 1400;
-              const flyH = window.innerHeight || 900;
+              // Phase 69: Staggered Lateral Reviews Entrance at 100% Scale (43500px -> 45200px | 1700px)
+              // Quotes remain at 100% end-state scale throughout:
+              // - Quote 1 & 3: glide in from offscreen Left (x: -s8SlideDist -> 0) gently fading in (opacity: 0 -> 1)
+              // - Quote 2 & 4: glide in from offscreen Right (x: +s8SlideDist -> 0) gently fading in (opacity: 0 -> 1)
+              const s8SlideDist = Math.max(window.innerWidth || 1400, 1200);
 
-              // Helper to compute responsive fly-in scale and offsets
-              function getScene8FlyMetrics() {
-                const w = window.innerWidth || 1400;
-                const h = window.innerHeight || 900;
-
-                // Tier 4: Mobile Spectrum (<768px)
-                if (w < 768) {
-                  const scale = Math.min(1.0, Math.max(0.65, (w - 32) / 420));
-                  return {
-                    scale: Number(scale.toFixed(2)),
-                    startScale: Number((scale * 1.3).toFixed(2)),
-                    sideOffsetY: Math.min(50, Math.round(h * 0.07)),
-                  };
-                }
-                
-                // Full Desktop Spectrum (Tier 1: 1366px up to 4K, tall screens): 100% UNTOUCHED
-                if (w >= 1366 && h >= 850) {
-                  return {
-                    scale: 2.0,
-                    startScale: 3.0,
-                    sideOffsetY: Math.min(160, Math.round(h * 0.18)),
-                  };
-                }
-
-                // Tier 2 (1024px to 1365px) and compact heights (<850px):
-                // Dynamically fit so 640px card never touches or exceeds screen edges
-                const maxScaleByWidth = Math.max(1.2, (w - 120) / 640);
-                const maxScaleByHeight = Math.max(1.2, (h - 220) / 280);
-                const scale = Math.min(2.0, Math.min(maxScaleByWidth, maxScaleByHeight));
-                const sideOffsetY = Math.min(140, Math.round(h * 0.13));
-
-                return {
-                  scale: Number(scale.toFixed(2)),
-                  startScale: Number((scale * 1.5).toFixed(2)),
-                  sideOffsetY,
-                };
-              }
-              const s8Metrics = getScene8FlyMetrics();
-              const s8FlyScale = s8Metrics.scale;
-              const s8StartScale = s8Metrics.startScale;
-              const sideOffsetY = s8Metrics.sideOffsetY;
-
-              // Quote 1: Fly in from Left at higher vertical track (43500px -> 44500px | 1000px)
-              // Flies from offscreen left at higher vertical position (y: -sideOffsetY), scales startScale -> flyScale, fades in
-              scrollTl.fromTo('#scene8-fly-1',
-                { x: -flyW, y: -sideOffsetY, scale: s8StartScale, opacity: 0 },
-                { x: 0, y: -sideOffsetY, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
+              // Quote 1: Top-Left from Left (43500px -> 44300px | 800px)
+              scrollTl.fromTo('#scene8-card-1',
+                { x: -s8SlideDist, opacity: 0 },
+                { x: 0, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
                 43500
               );
-              // Fade out Quote 1 smoothly as Quote 2 arrives
-              scrollTl.to('#scene8-fly-1', {
-                opacity: 0,
-                duration: 400,
-                ease: 'power1.in',
-              }, 44100);
 
-              // Quote 2: Fly in from Right at lower vertical track (43833px -> 44833px | 1000px)
-              // Starts at 1/3 progress of Quote 1, flies at lower vertical position (y: +sideOffsetY), scales startScale -> flyScale
-              scrollTl.fromTo('#scene8-fly-2',
-                { x: flyW, y: sideOffsetY, scale: s8StartScale, opacity: 0 },
-                { x: 0, y: sideOffsetY, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
-                43833
-              );
-              // Fade out Quote 2 smoothly as Quote 3 arrives and superimposes
-              scrollTl.to('#scene8-fly-2', {
-                opacity: 0,
-                duration: 400,
-                ease: 'power1.in',
-              }, 44433);
-
-              // Quote 3: Fly in from Top (44167px -> 45167px | 1000px)
-              // Starts at 1/3 progress of Quote 2, superimposes over Quote 2
-              scrollTl.fromTo('#scene8-fly-3',
-                { x: 0, y: -flyH, scale: s8StartScale, opacity: 0 },
-                { x: 0, y: 0, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
-                44167
-              );
-              // Fade out Quote 3 smoothly as Quote 4 arrives and superimposes
-              scrollTl.to('#scene8-fly-3', {
-                opacity: 0,
-                duration: 400,
-                ease: 'power1.in',
-              }, 44767);
-
-              // Quote 4: Fly in from Bottom (44500px -> 45500px | 1000px)
-              // Starts at 1/3 progress of Quote 3, reaches center at scale s8FlyScale
-              scrollTl.fromTo('#scene8-fly-4',
-                { x: 0, y: flyH, scale: s8StartScale, opacity: 0 },
-                { x: 0, y: 0, scale: s8FlyScale, opacity: 1, duration: 1000, ease: 'power1.out', immediateRender: false },
-                44500
-              );
-
-              // Phase 70: Quote 4 Center Stillness Pause (45500px -> 45600px | 100px)
-              // [100px pause with Quote 4 centered and prominent at 200% scale]
-
-              // Phase 71: Settle into 2x2 Grid (45600px -> 46400px | 800px)
-              // Helper to compute Card 4 delta relative to fly-layer center
-              function getScene8Card4Delta() {
-                const card4 = document.querySelector('#scene8-card-4');
-                const flyLayer = document.querySelector('#scene8-fly-layer');
-                if (card4 && flyLayer) {
-                  const cardRect = card4.getBoundingClientRect();
-                  const flyRect = flyLayer.getBoundingClientRect();
-                  const flyCenterX = flyRect.left + flyRect.width / 2;
-                  const flyCenterY = flyRect.top + flyRect.height / 2;
-                  const cardCenterX = cardRect.left + cardRect.width / 2;
-                  const cardCenterY = cardRect.top + cardRect.height / 2;
-                  return {
-                    deltaX: cardCenterX - flyCenterX,
-                    deltaY: cardCenterY - flyCenterY,
-                  };
-                }
-                const isMobile = window.innerWidth <= 768;
-                return isMobile ? { deltaX: 0, deltaY: 280 } : { deltaX: 300, deltaY: 180 };
-              }
-              const s8Delta = getScene8Card4Delta();
-
-              // 1. Quote 4 moves and scales to reach final position in grid (scale 2.0 -> 1.0)
-              scrollTl.to('#scene8-fly-4', {
-                x: s8Delta.deltaX,
-                y: s8Delta.deltaY,
-                scale: 1.0,
-                duration: 800,
-                ease: 'power2.inOut',
-              }, 45600);
-
-              // Cross-fade seamlessly into final card 4 at its exact slot
-              scrollTl.fromTo('#scene8-card-4',
-                { opacity: 0 },
-                { opacity: 1, duration: 200, ease: 'power1.out', immediateRender: false },
-                46200
-              );
-              scrollTl.to('#scene8-fly-4', {
-                opacity: 0,
-                duration: 200,
-                ease: 'power1.in',
-              }, 46200);
-
-              // 2. The other three quotes randomly fade in at their end positions (scale 1.0)
-              // Card 2 (Top-Right): fades in first
+              // Quote 2: Top-Right from Right (43800px -> 44600px | 800px)
               scrollTl.fromTo('#scene8-card-2',
-                { opacity: 0 },
-                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
-                45750
+                { x: s8SlideDist, opacity: 0 },
+                { x: 0, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
+                43800
               );
 
-              // Card 1 (Top-Left): fades in next
-              scrollTl.fromTo('#scene8-card-1',
-                { opacity: 0 },
-                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
-                45900
-              );
-
-              // Card 3 (Bottom-Left): fades in last
+              // Quote 3: Bottom-Left from Left (44100px -> 44900px | 800px)
               scrollTl.fromTo('#scene8-card-3',
-                { opacity: 0 },
-                { opacity: 1, duration: 400, ease: 'power1.out', immediateRender: false },
-                46050
+                { x: -s8SlideDist, opacity: 0 },
+                { x: 0, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
+                44100
               );
 
-              // Phase 72: End-State Stillness Pause (46400px -> 46600px | 200px)
-              // [200px stillness pause on final Scene 8 end-state matching Scene8-end.png]
+              // Quote 4: Bottom-Right from Right (44400px -> 45200px | 800px)
+              scrollTl.fromTo('#scene8-card-4',
+                { x: s8SlideDist, opacity: 0 },
+                { x: 0, opacity: 1, duration: 800, ease: 'power2.out', immediateRender: false },
+                44400
+              );
 
-              // Phase 73: Scene 8 Final Reading Hold (46600px -> 48500px | 1900px)
-              // [Reading hold before Scene 8 exit]
+              // Phase 70: End-State Stillness & Reading Hold (45200px -> 48500px | 3300px)
+              // Complete stillness on settled 2x2 reviews grid matching Scene8-end.png
 
               // --------------------------------------------------------------------------
               // Scene 8 Zero-Gravity Exit & Scene 9 Grand Climax (48500px -> 59000px)

@@ -373,8 +373,8 @@ body {
 .scene8-quote-text {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.25rem;
-  line-height: 1.55;
+  font-size: 1.45rem;
+  line-height: 1.5;
   color: #c9a35e; /* warm amber ochre / gold matching Scene8-end.png */
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
@@ -383,25 +383,27 @@ body {
 }
 
 .scene8-author {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.12rem;
   color: #f0f0f0;
-  letter-spacing: -0.01em;
 }
 
 .scene8-meta {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-serif);
   font-weight: 400;
-  font-size: 0.82rem;
+  font-style: normal;
+  font-size: 0.95rem;
   line-height: 1.45;
   color: #929292;
 }
 
 .scene8-platform {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-weight: 600;
-  font-size: 0.75rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.85rem;
   letter-spacing: 0.08em;
   color: #727272;
 }
@@ -418,13 +420,16 @@ body {
 
 @media (max-width: 768px) {
   .scene8-quote-text {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     line-height: 1.48;
   }
   .scene8-author {
-    font-size: 0.88rem;
+    font-size: 0.98rem;
   }
   .scene8-meta {
+    font-size: 0.84rem;
+  }
+  .scene8-platform {
     font-size: 0.78rem;
   }
 }
