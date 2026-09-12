@@ -248,8 +248,14 @@ export function loadScene7Assets() {
   if (s7Img && !s7Img.getAttribute('src')) {
     s7Img.src = '/images/S7-1-molotov.jpg';
   }
-  const img = new Image();
-  img.src = '/images/S7-1-molotov.jpg';
+  const s7BookImg = document.querySelector('#scene7-image-book');
+  if (s7BookImg && !s7BookImg.getAttribute('src')) {
+    s7BookImg.src = '/images/S9-01-book.jpg';
+  }
+  const img1 = new Image();
+  img1.src = '/images/S7-1-molotov.jpg';
+  const img2 = new Image();
+  img2.src = '/images/S9-01-book.jpg';
 }
 
 // Lazy load Scene 9 assets
@@ -598,6 +604,77 @@ function handleEnter() {
                         ? -35
                         : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5))));
 
+              // Helper to compute responsive Scene 7 coordinates
+              function getScene7Layout() {
+                // Tier 3 (768px to 1023px) & Mobile (<768px): Centered Stacked Layout
+                if (window.innerWidth < 1024) {
+                  const isMobile = window.innerWidth < 768;
+                  if (isMobile) {
+                    const pScale = Math.min(0.85, Math.max(0.65, (window.innerHeight - 380) / 300));
+                    const liftY = 16;
+                    const portalEndY = -Math.round(window.innerHeight * 0.24);
+                    const portalFinalY = portalEndY - liftY;
+                    return {
+                      portalEndX: 0,
+                      portalEndY,
+                      portalFinalY,
+                      textEndX: 0,
+                      textEndY: Math.round(window.innerHeight * 0.12),
+                      textMaxWidth: 'min(440px, 92vw)',
+                      portalScale: pScale,
+                      btnFinalY: portalFinalY + Math.round((300 * pScale) / 2) + 46,
+                    };
+                  }
+                  const pScale = 0.85;
+                  const liftY = 20;
+                  const portalEndY = -190;
+                  const portalFinalY = portalEndY - liftY;
+                  return {
+                    portalEndX: 0,
+                    portalEndY,
+                    portalFinalY,
+                    textEndX: 0,
+                    textEndY: 160,
+                    textMaxWidth: '600px',
+                    portalScale: pScale,
+                    btnFinalY: portalFinalY + Math.round((300 * pScale) / 2) + 46,
+                  };
+                }
+
+                // Tier 2: Compact Laptops & Landscape Tablets (1024px to 1365px)
+                if (window.innerWidth < 1366) {
+                  const pScale = 0.80;
+                  const liftY = 28;
+                  const portalFinalY = -liftY;
+                  return {
+                    portalEndX: -250,
+                    portalEndY: 0,
+                    portalFinalY,
+                    textEndX: 225,
+                    textEndY: 0,
+                    textMaxWidth: '460px',
+                    portalScale: pScale,
+                    btnFinalY: 138,
+                  };
+                }
+                
+                // Tier 1: Full Desktop Spectrum (1366px up to 4K)
+                const pScale = 1.05;
+                const liftY = 34;
+                const portalFinalY = -liftY;
+                return {
+                  portalEndX: -330,
+                  portalEndY: 0,
+                  portalFinalY,
+                  textEndX: 300,
+                  textEndY: 0,
+                  textMaxWidth: '600px',
+                  portalScale: pScale,
+                  btnFinalY: 170,
+                };
+              }
+              const s7Layout = getScene7Layout();
+
               const promptCoords = getPromptDockCoordinates();
               const circle1StartY = Math.round(Math.max(window.innerHeight, promptCoords.canvasRect.height) / 2 + 200);
 
@@ -732,7 +809,11 @@ function handleEnter() {
               gsap.set('#scene3-deer-focus-detail', { opacity: 1 });
 
               // Ensure Scene 7 visual initial states
+              gsap.set(['#scene7-portal-wrapper', '#scene7-purchase-btn-wrapper'], { x: 0, y: 0 });
               gsap.set('#scene7-portal', { opacity: 0, scale: 0.95 });
+              gsap.set('#scene7-image', { opacity: 1 });
+              gsap.set('#scene7-image-book', { opacity: 0 });
+              gsap.set('#scene7-purchase-btn', { opacity: 0, y: s7Layout.btnFinalY + 30, pointerEvents: 'none' });
               gsap.set('#scene7-narrative-wrapper', { opacity: 0, y: 450 });
               gsap.set('#scene7-narrative', { opacity: 0 });
 
@@ -1860,58 +1941,6 @@ function handleEnter() {
               // Phase 57: Centered Breathing Hold on Prompt (37100px -> 37300px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Helper to compute responsive Scene 7 coordinates
-              function getScene7Layout() {
-                // Tier 3 (768px to 1023px) & Mobile (<768px): Centered Stacked Layout
-                if (window.innerWidth < 1024) {
-                  const isMobile = window.innerWidth < 768;
-                  if (isMobile) {
-                    return {
-                      portalEndX: 0,
-                      portalEndY: -Math.round(window.innerHeight * 0.24),
-                      textEndX: 0,
-                      textEndY: Math.round(window.innerHeight * 0.12),
-                      textMaxWidth: 'min(440px, 92vw)',
-                      portalScale: Math.min(0.55, Math.max(0.42, (window.innerHeight - 380) / 512)),
-                    };
-                  }
-                  return {
-                    portalEndX: 0,
-                    portalEndY: -190,
-                    textEndX: 0,
-                    textEndY: 160,
-                    textMaxWidth: '600px',
-                    portalScale: 0.85,
-                  };
-                }
-
-                // Tier 2: Compact Laptops & Landscape Tablets (1024px to 1365px)
-                // Symmetrically balanced inside 976px usable canvas (57px margins, 40px gap)
-                if (window.innerWidth < 1366) {
-                  return {
-                    portalEndX: -250,
-                    portalEndY: 0,
-                    textEndX: 225,
-                    textEndY: 0,
-                    textMaxWidth: '460px',
-                    portalScale: 0.80,
-                  };
-                }
-                
-                // Tier 1: Full Desktop Spectrum (1366px up to 4K) - 100% UNTOUCHED
-                // Total group width ~ 538px (portal @ 105%) + 60px (gap) + 600px (text) = 1198px
-                // Symmetrically centered within 1366px canvas (84px left & right margins)
-                return {
-                  portalEndX: -330,
-                  portalEndY: 0,
-                  textEndX: 300,
-                  textEndY: 0,
-                  textMaxWidth: '600px',
-                  portalScale: 1.05,
-                };
-              }
-              const s7Layout = getScene7Layout();
-
               // Phase 58: Act 1 — Prompt Un-typing & Big Circle Zoom-In (37300px -> 37800px | 500px)
               // 1. Prompt un-typing coordinated dynamically by syncPromptStates
 
@@ -1927,11 +1956,11 @@ function handleEnter() {
                 ease: 'none',
               }, 37300);
 
-              // Phase 59: Act 2 — Circle Continues Zooming In Behind End-Credits Crawl (37800px -> 38300px | 500px)
-              // 1. Circle keeps zooming in (100% -> 105%) while behind the text at low opacity (never shrinks down or zooms out!)
+              // Phase 59: Act 2 — Circle Continues Zooming In Behind End-Credits Crawl & Dims to Opacity 0 (37800px -> 38300px | 500px)
+              // 1. Circle keeps zooming in (100% -> 105%) while dims opacity completely to 0 (never shrinks down or zooms out!)
               scrollTl.to('#scene7-portal', {
                 scale: 1.05,
-                opacity: 0.18,
+                opacity: 0,
                 duration: 500,
                 ease: 'none',
               }, 37800);
@@ -1949,10 +1978,14 @@ function handleEnter() {
                 37800
               );
 
-              // Phase 60: Pause for 100px with all three paragraphs visible and big in the center (38300px -> 38400px)
-              // [100px stillness hold on centered end credits with ambient background portal at 105% scale and 18% opacity]
+              // In the background while portal opacity is 0: swap Molotov portrait with Book Cover circle (38300px)
+              scrollTl.set('#scene7-image', { opacity: 0 }, 38300);
+              scrollTl.set('#scene7-image-book', { opacity: 1 }, 38300);
 
-              // Phase 61: Act 3 — Spatial Separation & Return to Full Presence (38400px -> 39000px | 600px)
+              // Phase 60: Pause for 100px with all three paragraphs visible and big in the center (38300px -> 38400px)
+              // [100px stillness hold on centered end credits with background portal hidden at opacity 0]
+
+              // Phase 61: Act 3 — Spatial Separation & Fade In New Book Cover Circle (38400px -> 39000px | 600px)
               // 1. Paragraphs zoom down and glide right to reach exact position of end state
               scrollTl.to('#scene7-narrative-wrapper', {
                 x: s7Layout.textEndX,
@@ -1968,19 +2001,54 @@ function handleEnter() {
                 ease: 'power2.inOut',
               }, 38400);
 
-              // 2. Portal glides smoothly from center to the left column and brightens to 100% presence (never shrinking down!)
-              scrollTl.to('#scene7-portal-wrapper', {
+              // 2. Portal and button glide smoothly from center to the left column and fade in
+              scrollTl.to(['#scene7-portal-wrapper', '#scene7-purchase-btn-wrapper'], {
                 x: s7Layout.portalEndX,
-                y: s7Layout.portalEndY,
                 duration: 600,
                 ease: 'power2.inOut',
               }, 38400);
-              scrollTl.to('#scene7-portal', {
-                scale: s7Layout.portalScale,
-                opacity: 1.0,
-                duration: 600,
-                ease: 'power2.inOut',
-              }, 38400);
+              scrollTl.fromTo('#scene7-portal-wrapper',
+                { y: 0 },
+                {
+                  y: s7Layout.portalEndY,
+                  duration: 350,
+                  ease: 'power2.inOut',
+                  immediateRender: false,
+                },
+                38400
+              );
+              scrollTl.fromTo('#scene7-portal',
+                { opacity: 0, scale: 1.05 },
+                {
+                  scale: s7Layout.portalScale,
+                  opacity: 1.0,
+                  duration: 600,
+                  ease: 'power2.inOut',
+                  immediateRender: false,
+                },
+                38400
+              );
+
+              // As button slides up and fades in, it pushes the circle slightly up so cluster is vertically centered with text
+              scrollTl.to('#scene7-portal-wrapper', {
+                y: s7Layout.portalFinalY,
+                duration: 350,
+                ease: 'power2.out',
+              }, 38750);
+
+              // 3. Purchase Button under Book Circle slides up and fades in organically
+              scrollTl.fromTo('#scene7-purchase-btn',
+                { opacity: 0, y: s7Layout.btnFinalY + 30 },
+                {
+                  opacity: 1,
+                  y: s7Layout.btnFinalY,
+                  duration: 350,
+                  ease: 'power2.out',
+                  immediateRender: false,
+                },
+                38750
+              );
+              scrollTl.set('#scene7-purchase-btn', { pointerEvents: 'auto' }, 39000);
 
               // Phase 62: Pause like that for 200px (39000px -> 39200px)
               // [200px stillness pause on final Scene 7 end state]
@@ -2002,13 +2070,22 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 41100);
 
-              // 3. Circular portal floats upwards into the void
+              // 3. Circular portal floats upwards into the void FIRST
               scrollTl.to('#scene7-portal-wrapper', {
-                y: s7Layout.portalEndY - 200,
+                y: s7Layout.portalFinalY - 220,
                 opacity: 0,
                 duration: 450,
                 ease: 'power1.in',
-              }, 41200);
+              }, 41150);
+
+              // 4. Purchase button floats upwards a hair later so they never overlap
+              scrollTl.to('#scene7-purchase-btn', {
+                y: s7Layout.btnFinalY - 220,
+                opacity: 0,
+                duration: 420,
+                ease: 'power1.in',
+              }, 41280);
+              scrollTl.set('#scene7-purchase-btn', { pointerEvents: 'none' }, 41280);
 
               // =========================================================================
               // SCENE 8: REVIEWED BY MACHINES (41600px -> 48500px)
@@ -2270,10 +2347,34 @@ function handleEnter() {
   });
 }
 
+// Global safeguard: prevent all anchor tags with href="#" from navigating or changing URL hash
+document.addEventListener('click', (e) => {
+  const anchor = e.target.closest('a[href="#"]');
+  if (anchor) {
+    e.preventDefault();
+  }
+});
+
+// Scene 1: Initial load pointer-events safeguard so inactive background elements never block clicks
+gsap.set(['#scene6-purchase-btn', '#scene7-purchase-btn', '#scene9-purchase-btn', '#scene9-footer-wrapper', '#scene9-email-form', '#scene9-links-row'], {
+  pointerEvents: 'none'
+});
+
+const introVideoEl = document.getElementById('intro-video');
+const introSectionEl = document.getElementById('intro-portal-section');
+
 if (promptEl) {
   promptEl.addEventListener('click', handleEnter);
 }
 if (portalEl) {
   portalEl.addEventListener('click', handleEnter);
   portalEl.style.cursor = 'pointer';
+}
+if (introVideoEl) {
+  introVideoEl.addEventListener('click', handleEnter);
+  introVideoEl.style.cursor = 'pointer';
+}
+if (introSectionEl) {
+  introSectionEl.addEventListener('click', handleEnter);
+  introSectionEl.style.cursor = 'pointer';
 }

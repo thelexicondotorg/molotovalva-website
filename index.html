@@ -30,7 +30,7 @@
         </div>
 
         <!-- Central Portal Section -->
-        <section class="flex flex-col items-center justify-center text-center pointer-events-auto">
+        <section id="intro-portal-section" class="flex flex-col items-center justify-center text-center pointer-events-auto relative z-20 cursor-pointer">
           
           <!-- Central Media Portal: 300px x 300px Circular Mask with Looping Video -->
           <div class="media-portal border border-neutral-900 shadow-2xl relative overflow-hidden" id="media-portal">
@@ -269,7 +269,7 @@
               <span id="scene6-subheading-line2" class="inline-block opacity-0 text-[1.15rem]">272 pages. Signed and numbered edition of 500.</span>
             </div>
             <div id="scene6-purchase-btn-wrapper" class="mt-6">
-              <a href="#" id="scene6-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
+              <a href="#" onclick="event.preventDefault();" id="scene6-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
             </div>
           </div>
         </div>
@@ -286,9 +286,15 @@
           
           <!-- Unified Circular Portal (512px native, recedes to 320px / scale 0.625, glides left in Act 3) -->
           <div id="scene7-portal-wrapper" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
-            <div id="scene7-portal" class="media-portal w-[512px] h-[512px] max-w-[85vw] max-h-[85vw] rounded-full overflow-hidden border border-neutral-900 shadow-2xl opacity-0">
-              <img id="scene7-image" src="/images/S7-1-molotov.jpg" alt="Molotov Alva" class="w-full h-full object-cover" />
+            <div id="scene7-portal" class="media-portal w-[512px] h-[512px] max-w-[85vw] max-h-[85vw] rounded-full overflow-hidden border border-neutral-900 shadow-2xl opacity-0 relative">
+              <img id="scene7-image" src="/images/S7-1-molotov.jpg" alt="Molotov Alva" class="w-full h-full object-cover absolute inset-0" />
+              <img id="scene7-image-book" src="/images/S9-01-book.jpg" alt="Molotov Alva Book" class="w-full h-full object-cover absolute inset-0 opacity-0" />
             </div>
+          </div>
+          
+          <!-- Scene 7 Purchase Button under Book Circle -->
+          <div id="scene7-purchase-btn-wrapper" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none whitespace-nowrap z-20">
+            <a href="#" onclick="event.preventDefault();" id="scene7-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
           </div>
 
           <!-- Narrative Text (100% wide end-credits crawl in Act 2, then zooms down & moves to right in Act 3) -->
@@ -458,7 +464,7 @@
               </p>
 
               <div id="scene9-purchase-btn-wrapper" class="mt-6 flex justify-start w-full">
-                <a href="#" id="scene9-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
+                <a href="#" onclick="event.preventDefault();" id="scene9-purchase-btn" class="purchase-btn opacity-0 pointer-events-none">Purchase<span class="terminal-cursor">_</span></a>
               </div>
             </div>
 
@@ -468,7 +474,7 @@
           <div id="scene9-footer-wrapper" class="w-full max-w-[840px] flex flex-col items-center pointer-events-none opacity-0 z-25">
             
             <!-- Email Capture Form -->
-            <form id="scene9-email-form" class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[560px] pointer-events-auto" onsubmit="event.preventDefault();">
+            <form id="scene9-email-form" class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-[560px] pointer-events-none" onsubmit="event.preventDefault();">
               <input 
                 type="email" 
                 id="scene9-email-input" 
@@ -489,10 +495,10 @@
             <div id="scene9-divider" class="w-full border-t border-[#262626] my-6"></div>
 
             <!-- Footer Links -->
-            <div id="scene9-links-row" class="flex items-center justify-center gap-8 sm:gap-14 text-sm pointer-events-auto select-none">
-              <a href="#" class="scene9-footer-link">Rumplefarm Press</a>
-              <a href="#" class="scene9-footer-link">RestoreSix</a>
-              <a href="#" class="scene9-footer-link">Contact</a>
+            <div id="scene9-links-row" class="flex items-center justify-center gap-8 sm:gap-14 text-sm pointer-events-none select-none">
+              <a href="#" onclick="event.preventDefault();" class="scene9-footer-link">Rumplefarm Press</a>
+              <a href="#" onclick="event.preventDefault();" class="scene9-footer-link">RestoreSix</a>
+              <a href="#" onclick="event.preventDefault();" class="scene9-footer-link">Contact</a>
             </div>
 
             <!-- End of Transmission Typing -->

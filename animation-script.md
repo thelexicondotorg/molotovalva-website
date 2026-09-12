@@ -173,7 +173,7 @@
 
 ## Scene 7: "narrated_by_an_otherwordly_intelligence_"
 **Pixel Range**: `35,900px – 41,650px` (Total Span: `5,750px`)  
-**Elements**: `#scene7-prompt`, `#scene7-portal`, `#scene7-narrative-wrapper` (`#scene7-narrative`)
+**Elements**: `#scene7-prompt`, `#scene7-portal`, `#scene7-purchase-btn`, `#scene7-narrative-wrapper` (`#scene7-narrative`)
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
@@ -181,12 +181,12 @@
 | **Phase 56** | `36,300px – 37,100px` | 800px | Prompt types: `narrated_by_an_otherwordly_intelligence`. |
 | **Phase 57** | `37,100px – 37,300px` | 200px | Centered breathing hold on prompt with cursor blinking. |
 | **Phase 58** | `37,300px – 37,800px` | 500px | **Act 1 — Prompt Un-typing & Portal Zoom**:<br>• Prompt un-types right-to-left (`37,300px – 37,675px`), then `>:` prefix and cursor `_` delete completely (`37,675px – 37,800px`), fading to `opacity: 0` so nothing remains on screen.<br>• 512px circular portal fades in (`37,300px – 37,500px`) and zooms `scale: 0.95 -> 1.0`. |
-| **Phase 59** | `37,800px – 38,300px` | 500px | **Act 2 — Continuous Zoom Behind End Credits**:<br>• Portal continues zooming `scale: 1.0 -> 1.05`, dims to `opacity: 0.18` (never shrinks!).<br>• 3 paragraphs of colophon text (large film credits at `scale: 1.25`) scroll up in front (`y: 450 -> 0`, `opacity: 0 -> 1`). |
-| **Phase 60** | `38,300px – 38,400px` | 100px | **Credits Center Pause**: 100px stillness hold on centered credits with watermark avatar behind. |
-| **Phase 61** | `38,400px – 39,000px` | 600px | **Act 3 — Spatial Separation** (`power2.inOut`):<br>• Text scales down (`scale: 1.25 -> 1.0`, max-width `600px`) and glides right to `x: +300`.<br>• Portal glides left to `x: -330` and brightens to 100% presence (`opacity: 0.18 -> 1.0`) at full 105% scale. |
-| **Phase 62** | `39,000px – 39,200px` | 200px | End-state stillness pause on balanced side-by-side layout matching `Scene7-end.png`. |
-| **Phase 63** | `39,200px – 41,000px` | 1,800px | **Final Reflection Hold**: 1,800px deep reading hold. |
-| **Phase 64** | `41,000px – 41,650px` | 650px | **Zero-Gravity Staggered Exit** (`y: -200`, `opacity: 0`, `power1.in`):<br>• Narrative text (`41,100px – 41,550px`)<br>• Portal (`41,200px – 41,650px`).<br>*(Prompt was already un-typed and cleared at 37,800px)*. |
+| **Phase 59** | `37,800px – 38,300px` | 500px | **Act 2 — Continuous Zoom Behind End Credits & Fade to 0**:<br>• Portal continues zooming `scale: 1.0 -> 1.05`, and dims opacity completely to `0` (never shrinks!).<br>• 3 paragraphs of colophon text (large film credits at `scale: 1.25`) scroll up in front (`y: 450 -> 0`, `opacity: 0 -> 1`).<br>• **Background Image Swap** (at `38,300px`, opacity 0): Molotov portrait circle (`S7-1-molotov.jpg`) is silently swapped with the book cover circle (`S9-01-book.jpg`). |
+| **Phase 60** | `38,300px – 38,400px` | 100px | **Credits Center Pause**: 100px stillness hold on centered credits with portal hidden at `opacity: 0` in background. |
+| **Phase 61** | `38,400px – 39,000px` | 600px | **Act 3 — Spatial Separation, Book Cover Fade In & Organic Purchase CTA** (`power2.inOut`):<br>• Text scales down (`scale: 1.25 -> 1.0`, max-width `600px`) and glides right to `x: +300`.<br>• Portal glides left to `x: -330` and fades in from `0 -> 1.0` presence showing the new book cover circle (`S9-01-book.jpg`) at full 105% scale.<br>• **Purchase CTA Entrance & Push-Up Action** (`38,750px – 39,100px`, 350px): As `#scene7-purchase-btn` under the book circle organically slides up (`y: btnFinalY + 30 -> btnFinalY`, `opacity: 0 -> 1`, `power2.out`), it gently pushes the book circle up (`y: 0 -> portalFinalY`), ensuring that the resulting (Book Circle + Button) cluster ends up perfectly vertically centered with the narrative text block on the right (pointer events enabled at `39,000px`). |
+| **Phase 62** | `39,000px – 39,200px` | 200px | End-state stillness pause on balanced side-by-side layout (Book Cover circle + Purchase CTA vertically centered with narrative text on right). |
+| **Phase 63** | `39,200px – 41,000px` | 1,800px | **Final Reflection Hold**: 1,800px deep reading hold with interactive purchase CTA button. |
+| **Phase 64** | `41,000px – 41,650px` | 650px | **Zero-Gravity Staggered Exit** (`opacity: 0`, `power1.in`):<br>• Narrative text floats upwards (`41,100px – 41,550px`, `y: textEndY - 200`).<br>• **Circular book portal floats upwards first** (`41,150px – 41,600px`, `y: portalFinalY - 220`).<br>• **Purchase button floats upwards a hair later** (`41,280px – 41,700px`, `y: btnFinalY - 220`, pointer events disabled at `41,280px`), maintaining separation throughout ascension so they never overlap.<br>*(Prompt was already un-typed and cleared at 37,800px)*. |
 
 ---
 

@@ -324,7 +324,7 @@ body {
   text-decoration: none;
   background: transparent;
   cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 0 15px rgba(0, 233, 0, 0.12);
 }
