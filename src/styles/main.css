@@ -160,6 +160,33 @@ body {
   line-height: 1.2;
 }
 
+/* Terminal Progress Bar */
+.terminal-progress {
+  font-family: var(--font-terminal);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-terminal);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  user-select: none;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 30;
+}
+
+@media (max-width: 640px) {
+  .terminal-progress {
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+  }
+}
+
 /* Interactive Terminal Prompts */
 .terminal-prompt {
   font-family: var(--font-terminal);

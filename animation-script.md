@@ -20,6 +20,17 @@
 
 ## Master Timeline Overview (Scenes 1 to 9)
 
+> [!NOTE]
+> **Low-Fi Terminal Progress Bar (`#terminal-progress`)**:
+> - **Position**: Stationed at the bottom (`bottom: 30px`), spanning the entire available width between main canvas padding (`left-4 md:left-[50px]` to `right-4 md:right-[50px]`).
+> - **Typography**: Monospace terminal font (`var(--font-terminal)`), terminal green (`#00e900`), `0.82rem` (`13px`).
+> - **Cursor**: Monospace blinking terminal cursor (`<span class="terminal-cursor">_</span>`) positioned immediately after the `%` sign.
+> - **Choreography & Span (`0px – 56,500px`)**:
+>   - Pre-scroll / Scene 1: Hidden (`opacity: 0`).
+>   - Scene 2 Start (`0px`): Fades in at `0%_`.
+>   - Progress: Dynamic hyphen sequence calculated against the full container width (`~185` hyphens at 1366px), formatted as `[hyphens] [percent]%_`.
+>   - End of Transmission (`56,500px`): Hyphens span the entire available width to the right margin ending with ` 100%_`, exactly as `>: end_of_transmission` completes typing on screen, remaining steadily pinned through the final reflection hold.
+
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Primary Visual / Interaction |
 | :---: | :--- | :---: | :---: | :--- |
 | **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Hero circular portal, looping video, prompt typing, un-typing click-to-enter |

@@ -329,6 +329,58 @@ const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
 const mainCanvasEl = document.getElementById('main-canvas');
 const scrollIndicator = document.getElementById('scroll-indicator');
+const terminalProgressEl = document.getElementById('terminal-progress');
+const terminalProgressTextEl = document.getElementById('terminal-progress-text');
+
+const END_OF_TRANSMISSION_PX = 56500;
+
+let monospaceCharWidth = 0;
+
+function getMonospaceCharWidth() {
+  if (monospaceCharWidth > 0) return monospaceCharWidth;
+  if (!terminalProgressEl) return 6.6;
+  const testSpan = document.createElement('span');
+  testSpan.className = 'terminal-progress';
+  testSpan.style.visibility = 'hidden';
+  testSpan.style.position = 'absolute';
+  testSpan.textContent = '-';
+  document.body.appendChild(testSpan);
+  const w = testSpan.getBoundingClientRect().width || 6.6;
+  testSpan.remove();
+  monospaceCharWidth = w;
+  return w;
+}
+
+function getMaxHyphens() {
+  if (!terminalProgressEl) return 100;
+  const availW = terminalProgressEl.clientWidth;
+  if (!availW || availW <= 0) return 100;
+  const charW = getMonospaceCharWidth();
+  // Suffix ' 100%_' is 6 characters: 1 space, 4 chars ('100%'), 1 cursor ('_')
+  const suffixChars = 6;
+  return Math.max(10, Math.floor((availW - (suffixChars * charW)) / charW));
+}
+
+function syncTerminalProgressBar(scrollPos) {
+  if (!terminalProgressTextEl) return;
+  const pos = Math.max(0, scrollPos || 0);
+  const progress = Math.min(Math.max(pos / END_OF_TRANSMISSION_PX, 0), 1);
+  const percent = Math.round(progress * 100);
+
+  const maxHyphens = getMaxHyphens();
+  const hyphenCount = Math.round(progress * maxHyphens);
+  const hyphens = '-'.repeat(hyphenCount);
+  const displayText = hyphens ? `${hyphens} ${percent}%` : `${percent}%`;
+
+  if (terminalProgressTextEl.textContent !== displayText) {
+    terminalProgressTextEl.textContent = displayText;
+  }
+
+  // Ensure visible if user has scrolled past 0
+  if (terminalProgressEl && pos > 0 && parseFloat(gsap.getProperty(terminalProgressEl, 'opacity') || 0) < 0.1) {
+    gsap.to(terminalProgressEl, { opacity: 0.85, duration: 0.4 });
+  }
+}
 
 let cancelIntroVideoLoop = null;
 
@@ -455,6 +507,16 @@ function handleEnter() {
       onComplete: () => {
         promptEl.classList.add('static-prompt');
 
+              // 0. Fade in terminal progress bar
+              if (terminalProgressEl) {
+                syncTerminalProgressBar(0);
+                gsap.to(terminalProgressEl, {
+                  opacity: 0.85,
+                  duration: 0.8,
+                  ease: 'power2.out',
+                });
+              }
+
               // 1. Fade in scroll indicator
               if (scrollIndicator) {
                 gsap.to(scrollIndicator, {
@@ -532,7 +594,9 @@ function handleEnter() {
                 ? 0
                 : (window.innerHeight >= 1050
                     ? -150
-                    : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5)));
+                    : (window.innerHeight < 820
+                        ? -35
+                        : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5))));
 
               const promptCoords = getPromptDockCoordinates();
               const circle1StartY = Math.round(Math.max(window.innerHeight, promptCoords.canvasRect.height) / 2 + 200);
@@ -950,6 +1014,9 @@ function handleEnter() {
                     // Synchronize master prompt states
                     syncPromptStates(scrollPos);
 
+                    // Synchronize terminal progress bar
+                    syncTerminalProgressBar(scrollPos);
+
                     if (scrollPos >= 1500 && !scene3AssetsLoaded) {
                       loadScene3Assets();
                     }
@@ -974,11 +1041,18 @@ function handleEnter() {
 
               // Initial synchronization of master prompt states at scroll 0
               syncPromptStates(0);
+              syncTerminalProgressBar(0);
               lenis.on('scroll', ({ scroll }) => {
                 syncPromptStates(scroll);
+                syncTerminalProgressBar(scroll);
               });
               ScrollTrigger.addEventListener('refresh', () => {
                 syncPromptStates(window.scrollY);
+                syncTerminalProgressBar(window.scrollY);
+              });
+              window.addEventListener('resize', () => {
+                monospaceCharWidth = 0;
+                syncTerminalProgressBar(window.scrollY);
               });
 
               // Phase 0 (0px -> 500px): Prompt un-types text right-to-left, then '>:' and cursor '_', so nothing remains on screen
