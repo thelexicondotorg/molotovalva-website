@@ -338,11 +338,8 @@ const scene1GridEl = document.getElementById('scene1-grid');
 const scene1HeroContainer = document.getElementById('scene1-hero-container');
 const scene1HeroImg = document.getElementById('scene1-hero-img');
 const scene1MeetBtn = document.getElementById('scene1-meet-btn');
+const scene1MeetBtnWrapper = document.getElementById('scene1-meet-btn-wrapper');
 const scene1FunnelWrapper = document.getElementById('scene1-funnel-wrapper');
-const scene1Lightbox = document.getElementById('scene1-lightbox');
-const scene1LightboxImg = document.getElementById('scene1-lightbox-img');
-const scene1LightboxClose = document.getElementById('scene1-lightbox-close');
-const scene1LightboxCaption = document.getElementById('scene1-lightbox-caption');
 const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
 const mainCanvasEl = document.getElementById('main-canvas');
@@ -431,28 +428,13 @@ function skipScene1ToEnd() {
     if (scene1HeroContainer) {
       gsap.set(scene1HeroContainer, { visibility: 'hidden', opacity: 0 });
     }
-    if (scene1Text2El) gsap.set(scene1Text2El, { scale: 1, opacity: 1 });
+    if (scene1MeetBtnWrapper) {
+      gsap.set(scene1MeetBtnWrapper, { y: 0, opacity: 1, pointerEvents: 'auto' });
+    }
     if (scene1MeetBtn) {
-      gsap.set(scene1MeetBtn, { y: 0, opacity: 1, pointerEvents: 'auto' });
+      scene1MeetBtn.style.pointerEvents = 'auto';
     }
   }
-}
-
-function openScene1Lightbox(src, alt, caption) {
-  if (!scene1Lightbox || !scene1LightboxImg) return;
-  scene1LightboxImg.src = src;
-  scene1LightboxImg.alt = alt || 'Molotov Alva Full Size';
-  if (scene1LightboxCaption) {
-    scene1LightboxCaption.textContent = caption || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed haec quidem liberius ab eo dicuntur et saepius.';
-  }
-  scene1Lightbox.classList.remove('opacity-0', 'pointer-events-none');
-  scene1Lightbox.classList.add('opacity-100', 'pointer-events-auto');
-}
-
-function closeScene1Lightbox() {
-  if (!scene1Lightbox) return;
-  scene1Lightbox.classList.remove('opacity-100', 'pointer-events-auto');
-  scene1Lightbox.classList.add('opacity-0', 'pointer-events-none');
 }
 
 function initScene1() {
@@ -488,13 +470,6 @@ function initScene1() {
     scene1GridEl.appendChild(item);
     gridItemEls.push(item);
     gridImgEls.push(img);
-
-    // End-state lightbox click handler
-    item.addEventListener('click', (e) => {
-      if (scene1Tl && scene1Tl.progress() < 1) return;
-      e.stopPropagation();
-      openScene1Lightbox(img.src, img.alt);
-    });
   });
   s1GridImgEls = gridImgEls;
 
@@ -503,8 +478,11 @@ function initScene1() {
   gsap.set(scene1Text2El, { opacity: 0, scale: 0.95 });
 
   // Button Initial State
+  if (scene1MeetBtnWrapper) {
+    gsap.set(scene1MeetBtnWrapper, { y: 30, opacity: 0, pointerEvents: 'none' });
+  }
   if (scene1MeetBtn) {
-    gsap.set(scene1MeetBtn, { y: 30, opacity: 0, pointerEvents: 'none' });
+    scene1MeetBtn.style.pointerEvents = 'auto';
   }
 
   // Calculate vertical center offset so Text 1 initially appears in the exact vertical center of the screen
@@ -638,16 +616,16 @@ function initScene1() {
 
     const t2EndTime = t2StartTime + 4.0;
 
-    // BUTTON: comes in exactly as TEXT 2 ends its movement (t2EndTime)
-    const buttonStartTime = t2EndTime;
-    if (scene1MeetBtn) {
-      introTl.to(scene1MeetBtn, {
+    // BUTTON: comes in 1 second earlier (1.0s before TEXT 2 ends)
+    const buttonStartTime = t2EndTime - 1.0;
+    if (scene1MeetBtnWrapper) {
+      introTl.to(scene1MeetBtnWrapper, {
         y: 0,
         opacity: 1,
         duration: 1.0,
         ease: 'power2.out',
         onStart: () => {
-          scene1MeetBtn.style.pointerEvents = 'auto';
+          scene1MeetBtnWrapper.style.pointerEvents = 'auto';
         }
       }, buttonStartTime);
     }
@@ -2613,35 +2591,9 @@ gsap.set(['#scene6-purchase-btn', '#scene7-purchase-btn', '#scene9-purchase-btn'
   pointerEvents: 'none'
 });
 
-// Scene 1 Lightbox Event Listeners
-if (scene1LightboxClose) {
-  scene1LightboxClose.addEventListener('click', (e) => {
-    e.stopPropagation();
-    closeScene1Lightbox();
-  });
-}
-
-if (scene1Lightbox) {
-  scene1Lightbox.addEventListener('click', (e) => {
-    if (e.target === scene1Lightbox) {
-      e.stopPropagation();
-      closeScene1Lightbox();
-    }
-  });
-}
-
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && scene1Lightbox && !scene1Lightbox.classList.contains('pointer-events-none')) {
-    closeScene1Lightbox();
-  }
-});
-
 // Development feature: Clicking anywhere on Scene 1 mid-animation immediately fast-forwards to the final layout
 if (scene1Container) {
   scene1Container.addEventListener('click', (e) => {
-    if (scene1Lightbox && !scene1Lightbox.classList.contains('pointer-events-none')) {
-      return;
-    }
     if (scene1MeetBtn && (e.target === scene1MeetBtn || scene1MeetBtn.contains(e.target))) {
       if (scene1Tl && scene1Tl.progress() < 1) {
         e.stopPropagation();

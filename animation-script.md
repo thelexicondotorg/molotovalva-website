@@ -33,7 +33,7 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Primary Visual / Interaction |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | The Genesis & Funnel Transition | Pre-Scroll | Event-Driven | White stage $\to$ Text 1 center fade & 7s zoom $\to$ MA-Grid-01 fade-in & 20-image grid assembly (5x4) $\to$ Immediate Text 2 fade & zoom (4s) $\to$ Button $\to$ Interactive Lightbox $\to$ Seamless funnel swallowing into black |
+| **Scene 1** | The Genesis & Funnel Transition | Pre-Scroll | Event-Driven | White stage $\to$ Text 1 center fade & 7s zoom $\to$ MA-Grid-01 fade-in & 20-image grid assembly (5x4) $\to$ Immediate Text 2 fade & zoom (4s) $\to$ Button $\to$ Seamless funnel swallowing into black |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | 5 center flashes $\to$ 5-circle row $\to$ Word-by-word heading $\to$ Staggered exit |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
@@ -70,8 +70,9 @@
     - As Text 1 falls into position (`7.8s`), `MA-Grid-01.jpg` enters in `#scene1-hero-container` at screen center with a **pure fade-in** at 100% scale (no zoom-in; `0.6s` fade in, `power2.out`).
     - Holds at center for `0.5s` at native scale.
     - At `8.9s`, hero glides into Slot [0,0] (top-left) of the grid (`0.7s`, `power2.inOut`), seamlessly handing off to `#scene1-grid-img-0`.
-  - **Randomized Montage (`9.2s – 11.04s`)**:
+  - **Montage & Hover Behavior**:
     - The remaining 19 thumbnails fade in one-by-one in randomized order (`0.08s` stagger, `0.22s` duration per image, `power2.out`), completing the full 5x4 grid at `~11.04s`.
+    - Thumbnails remain non-clickable (no lightbox/modal), but subtly scale up (`transform: scale(1.04)`, `0.25s ease`) on hover with default cursor.
 - **Phase 1.3 — Seamless Progression to Text 2 (`11.04s`)**:
   - The 1-second pause has been eliminated; Text Box 2 begins fading in immediately as the 20th grid image finishes its fade.
 - **Phase 1.4 — Text Box 2 Slow Fade & Zoom (`11.04s – 15.04s`)**:
@@ -80,22 +81,14 @@
   - **Choreography**:
     - `11.04s – 13.04s`: Slow fade in over 2.0s (`opacity: 0 -> 1`, `power2.out`).
     - `11.04s – 15.04s`: Slow zoom from 95% to 100% over the full 4.0s duration (`scale: 0.95 -> 1.0`, `power2.out`).
-- **Phase 1.5 — Button Entrance & Interactive Swipe Hover (`15.04s – 16.04s`)**:
-  - Button `MEET MOLOTOV` slides up and fades in over 1.0s (`y: 30 -> 0`, `opacity: 0 -> 1`, `power2.out`, pointer events enabled), triggering exactly as Text Box 2 concludes its zoom and movement (`15.04s`).
+- **Phase 1.5 — Button Entrance, Outer-Edge Shadow Pulse & Interactive Swipe Hover (`14.04s – 15.04s`)**:
+  - Button `MEET MOLOTOV` slides up and fades in over 1.0s (`y: 30 -> 0`, `opacity: 0 -> 1`, `power2.out`, pointer events enabled), entering **1 second earlier** (`14.04s`) to overlap with the final second of Text Box 2's movement.
+  - **Outer-Edge Shadow Pulse**: When not hovered, the button maintains fixed geometry (no scaling) and emits a soft shadow ripple emanating outward from its perimeter edges every 2.5 seconds via CSS (`animation: scene1BtnPulse 2.5s infinite`, expanding over `1.125s` to `35px` with a `1.375s` rest interval).
   - **Typography & Spacing**: 20px spacing between `"MOLOTOV"` and arrow `↓` (`ml-[20px]`).
-  - **Zero Shadows**: No drop shadow on normal, hover, or active states.
   - **Swipe Reversible Hover Transition**:
-    - **Normal state**: Solid black fill, white text, 1px black inner stroke (`box-shadow: inset 0 0 0 1px #000000`).
-    - **Hover state**: Left-to-right swipe (`transform: translateX(0)`) reveals white background, reverses text color to black, preserving the 1px black inner stroke.
-    - **Mouse Abandon**: If cursor leaves without clicking, the swipe reverses back from right to left (`transform: translateX(-101%)`) and text returns to white.
-- **Phase 1.6 — End-State Interactive Lightbox Modal**:
-  - When the intro timeline reaches completion, clicking any grid thumbnail opens an interactive full-size image lightbox:
-    - **Backdrop**: 90% white overlay (`bg-white/90`).
-    - **Image Card**: Centered at 150% native scale (`716px x 492px`, aspect ratio `477/328`).
-    - **Close Button ("X")**: Solid black `&times;`, no shadow, positioned outside top-right at `-25px, -25px`.
-    - **Caption**: `1rem` font size, Garamond serif, italic, black (`text-left`, `mt-3`). Placeholder: *"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed haec quidem liberius ab eo dicuntur et saepius."*.
-    - **Dismissal**: Clicking "X", clicking backdrop, or pressing <kbd>Escape</kbd>.
-- **Phase 1.7 — Seamless Funnel Swallowing Transition (Button Click)**:
+    - **Hover state**: Left-to-right swipe (`transform: translateX(0)`) reveals white background, reverses text color to black, preserving the 1px black inner stroke, while pausing the pulse (`animation: none; box-shadow: none`).
+    - **Mouse Abandon**: If cursor leaves without clicking, the swipe reverses back from right to left (`transform: translateX(-101%)`), text returns to white, and the 2.5-second outer shadow pulse resumes.
+- **Phase 1.6 — Seamless Funnel Swallowing Transition (Button Click)**:
   - User clicks `MEET MOLOTOV ↓`.
   - Content container `#scene1-content` moves upward (`y: -(0.35 * innerHeight)`) as it shrinks from 100% to 0% and fades with ease-in in **0.8s** (`scale: 1 -> 0`, `opacity: 1 -> 0`, `0.8s`, `power2.in`, `transformOrigin: '50% 50%'`), falling directly into the mouth of the ascending funnel.
   - Black SVG funnel elevates upward by `2.8x innerHeight` (`1.8s`, `power2.inOut`), its throat swallowing the shrinking stage.
@@ -103,7 +96,7 @@
     - SVG wing paths overlap the solid black base by `-mt-[2px]` and extend past coordinates (`-5` to `605` and `1205` to `605`) to eliminate subpixel white hairlines.
     - Black base extends `350vh` below the throat, preventing any bottom white gap throughout the upward travel.
     - `#scene1-container` background smoothly cross-fades to `#000000` at `0.9s` before the container is hidden (`display: none`), guaranteeing a 100% seamless cut to Scene 2's black canvas.
-- **Phase 1.8 — Canonical Phase 1.4 Resume (Molotov Arrival on Black Canvas)**:
+- **Phase 1.7 — Canonical Phase 1.4 Resume (Molotov Arrival on Black Canvas)**:
   - Screen is 100% black.
   - Terminal prompt `#terminal-prompt` fades in at vertical middle, flush left, typing `hello_this_is_molotov_` (`1.5s`).
   - Low-fi terminal progress bar `#terminal-progress` fades in at `0%_`.
