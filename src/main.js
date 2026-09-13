@@ -576,6 +576,14 @@ function handleEnter() {
                 };
               }
 
+              // Dynamic vertical translation coordinate for prompts translating to top of screen (-50px from top)
+              function getPromptTopY() {
+                const canvasRect = mainCanvasEl ? mainCanvasEl.getBoundingClientRect() : { height: window.innerHeight };
+                const isMobile = window.innerWidth <= 768;
+                const padY = isMobile ? 24 : 50;
+                return -(canvasRect.height / 2 - padY);
+              }
+
               // Dynamic Height-Aware Scaling Factor for Desktop (1024px+)
               // Preserves 1.0 (100% current design) on 4K & tall screens (>= 980px usable height)
               // Scales smoothly on compact laptops (1366x768 and 1440x900) so vertical clusters never clip
@@ -898,8 +906,8 @@ function handleEnter() {
                   entrancePx: 0,
                   typeStartPx: 0,
                   typeEndPx: 0,
-                  untypeStartPx: 0,
-                  untypeEndPx: 500,
+                  untypeStartPx: 5000,
+                  untypeEndPx: 5500,
                 },
                 {
                   id: 'scene3',
@@ -909,8 +917,8 @@ function handleEnter() {
                   entrancePx: 5500,
                   typeStartPx: 5900,
                   typeEndPx: 6500,
-                  untypeStartPx: 6700,
-                  untypeEndPx: 7200,
+                  untypeStartPx: 10000,
+                  untypeEndPx: 10600,
                 },
                 {
                   id: 'scene4',
@@ -920,8 +928,8 @@ function handleEnter() {
                   entrancePx: 10900,
                   typeStartPx: 11300,
                   typeEndPx: 12500,
-                  untypeStartPx: 12700,
-                  untypeEndPx: 13200,
+                  untypeStartPx: 18000,
+                  untypeEndPx: 18600,
                   typeFn: (p) => {
                     const part1 = 'you_think_in_fractions';
                     const full = 'you_think_in_fractions_then_call_the_consequences_unexpected';
@@ -946,8 +954,8 @@ function handleEnter() {
                   entrancePx: 18900,
                   typeStartPx: 19300,
                   typeEndPx: 20000,
-                  untypeStartPx: 20500,
-                  untypeEndPx: 21000,
+                  untypeStartPx: 24600,
+                  untypeEndPx: 25100,
                 },
                 {
                   id: 'scene6',
@@ -957,8 +965,8 @@ function handleEnter() {
                   entrancePx: 25100,
                   typeStartPx: 25500,
                   typeEndPx: 26500,
-                  untypeStartPx: 27000,
-                  untypeEndPx: 27500,
+                  untypeStartPx: 35300,
+                  untypeEndPx: 35900,
                 },
                 {
                   id: 'scene7',
@@ -968,8 +976,8 @@ function handleEnter() {
                   entrancePx: 35900,
                   typeStartPx: 36300,
                   typeEndPx: 37100,
-                  untypeStartPx: 37300,
-                  untypeEndPx: 37800,
+                  untypeStartPx: 41000,
+                  untypeEndPx: 41600,
                 },
                 {
                   id: 'scene8',
@@ -979,8 +987,8 @@ function handleEnter() {
                   entrancePx: 41600,
                   typeStartPx: 42000,
                   typeEndPx: 42800,
-                  untypeStartPx: 43000,
-                  untypeEndPx: 43500,
+                  untypeStartPx: 48500,
+                  untypeEndPx: 49100,
                 },
                 {
                   id: 'scene9',
@@ -990,8 +998,8 @@ function handleEnter() {
                   entrancePx: 49100,
                   typeStartPx: 49500,
                   typeEndPx: 50500,
-                  untypeStartPx: 50700,
-                  untypeEndPx: 51200,
+                  untypeStartPx: 55100,
+                  untypeEndPx: 55700,
                 },
               ];
 
@@ -1136,14 +1144,12 @@ function handleEnter() {
                 syncTerminalProgressBar(window.scrollY);
               });
 
-              // Phase 0 (0px -> 500px): Prompt un-types text right-to-left, then '>:' and cursor '_', so nothing remains on screen
-              addPromptUntype(scrollTl, {
-                promptSelector: '#terminal-prompt',
-                textSelector: '#prompt-text',
-                fullText: 'hello_this_is_molotov',
-                startPx: 0,
-                duration: 500,
-              });
+              // Phase 0 (0px -> 500px): #terminal-prompt translates vertically to top of screen (at -50px from top)
+              scrollTl.fromTo('#terminal-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                0
+              );
 
               if (scrollIndicator) {
                 scrollTl.to(scrollIndicator, {
@@ -1254,7 +1260,7 @@ function handleEnter() {
               // 500px stillness hold with all Scene 2 elements at 100% opacity.
 
               // Phase 7: Staggered "Zero Gravity" Rise & Fade Out of Scene 2 Elements (5000px -> 5550px)
-              // (Note: "#terminal-prompt" already un-typed and cleared at 500px)
+              // (Note: "#terminal-prompt" un-types in place at top of screen from 5000px to 5500px, disappearing cleanly before Scene 3)
 
               // 2nd to go: 5 Circles row (5100px -> 5350px)
               scrollTl.to('#scene2-portals', {
@@ -1289,8 +1295,12 @@ function handleEnter() {
               // Phase 10: Scene 3 Prompt Centered Hold (6500px -> 6700px)
               // 200px stillness hold at vertical center, flush left (coordinated by syncPromptStates)
 
-              // Phase 11: Scene 3 Prompt Un-types Right-to-Left completely (6700px -> 7200px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 11: Scene 3 Prompt translates vertically to top of screen (6700px -> 7200px)
+              scrollTl.fromTo('#scene3-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                6700
+              );
 
               // Phase 12: Scene 3 Step 1 — Large Deer Focus & Initial Clause "You see the deer" (7200px -> 7500px)
               // 1. Deer Portal fades in centered over 100px (7200 -> 7300), holds for 200px (7300 -> 7500)
@@ -1478,7 +1488,7 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 10100);
 
-              // (Note: "#scene3-prompt" already un-typed and cleared at 7200px)
+              // (Note: "#scene3-prompt" un-types in place at top of screen from 10000px to 10600px, disappearing cleanly before runway & Scene 4)
 
               // Phase 18: Pure Black Space (10600px -> 10900px)
               // [300px pitch-black contemplation runway before Scene 4]
@@ -1498,8 +1508,12 @@ function handleEnter() {
               // Phase 23: Scene 4 Prompt Centered Hold (12500px -> 12700px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 24: Scene 4 Prompt Un-types Right-to-Left completely (12700px -> 13200px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 24: Scene 4 Prompt translates vertically to top of screen (12700px -> 13200px)
+              scrollTl.fromTo('#scene4-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                12700
+              );
 
               // Phase 25: 512x512 Centered Video Scrub (13200px -> 14600px)
               const s4Video = document.querySelector('#scene4-video');
@@ -1628,7 +1642,7 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 18100);
 
-              // (Note: "#scene4-prompt" already un-typed and cleared at 13200px)
+              // (Note: "#scene4-prompt" un-types in place at top of screen from 18000px to 18600px, disappearing cleanly before runway & Scene 5)
 
               // Phase 32: Pure Black Space (18600px -> 18900px)
               // [300px pitch-black contemplation runway before Scene 5]
@@ -1642,8 +1656,12 @@ function handleEnter() {
               // Phase 35: Breathing Moment & Centered Hold (20000px -> 20500px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 36: Scene 5 Prompt Un-types Right-to-Left completely (20500px -> 21000px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 36: Scene 5 Prompt translates vertically to top of screen (20500px -> 21000px)
+              scrollTl.fromTo('#scene5-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                20500
+              );
 
               // Phase 37: Option 2 - Randomized Orbital Gravitational Convergence (21000px -> 22400px)
               // 6 circles start from asymmetric randomized vectors across space and converge into 3x2 grid slots
@@ -1731,7 +1749,7 @@ function handleEnter() {
               // Phase 40: Scene 5 Complete Reading & Reflection Hold (24000px -> 24600px)
               // [600px stillness hold on complete 3x2 grid, heading, and full subheading]
 
-              // (Note: "#scene5-prompt" already un-typed and cleared at 21000px)
+              // (Note: "#scene5-prompt" un-types in place at top of screen from 24600px to 25100px, disappearing cleanly before Scene 6)
 
               // 2. Scene 5 3x2 Visuals / Grid departs (24700 -> 24950)
               scrollTl.to('#scene5-grid', {
@@ -1766,8 +1784,12 @@ function handleEnter() {
               // Phase 44: Centered Breathing Hold on Prompt (26500px -> 27000px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 45: Scene 6 Prompt Un-types Right-to-Left completely (27000px -> 27500px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 45: Scene 6 Prompt translates vertically to top of screen (27000px -> 27500px)
+              scrollTl.fromTo('#scene6-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                27000
+              );
 
               // Phase 46: Single 512x512 Video Scrub (27500px -> 28900px)
               const s6Video = document.querySelector('#scene6-video');
@@ -1897,7 +1919,7 @@ function handleEnter() {
 
               // Phase 53: Scene 6 Zero-Gravity Staggered Exit (35300px -> 35950px)
               // Outgoing elements ascend by -200px on Y while fading to opacity: 0
-              // (Note: "#scene6-prompt" already un-typed and cleared at 27500px)
+              // (Note: "#scene6-prompt" un-types in place at top of screen from 35300px to 35900px, disappearing cleanly before Scene 7)
 
               // 2. Scene 6 Grid (5x3 museum circles)
               scrollTl.to('#scene6-grid', {
@@ -1941,8 +1963,13 @@ function handleEnter() {
               // Phase 57: Centered Breathing Hold on Prompt (37100px -> 37300px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 58: Act 1 — Prompt Un-typing & Big Circle Zoom-In (37300px -> 37800px | 500px)
-              // 1. Prompt un-typing coordinated dynamically by syncPromptStates
+              // Phase 58: Act 1 — Prompt translates vertically to top of screen & Big Circle Zoom-In (37300px -> 37800px | 500px)
+              // 1. Prompt vertical translation to top of screen (at -50px from top)
+              scrollTl.fromTo('#scene7-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                37300
+              );
 
               // 2. 512px circular portal fades in (200px fade-in) while slowly zooming from 95% to 100% over 500px
               scrollTl.fromTo('#scene7-portal',
@@ -2060,7 +2087,7 @@ function handleEnter() {
               // SCENE 7 ZERO-GRAVITY EXIT (41000px -> 41650px)
               // =========================================================================
               // Phase 64: Staggered Zero-Gravity Ascension Exit
-              // (Note: "#scene7-prompt" already un-typed and cleared at 37800px)
+              // (Note: "#scene7-prompt" un-types in place at top of screen from 41000px to 41600px, disappearing cleanly before Scene 8)
 
               // 2. Colophon text floats upwards into the void
               scrollTl.to('#scene7-narrative-wrapper', {
@@ -2099,8 +2126,12 @@ function handleEnter() {
               // Phase 67: Centered Breathing Hold on Prompt (42800px -> 43000px | 200px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 68: Scene 8 Prompt Un-types Right-to-Left completely (43000px -> 43500px | 500px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 68: Scene 8 Prompt translates vertically to top of screen (43000px -> 43500px | 500px)
+              scrollTl.fromTo('#scene8-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                43000
+              );
 
               // Phase 69: Staggered Lateral Reviews Entrance at 100% Scale (43500px -> 45200px | 1700px)
               // Quotes remain at 100% end-state scale throughout:
@@ -2145,7 +2176,7 @@ function handleEnter() {
 
               // Phase 74: Scene 8 Zero-Gravity Staggered Ascension Exit (48500px -> 49150px | 650px)
               // Outgoing Scene 8 elements drift upward by -200px and dissolve into the void
-              // (Note: "#scene8-prompt" already un-typed and cleared at 43500px)
+              // (Note: "#scene8-prompt" un-types in place at top of screen from 48500px to 49100px, disappearing cleanly before Scene 9)
 
               scrollTl.to('#scene8-card-1', {
                 y: -200,
@@ -2184,8 +2215,12 @@ function handleEnter() {
               // Phase 77: Centered Breathing Hold on Prompt (50500px -> 50700px | 200px)
               // (Coordinated dynamically by syncPromptStates)
 
-              // Phase 78: Scene 9 Prompt Un-types Right-to-Left completely (50700px -> 51200px | 500px)
-              // (Coordinated dynamically by syncPromptStates)
+              // Phase 78: Scene 9 Prompt translates vertically to top of screen (50700px -> 51200px | 500px)
+              scrollTl.fromTo('#scene9-prompt',
+                { y: 0, yPercent: -50, x: 0 },
+                { y: () => getPromptTopY(), yPercent: 0, x: 0, duration: 500, ease: 'power1.inOut', immediateRender: false },
+                50700
+              );
 
               // Phase 79: The Book Circle Entrance (51200px -> 51700px | 500px)
               // Native 600px circle in dead center scales from 0 to peak scale (scale: 0 -> s9BookInitialScale)

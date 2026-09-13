@@ -105,28 +105,28 @@ Each element ascends by `-200px` on the Y-axis while fading to `opacity: 0`.
 
 ---
 
-## 6. Responsive Prompt Docking System
+## 6. Prompt Vertical Translation & End-of-Scene Un-typing System
 
-To ensure all terminal prompts dock to the upper-left corner across all viewports (desktop, tablet, mobile) regardless of string length or viewport aspect ratios, prompts use a normalized origin-center architecture:
+To maintain pure typographical dignity and vertical integrity, prompts across Scenes 2 through 9 follow a consistent translation and lifecycle pattern:
 
 1. **Initial Centered Baseline**:
-   - `position: absolute; left: 50%; top: 50%;`
-   - `xPercent: -50; yPercent: -50; x: 0; y: 0;`
-   - Centering is purely mathematical and invariant to dynamically typed text width.
+   - `position: absolute; left: 4px; md:left: 50px; top: 50%;`
+   - `x: 0; y: 0; xPercent: 0; yPercent: -50;`
+   - Prompt activates and types at vertical center, flush left.
 
-2. **Corner Migration Formula**:
-   - When migrating to the top-left corner, GSAP transitions:
-     - `xPercent: 0; yPercent: 0;`
-     - `x: -(canvasWidth / 2 - padX)`
-     - `y: -(canvasHeight / 2 - padY)`
-     - `transformOrigin: '0% 0%'`
-     - `scale: 0.5` (Desktop) / `0.65` (Mobile)
-   - The top-left corner of the element lands on `(padX, padY)` (`24px, 24px` on desktop, `16px, 16px` on mobile/tablet) with zero coordinate drift.
+2. **Vertical Translation to Top of Screen**:
+   - After typing and the centered breathing hold, the prompt translates vertically to the top of the screen:
+     - Pure vertical movement (zero horizontal shift, `x: 0`)
+     - `y: -(canvasHeight / 2 - padY)` where `padY = 50px` (Desktop) / `24px` (Mobile)
+     - `yPercent: 0`
+     - Duration: `500px`, `ease: 'power1.inOut'`
+   - The prompt butts against the top of the canvas at 50px from top and remains parked there throughout the scene.
 
-3. **Zero-Gravity Exit**:
-   - `y: -(canvasHeight / 2 - padY) - 200`
-   - `opacity: 0`
-   - `duration: 250px`, `ease: 'power1.in'`.
+3. **End-of-Scene In-Place Un-typing**:
+   - Just before the next scene's prompt is scheduled to appear, the prompt at the top un-types right-to-left:
+     - Characters un-type cleanly over the first 75% of the duration.
+     - The `>:` prefix and blinking cursor `_` delete completely over the final 25%, fading to `opacity: 0` (`display: none`).
+     - Clears the top edge completely before the incoming scene begins.
 
 ---
 
