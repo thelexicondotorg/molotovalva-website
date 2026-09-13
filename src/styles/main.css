@@ -556,4 +556,85 @@ body {
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Scene 1: White Intro Stage & Funnel Transition                            */
+/* -------------------------------------------------------------------------- */
+.scene1-text {
+  font-family: var(--font-serif);
+  color: #000000;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.scene1-word,
+.scene1-cluster {
+  display: inline;
+  opacity: 0;
+}
+
+.scene1-grid-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 477 / 328;
+  background-color: transparent;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.scene1-grid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.scene1-grid-item:hover .scene1-grid-img {
+  transform: scale(1.04);
+}
+
+.scene1-btn {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.12em;
+  position: relative;
+  overflow: hidden;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.scene1-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px #000000;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.scene1-btn .scene1-btn-swipe {
+  position: absolute;
+  inset: 0;
+  background-color: #ffffff;
+  transform: translateX(-101%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.scene1-btn .scene1-btn-inner {
+  position: relative;
+  z-index: 2;
+  transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scene1-btn:hover .scene1-btn-swipe {
+  transform: translateX(0);
+}
+
+.scene1-btn:hover .scene1-btn-inner {
+  color: #000000;
+}
+
+
 

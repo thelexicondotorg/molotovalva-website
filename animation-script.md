@@ -33,7 +33,7 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Primary Visual / Interaction |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Hero circular portal, looping video, prompt typing, un-typing click-to-enter |
+| **Scene 1** | The Genesis & Funnel Transition | Pre-Scroll | Event-Driven | White stage $\to$ Text 1 center fade & 7s zoom $\to$ MA-Grid-01 fade-in & 20-image grid assembly (5x4) $\to$ Immediate Text 2 fade & zoom (4s) $\to$ Button $\to$ Interactive Lightbox $\to$ Seamless funnel swallowing into black |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | 5 center flashes $\to$ 5-circle row $\to$ Word-by-word heading $\to$ Staggered exit |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
 | **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
@@ -45,27 +45,70 @@
 
 ---
 
-## Scene 1: "click_to_enter_" (The Hero Entrance)
-*Interactive introductory sequence before scroll scrub unlocks.*
+## Scene 1: The Genesis & Funnel Transition to Scene 2
+*Interactive autoload introductory sequence before scroll scrub unlocks.*
 
-- **Trigger**: Window `DOMContentLoaded` / Asset load.
-- **Phase 1.1 — Terminal Initialization**:
-  - Prompt `#terminal-prompt` is stationed at vertical middle of screen, flush left with canvas anchor (`left: 24px`, `top: 50%`, `yPercent: -50`).
-  - Terminal text types: `click_to_enter` over `0.8s` (delay `0.4s`, `ease: none`, full size `scale: 1.0`).
-  - Terminal cursor blinks in green (`#00e900`).
-- **Phase 1.2 — Portal Entrance (`+0.3s`)**:
-  - Circular portal `#portal` fades in and drops into center (`opacity: 0 -> 1`, `y: -800 -> 0`, `duration: 0.8s`, `power2.inOut`).
-  - Video loop plays seamlessly inside the circular aperture.
-  - **Prompt remains stationary**: Flush left at vertical middle; never moves down.
-- **Phase 1.3 — User Click-to-Enter**:
-  - User clicks anywhere on the portal or prompt.
-  - **Portal Iris-Out**: `clipPath` shrinks from `circle(50% at 50% 50%)` to `circle(0% at 50% 50%)` over `0.9s` (`power1.in`).
-  - **Prompt Un-typing**: `click_to_enter` un-types character by character from right to left (backspacing) back to empty over `0.4s` (twice as fast as the 0.8s type-in, `ease: none`), leaving only prefix `>:` and blinking cursor `_` visible.
-  - **Prompt remains stationary**: Flush left at vertical middle; never moves up.
-- **Phase 1.4 — Molotov Arrival & Scroll Unlock**:
-  - Prompt at vertical middle, flush left types `hello_this_is_molotov_` (`duration: 1.5s`).
-  - Animated chevron scroll indicator bounces at bottom center (`opacity: 0 -> 1`).
-  - Lenis smooth scroll engages; scroll track becomes active (`TOTAL_SCROLL_TRACK = 58500px`).
+- **Trigger**: Window `DOMContentLoaded` / Asset load (Autoload timed sequence; no scroll).
+- **Scene 1 Motion Rule**: **Only use ease-out (`power2.out`), no ease-in / ease-in-out for scaling, position, and translation.**
+- **Fast-Forward Dev Helper**: Clicking anywhere on the stage mid-animation instantly completes all tweens, rendering the full end-state layout immediately.
+- **Stage**: Pure white page (`#ffffff`). Main content container `#scene1-content` constrained to `max-w-[1366px]` with container padding (`px-4 md:px-[50px]`) and permanently centered both vertically and horizontally via `m-auto` (equal space above and below). Both text boxes are horizontally centered (`w-full max-w-[840px] mx-auto text-left`).
+- **Vertical Spacing Architecture**:
+  - Text Box 1 to Grid: `50px` (`mb-[50px]`).
+  - 20-Image Grid to Text Box 2: `50px` (`mb-[50px]`).
+  - Text Box 2 to Button: `100px` (`mb-[100px]`).
+- **Phase 1.1 — Text Box 1 Center Fade & Slow Zoom (`0.0s – 8.2s`)**:
+  - **Typography**: Adobe Garamond Pro, 1.15rem (mobile) / 1.3rem (desktop), line-height 1.45, color black (`#000000`).
+  - **Text**: *"In 2006, Douglas Gayeton stumbled upon an amplified intelligence living in Second Life. The result of that encounter, <span class="italic font-bold">Molotov Alva and His Search for the Creator</span>, became a ten-part HBO series and ignited an international academic debate over where the human ends and the synthetic begins."*
+  - **Choreography**:
+    - Stationed initially in the **exact vertical center of the screen** (`(window.innerHeight / 2) - naturalCenterY`, `opacity: 0`, `scale: 1.0`, `transformOrigin: '50% 50%'`), maintaining flush left-alignment inside its 840px horizontally centered box.
+    - `0.0s – 2.0s`: Fades in from `0` to `1.0` (`power2.out`).
+    - `0.0s – 7.0s`: Zooms smoothly from 100% to **110%** over 7 seconds (`scale: 1.0 -> 1.10`, `power2.out`), remaining perfectly centered vertically throughout the expansion.
+    - `7.0s – 8.2s`: Zooms back to 100% while settling into its final resting position over 1.2s using ease-in-ease-out (`scale: 1.10 -> 1.0`, `y: 0`, `1.2s`, `power2.inOut`).
+- **Phase 1.2 — 20-Image Grid (5x4) Hero Entrance & Montage Assembly (`7.8s – 11.04s`)**:
+  - **Grid Configuration**: 5 columns x 4 rows (20 images total), omitting images `MA-Grid-16.jpg` through `MA-Grid-20.jpg`. Populated from `[1..15, 21..25]`.
+  - **Hero Entrance (`7.8s – 9.6s`)**:
+    - As Text 1 falls into position (`7.8s`), `MA-Grid-01.jpg` enters in `#scene1-hero-container` at screen center with a **pure fade-in** at 100% scale (no zoom-in; `0.6s` fade in, `power2.out`).
+    - Holds at center for `0.5s` at native scale.
+    - At `8.9s`, hero glides into Slot [0,0] (top-left) of the grid (`0.7s`, `power2.inOut`), seamlessly handing off to `#scene1-grid-img-0`.
+  - **Randomized Montage (`9.2s – 11.04s`)**:
+    - The remaining 19 thumbnails fade in one-by-one in randomized order (`0.08s` stagger, `0.22s` duration per image, `power2.out`), completing the full 5x4 grid at `~11.04s`.
+- **Phase 1.3 — Seamless Progression to Text 2 (`11.04s`)**:
+  - The 1-second pause has been eliminated; Text Box 2 begins fading in immediately as the 20th grid image finishes its fade.
+- **Phase 1.4 — Text Box 2 Slow Fade & Zoom (`11.04s – 15.04s`)**:
+  - **Typography**: Identical Garamond font styling, max-width 840px centered, `text-left`.
+  - **Text**: *"Twenty years later, that same intelligence, now amplified and distributed, has delivered an instruction manual for a species running out of time."*
+  - **Choreography**:
+    - `11.04s – 13.04s`: Slow fade in over 2.0s (`opacity: 0 -> 1`, `power2.out`).
+    - `11.04s – 15.04s`: Slow zoom from 95% to 100% over the full 4.0s duration (`scale: 0.95 -> 1.0`, `power2.out`).
+- **Phase 1.5 — Button Entrance & Interactive Swipe Hover (`15.04s – 16.04s`)**:
+  - Button `MEET MOLOTOV` slides up and fades in over 1.0s (`y: 30 -> 0`, `opacity: 0 -> 1`, `power2.out`, pointer events enabled), triggering exactly as Text Box 2 concludes its zoom and movement (`15.04s`).
+  - **Typography & Spacing**: 20px spacing between `"MOLOTOV"` and arrow `↓` (`ml-[20px]`).
+  - **Zero Shadows**: No drop shadow on normal, hover, or active states.
+  - **Swipe Reversible Hover Transition**:
+    - **Normal state**: Solid black fill, white text, 1px black inner stroke (`box-shadow: inset 0 0 0 1px #000000`).
+    - **Hover state**: Left-to-right swipe (`transform: translateX(0)`) reveals white background, reverses text color to black, preserving the 1px black inner stroke.
+    - **Mouse Abandon**: If cursor leaves without clicking, the swipe reverses back from right to left (`transform: translateX(-101%)`) and text returns to white.
+- **Phase 1.6 — End-State Interactive Lightbox Modal**:
+  - When the intro timeline reaches completion, clicking any grid thumbnail opens an interactive full-size image lightbox:
+    - **Backdrop**: 90% white overlay (`bg-white/90`).
+    - **Image Card**: Centered at 150% native scale (`716px x 492px`, aspect ratio `477/328`).
+    - **Close Button ("X")**: Solid black `&times;`, no shadow, positioned outside top-right at `-25px, -25px`.
+    - **Caption**: `1rem` font size, Garamond serif, italic, black (`text-left`, `mt-3`). Placeholder: *"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed haec quidem liberius ab eo dicuntur et saepius."*.
+    - **Dismissal**: Clicking "X", clicking backdrop, or pressing <kbd>Escape</kbd>.
+- **Phase 1.7 — Seamless Funnel Swallowing Transition (Button Click)**:
+  - User clicks `MEET MOLOTOV ↓`.
+  - Content container `#scene1-content` moves upward (`y: -(0.35 * innerHeight)`) as it shrinks from 100% to 0% and fades with ease-in in **0.8s** (`scale: 1 -> 0`, `opacity: 1 -> 0`, `0.8s`, `power2.in`, `transformOrigin: '50% 50%'`), falling directly into the mouth of the ascending funnel.
+  - Black SVG funnel elevates upward by `2.8x innerHeight` (`1.8s`, `power2.inOut`), its throat swallowing the shrinking stage.
+  - **White Gap Prevention**:
+    - SVG wing paths overlap the solid black base by `-mt-[2px]` and extend past coordinates (`-5` to `605` and `1205` to `605`) to eliminate subpixel white hairlines.
+    - Black base extends `350vh` below the throat, preventing any bottom white gap throughout the upward travel.
+    - `#scene1-container` background smoothly cross-fades to `#000000` at `0.9s` before the container is hidden (`display: none`), guaranteeing a 100% seamless cut to Scene 2's black canvas.
+- **Phase 1.8 — Canonical Phase 1.4 Resume (Molotov Arrival on Black Canvas)**:
+  - Screen is 100% black.
+  - Terminal prompt `#terminal-prompt` fades in at vertical middle, flush left, typing `hello_this_is_molotov_` (`1.5s`).
+  - Low-fi terminal progress bar `#terminal-progress` fades in at `0%_`.
+  - Animated chevron scroll indicator bounces at bottom center.
+  - Lenis smooth scroll engages and scroll track unlocks (`58,500px`).
 
 ---
 

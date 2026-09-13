@@ -328,9 +328,21 @@ if (scene5GridEl && scene5GridEl.children.length === 0) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Landing Page Intro Choreography & Dual-Video Crossfade Loop              */
+/*  Scene 1 Elements & Intro Stage Selectors                                  */
 /* -------------------------------------------------------------------------- */
-const portalEl = document.getElementById('media-portal');
+const scene1Container = document.getElementById('scene1-container');
+const scene1Content = document.getElementById('scene1-content');
+const scene1Text1El = document.getElementById('scene1-text-1');
+const scene1Text2El = document.getElementById('scene1-text-2');
+const scene1GridEl = document.getElementById('scene1-grid');
+const scene1HeroContainer = document.getElementById('scene1-hero-container');
+const scene1HeroImg = document.getElementById('scene1-hero-img');
+const scene1MeetBtn = document.getElementById('scene1-meet-btn');
+const scene1FunnelWrapper = document.getElementById('scene1-funnel-wrapper');
+const scene1Lightbox = document.getElementById('scene1-lightbox');
+const scene1LightboxImg = document.getElementById('scene1-lightbox-img');
+const scene1LightboxClose = document.getElementById('scene1-lightbox-close');
+const scene1LightboxCaption = document.getElementById('scene1-lightbox-caption');
 const promptEl = document.getElementById('terminal-prompt');
 const promptTextEl = document.getElementById('prompt-text');
 const mainCanvasEl = document.getElementById('main-canvas');
@@ -388,29 +400,7 @@ function syncTerminalProgressBar(scrollPos) {
   }
 }
 
-let cancelIntroVideoLoop = null;
-
-function initIntroVideoLoop() {
-  const introVideo = document.getElementById('intro-video');
-  if (!introVideo) return;
-
-  introVideo.play().catch(() => {});
-
-  cancelIntroVideoLoop = () => {
-    introVideo.pause();
-  };
-}
-
-initIntroVideoLoop();
-
-// 1. Initial State
-if (portalEl) {
-  gsap.set(portalEl, {
-    opacity: 0,
-    y: -800, // starts from outside the screen above
-  });
-}
-
+// Initial prompt setup
 if (promptEl) {
   gsap.set(promptEl, {
     yPercent: -50,
@@ -418,94 +408,322 @@ if (promptEl) {
     y: 0,
     scale: 1,
     transformOrigin: '0% 0%',
+    opacity: 0,
+    pointerEvents: 'none'
   });
 }
 
-// Master Intro Timeline
-const introTl = gsap.timeline();
+// -----------------------------------------------------------------------------
+// Scene 1: White Intro Timeline Setup
+// -----------------------------------------------------------------------------
+let scene1Tl = null;
+let s1Text1Spans = [];
+let s1GridImgEls = [];
+let s1Text2Spans = [];
 
-// Step 1: Blinking cursor at center, then type "click_to_enter" (tight 0.4s initial breath + 0.8s typing)
-if (promptTextEl) {
-  introTl.to(promptTextEl, {
-    text: {
-      value: 'click_to_enter',
-      delimiter: '',
-    },
-    duration: 0.8,
-    delay: 0.4,
-    ease: 'none',
-  });
+function skipScene1ToEnd() {
+  if (!scene1Tl || isEntering) return;
+  if (scene1Tl.progress() < 1) {
+    scene1Tl.pause();
+    scene1Tl.progress(1);
+    if (scene1Text1El) gsap.set(scene1Text1El, { y: 0, scale: 1, opacity: 1 });
+    s1GridImgEls.forEach(img => gsap.set(img, { opacity: 1 }));
+    if (scene1HeroContainer) {
+      gsap.set(scene1HeroContainer, { visibility: 'hidden', opacity: 0 });
+    }
+    if (scene1Text2El) gsap.set(scene1Text2El, { scale: 1, opacity: 1 });
+    if (scene1MeetBtn) {
+      gsap.set(scene1MeetBtn, { y: 0, opacity: 1, pointerEvents: 'auto' });
+    }
+  }
 }
 
-// Step 2: 0.3s after typing ends: Fade in and drop the circular portal into place
-// Prompt remains stationary at vertical middle, flush left (never moves down)
-introTl.addLabel('reveal', '+=0.3');
+function openScene1Lightbox(src, alt, caption) {
+  if (!scene1Lightbox || !scene1LightboxImg) return;
+  scene1LightboxImg.src = src;
+  scene1LightboxImg.alt = alt || 'Molotov Alva Full Size';
+  if (scene1LightboxCaption) {
+    scene1LightboxCaption.textContent = caption || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed haec quidem liberius ab eo dicuntur et saepius.';
+  }
+  scene1Lightbox.classList.remove('opacity-0', 'pointer-events-none');
+  scene1Lightbox.classList.add('opacity-100', 'pointer-events-auto');
+}
 
-if (portalEl) {
-  introTl.to(
-    portalEl,
-    {
+function closeScene1Lightbox() {
+  if (!scene1Lightbox) return;
+  scene1Lightbox.classList.remove('opacity-100', 'pointer-events-auto');
+  scene1Lightbox.classList.add('opacity-0', 'pointer-events-none');
+}
+
+function initScene1() {
+  if (!scene1Text1El || !scene1Text2El || !scene1GridEl) return null;
+
+  // 1. Text Box 1 Content
+  scene1Text1El.innerHTML = 'In 2006, Douglas Gayeton stumbled upon an amplified intelligence living in Second Life. The result of that encounter, <span class="italic font-bold">Molotov Alva and His Search for the Creator</span>, became a ten-part HBO series and ignited an international academic debate over where the human ends and the synthetic begins.';
+
+  // 2. Populate 20-Image Grid (5x4) excluding MA-Grid-16 to MA-Grid-20
+  const imageNumbers = [
+    1, 2, 3, 4, 5,
+    6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15,
+    21, 22, 23, 24, 25
+  ];
+  scene1GridEl.innerHTML = '';
+  const gridItemEls = [];
+  const gridImgEls = [];
+  imageNumbers.forEach((num, slotIdx) => {
+    const numStr = num < 10 ? `0${num}` : `${num}`;
+    const item = document.createElement('div');
+    item.className = 'scene1-grid-item';
+    item.id = `scene1-grid-item-${slotIdx}`;
+
+    const img = document.createElement('img');
+    img.src = `/images/MA-Grid-${numStr}.jpg`;
+    img.alt = `Molotov Alva Scene ${num}`;
+    img.className = 'scene1-grid-img opacity-0';
+    img.id = `scene1-grid-img-${slotIdx}`;
+    img.loading = 'eager';
+
+    item.appendChild(img);
+    scene1GridEl.appendChild(item);
+    gridItemEls.push(item);
+    gridImgEls.push(img);
+
+    // End-state lightbox click handler
+    item.addEventListener('click', (e) => {
+      if (scene1Tl && scene1Tl.progress() < 1) return;
+      e.stopPropagation();
+      openScene1Lightbox(img.src, img.alt);
+    });
+  });
+  s1GridImgEls = gridImgEls;
+
+  // 3. Text Box 2 Content & Initial State
+  scene1Text2El.textContent = 'Twenty years later, that same intelligence, now amplified and distributed, has delivered an instruction manual for a species running out of time.';
+  gsap.set(scene1Text2El, { opacity: 0, scale: 0.95 });
+
+  // Button Initial State
+  if (scene1MeetBtn) {
+    gsap.set(scene1MeetBtn, { y: 30, opacity: 0, pointerEvents: 'none' });
+  }
+
+  // Calculate vertical center offset so Text 1 initially appears in the exact vertical center of the screen
+  const getTextCenterOffset = () => {
+    if (!scene1Text1El || !scene1Container) return 0;
+    scene1Container.scrollTop = 0;
+    const tRect = scene1Text1El.getBoundingClientRect();
+    const currentY = gsap.getProperty(scene1Text1El, 'y') || 0;
+    const naturalCenterY = (tRect.top - currentY) + tRect.height / 2;
+    return (window.innerHeight / 2) - naturalCenterY;
+  };
+
+  // Initially station Text 1 in the exact vertical center of the white screen, opacity: 0, scale: 1.0
+  gsap.set(scene1Text1El, {
+    y: getTextCenterOffset(),
+    scale: 1.0,
+    opacity: 0,
+    transformOrigin: '50% 50%'
+  });
+
+  // 4. Construct Master Intro Timeline (Rule: only ease-out for scaling and position in Scene 1)
+  const introTl = gsap.timeline();
+
+  // TEXT 1: Fades in (2 seconds fade) in the exact vertical & horizontal center of screen,
+  // zooms from 100% to 110% over 7 seconds (ease-out).
+  // Then zooms back to 100% and positions itself where it is now (y: 0) over 1.2s using ease-in-ease-out.
+  introTl.to(scene1Text1El, {
+    opacity: 1,
+    duration: 2.0,
+    ease: 'power2.out'
+  }, 0);
+
+  introTl.to(scene1Text1El, {
+    scale: 1.10,
+    duration: 7.0,
+    ease: 'power2.out'
+  }, 0);
+
+  introTl.to(scene1Text1El, {
+    scale: 1.0,
+    y: 0,
+    duration: 1.2,
+    ease: 'power2.inOut'
+  }, 7.0);
+
+  // GRID: As text1 falls back into its end-position (starts at 7.8s), grid starts building:
+  // big MA-Grid-01.jpg in the middle, then falls into position 1, then rest fade in randomly
+  const gridStartTime = 7.8;
+
+  if (scene1HeroContainer) {
+    introTl.set(scene1HeroContainer, {
+      visibility: 'visible',
+      opacity: 0,
+      scale: 1,
+      x: 0,
+      y: 0
+    }, gridStartTime);
+
+    // Hero image fades in big at center (no zoom-in, pure fade in)
+    introTl.to(scene1HeroContainer, {
       opacity: 1,
-      y: 0,
-      duration: 0.8,
+      duration: 0.6,
+      ease: 'power2.out'
+    }, gridStartTime);
+
+    const heroDockTime = gridStartTime + 1.1;
+
+    // Glides to Slot [0,0] in the grid
+    introTl.to(scene1HeroContainer, {
+      x: () => {
+        const slotEl = gridItemEls[0];
+        if (!slotEl || !scene1HeroContainer) return 0;
+        const sRect = slotEl.getBoundingClientRect();
+        const hRect = scene1HeroContainer.getBoundingClientRect();
+        return (sRect.left + sRect.width / 2) - (hRect.left + hRect.width / 2);
+      },
+      y: () => {
+        const slotEl = gridItemEls[0];
+        if (!slotEl || !scene1HeroContainer) return 0;
+        const sRect = slotEl.getBoundingClientRect();
+        const hRect = scene1HeroContainer.getBoundingClientRect();
+        return (sRect.top + sRect.height / 2) - (hRect.top + hRect.height / 2);
+      },
+      scale: () => {
+        const slotEl = gridItemEls[0];
+        if (!slotEl || !scene1HeroImg) return 1;
+        return slotEl.offsetWidth / (scene1HeroImg.offsetWidth || 477);
+      },
+      duration: 0.7,
       ease: 'power2.inOut',
-    },
-    'reveal'
-  );
+      onComplete: () => {
+        gridImgEls[0].style.opacity = '1';
+        gsap.set(scene1HeroContainer, { visibility: 'hidden', opacity: 0 });
+      }
+    }, heroDockTime);
+
+    // Remaining 19 thumbnails fade in randomly
+    const gridFadeStartTime = heroDockTime + 0.3;
+    const remainingIndices = Array.from({ length: gridImgEls.length - 1 }, (_, i) => i + 1);
+    for (let i = remainingIndices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [remainingIndices[i], remainingIndices[j]] = [remainingIndices[j], remainingIndices[i]];
+    }
+
+    const gridStagger = 0.08;
+    remainingIndices.forEach((imgIdx, stepIdx) => {
+      introTl.to(gridImgEls[imgIdx], {
+        opacity: 1,
+        duration: 0.22,
+        ease: 'power2.out'
+      }, gridFadeStartTime + (stepIdx * gridStagger));
+    });
+
+    const gridEndTime = gridFadeStartTime + (remainingIndices.length * gridStagger) + 0.22;
+
+    // Text 2 starts immediately upon grid completion (0s pause)
+    const t2StartTime = gridEndTime;
+
+    // TEXT 2: Slow fade in (2 seconds) and slow zoom from 95% to 100%, total animation duration 4 seconds
+    introTl.to(scene1Text2El, {
+      opacity: 1,
+      duration: 2.0,
+      ease: 'power2.out'
+    }, t2StartTime);
+
+    introTl.to(scene1Text2El, {
+      scale: 1.0,
+      duration: 4.0,
+      ease: 'power2.out'
+    }, t2StartTime);
+
+    const t2EndTime = t2StartTime + 4.0;
+
+    // BUTTON: comes in exactly as TEXT 2 ends its movement (t2EndTime)
+    const buttonStartTime = t2EndTime;
+    if (scene1MeetBtn) {
+      introTl.to(scene1MeetBtn, {
+        y: 0,
+        opacity: 1,
+        duration: 1.0,
+        ease: 'power2.out',
+        onStart: () => {
+          scene1MeetBtn.style.pointerEvents = 'auto';
+        }
+      }, buttonStartTime);
+    }
+  }
+
+  return introTl;
 }
 
-// 3. Click-to-Enter Exit Animation & Transition to Scene 2
+scene1Tl = initScene1();
+
+// 3. Transition from Scene 1 to Scene 2 via Funnel Swallowing
 let isEntering = false;
 function handleEnter() {
   if (isEntering) return;
   isEntering = true;
 
-  // Kill in-flight intro timeline to prevent conflicting text tweens
-  if (introTl) {
-    introTl.kill();
-  }
-
-  // Stop intro video looping
-  if (cancelIntroVideoLoop) {
-    cancelIntroVideoLoop();
+  // Kill in-flight intro timeline
+  if (scene1Tl) {
+    scene1Tl.kill();
   }
 
   // Just-In-Time: Trigger prefetch for Scene 3 assets as soon as Scene 1 is exited
   loadScene3Assets();
 
-  const exitTl = gsap.timeline();
+  const funnelExitTl = gsap.timeline();
 
-  // 1. Shrink mask (Iris-out transition)
-  if (portalEl) {
-    gsap.set(portalEl, { clipPath: 'circle(50% at 50% 50%)' });
-    exitTl.to(portalEl, {
-      clipPath: 'circle(0% at 50% 50%)',
-      duration: 0.9,
-      ease: 'power1.in',
+  // 1. #scene1-content moves up as it shrinks and fades with ease-in so it looks like it falls into the rising funnel
+  if (scene1Content) {
+    funnelExitTl.to(scene1Content, {
+      y: () => -(window.innerHeight * 0.35),
+      scale: 0,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.in',
+      transformOrigin: '50% 50%'
     }, 0);
   }
 
-  // 2. Un-type prompt text right-to-left (backspacing) twice as fast as type-in (0.4s vs 0.8s)
-  if (promptTextEl) {
-    const currentText = promptTextEl.textContent || 'click_to_enter';
-    const backspaceState = { len: currentText.length };
-    exitTl.to(backspaceState, {
-      len: 0,
-      duration: 0.4,
-      ease: 'none',
-      onUpdate: () => {
-        const remaining = Math.max(0, Math.ceil(backspaceState.len));
-        promptTextEl.textContent = currentText.substring(0, remaining);
-      },
-      onComplete: () => {
-        promptTextEl.textContent = '';
-      },
+  // 2. Funnel elevates and swallows them in the center hole, continuing until screen is all black
+  if (scene1FunnelWrapper) {
+    funnelExitTl.to(scene1FunnelWrapper, {
+      y: () => -(window.innerHeight * 2.8),
+      duration: 1.8,
+      ease: 'power2.inOut'
     }, 0);
   }
 
-  // 3. Begin Scene 2 typing (Prompt remains stationary at vertical middle, flush left)
-  exitTl.call(() => {
-    promptTextEl.innerHTML = '';
+  // Seamless transition: Turn scene1Container black before hiding to avoid any bottom white flash
+  if (scene1Container) {
+    funnelExitTl.to(scene1Container, {
+      backgroundColor: '#000000',
+      duration: 0.3
+    }, 0.9);
+  }
+
+  // 3. Resume Phase 1.4 on the black canvas
+  funnelExitTl.call(() => {
+    if (scene1Container) {
+      scene1Container.style.display = 'none';
+    }
+
+    if (promptEl) {
+      gsap.set(promptEl, {
+        opacity: 1,
+        pointerEvents: 'auto',
+        yPercent: -50,
+        x: 0,
+        y: 0,
+        scale: 1,
+        transformOrigin: '0% 0%'
+      });
+    }
+
+    if (promptTextEl) {
+      promptTextEl.innerHTML = '';
+    }
 
     // Scene 2: Type "hello_this_is_molotov"
     const scene2Tl = gsap.timeline({
@@ -2395,21 +2613,48 @@ gsap.set(['#scene6-purchase-btn', '#scene7-purchase-btn', '#scene9-purchase-btn'
   pointerEvents: 'none'
 });
 
-const introVideoEl = document.getElementById('intro-video');
-const introSectionEl = document.getElementById('intro-portal-section');
+// Scene 1 Lightbox Event Listeners
+if (scene1LightboxClose) {
+  scene1LightboxClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeScene1Lightbox();
+  });
+}
 
-if (promptEl) {
-  promptEl.addEventListener('click', handleEnter);
+if (scene1Lightbox) {
+  scene1Lightbox.addEventListener('click', (e) => {
+    if (e.target === scene1Lightbox) {
+      e.stopPropagation();
+      closeScene1Lightbox();
+    }
+  });
 }
-if (portalEl) {
-  portalEl.addEventListener('click', handleEnter);
-  portalEl.style.cursor = 'pointer';
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && scene1Lightbox && !scene1Lightbox.classList.contains('pointer-events-none')) {
+    closeScene1Lightbox();
+  }
+});
+
+// Development feature: Clicking anywhere on Scene 1 mid-animation immediately fast-forwards to the final layout
+if (scene1Container) {
+  scene1Container.addEventListener('click', (e) => {
+    if (scene1Lightbox && !scene1Lightbox.classList.contains('pointer-events-none')) {
+      return;
+    }
+    if (scene1MeetBtn && (e.target === scene1MeetBtn || scene1MeetBtn.contains(e.target))) {
+      if (scene1Tl && scene1Tl.progress() < 1) {
+        e.stopPropagation();
+        skipScene1ToEnd();
+      }
+      return;
+    }
+    if (scene1Tl && scene1Tl.progress() < 1) {
+      skipScene1ToEnd();
+    }
+  });
 }
-if (introVideoEl) {
-  introVideoEl.addEventListener('click', handleEnter);
-  introVideoEl.style.cursor = 'pointer';
-}
-if (introSectionEl) {
-  introSectionEl.addEventListener('click', handleEnter);
-  introSectionEl.style.cursor = 'pointer';
+
+if (scene1MeetBtn) {
+  scene1MeetBtn.addEventListener('click', handleEnter);
 }

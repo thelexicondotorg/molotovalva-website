@@ -10,11 +10,77 @@
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet" />
 
     <!-- Scene 1 Critical Preloads -->
-    <link rel="preload" as="image" href="/images/01-click_to_enter-v2.jpg" />
+    <link rel="preload" as="image" href="/images/MA-Grid-01.jpg" />
     <link rel="preload" as="font" type="font/ttf" href="/fonts/Platelet Regular.ttf" crossorigin />
   </head>
   <body class="bg-black text-white min-h-screen font-mono selection:bg-[#00E900] selection:text-black overflow-x-hidden">
     
+    <!-- Scene 1: The New White Intro Stage & Funnel Transition (Fixed Overlay) -->
+    <div id="scene1-container" class="fixed inset-0 z-40 bg-white flex flex-col items-center overflow-y-auto overflow-x-hidden select-none cursor-pointer">
+      <!-- 4 Core Elements in Main Container (max-w-[1366px], px-4 md:px-[50px]) -->
+      <div id="scene1-content" class="w-full max-w-[1366px] px-4 md:px-[50px] flex flex-col items-center text-black relative z-10 origin-bottom m-auto py-8 md:py-12" style="transform-origin: 50% 90%;">
+        
+        <!-- 1. Text Box 1 (max-width: 840px, horizontally centered, 50px bottom spacing) -->
+        <p id="scene1-text-1" class="scene1-text w-full max-w-[840px] mx-auto text-left font-serif text-[1.15rem] md:text-[1.3rem] leading-[1.45] text-black mb-[50px]">
+        </p>
+
+        <!-- 2. 20-Image Grid (5x4, max-width: 1366px, 50px bottom spacing) -->
+        <div id="scene1-grid-wrapper" class="relative w-full max-w-[1366px] mb-[50px]">
+          <!-- Grid of 20 thumbnail cards -->
+          <div id="scene1-grid" class="grid grid-cols-5 gap-2 w-full">
+            <!-- 20 slots with MA-Grid images (excluding 16-20) -->
+          </div>
+          
+          <!-- Hero Floating MA-Grid-01 Container (Native size: max-w-[477px]) -->
+          <div id="scene1-hero-container" class="absolute inset-0 flex items-center justify-center pointer-events-none z-20 opacity-0" style="visibility: hidden;">
+            <img id="scene1-hero-img" src="/images/MA-Grid-01.jpg" alt="Molotov Alva Scene" class="w-full max-w-[477px] aspect-[477/328] object-cover shadow-2xl" />
+          </div>
+        </div>
+
+        <!-- 3. Text Box 2 (max-width: 840px, horizontally centered, 100px bottom spacing) -->
+        <p id="scene1-text-2" class="scene1-text w-full max-w-[840px] mx-auto text-left font-serif text-[1.15rem] md:text-[1.3rem] leading-[1.45] text-black mb-[100px]">
+        </p>
+
+        <!-- 4. Meet Molotov Button -->
+        <button id="scene1-meet-btn" type="button" class="scene1-btn relative overflow-hidden bg-black text-white px-8 py-3.5 text-sm md:text-base font-mono font-bold tracking-widest uppercase cursor-pointer opacity-0 pointer-events-none">
+          <span class="scene1-btn-swipe"></span>
+          <span class="scene1-btn-inner inline-flex items-center">
+            <span>MEET MOLOTOV</span><span class="inline-block ml-[20px]">&darr;</span>
+          </span>
+        </button>
+      </div>
+
+      <!-- The Funnel Transition Graphic (Positioned offscreen at bottom) -->
+      <div id="scene1-funnel-wrapper" class="absolute inset-x-0 top-[100vh] w-full pointer-events-none z-20 flex flex-col justify-start">
+        <svg id="scene1-funnel-svg" viewBox="0 0 1200 600" preserveAspectRatio="none" class="w-full h-[55vh] min-h-[320px] block overflow-visible">
+          <!-- Left Black Triangle Wing -->
+          <path d="M -5,-5 L 535,460 Q 550,510 550,605 L -5,605 Z" fill="#000000"></path>
+          <!-- Right Black Triangle Wing -->
+          <path d="M 1205,-5 L 665,460 Q 650,510 650,605 L 1205,605 Z" fill="#000000"></path>
+        </svg>
+        <!-- Solid Black Base extending 350vh to permanently cover screen with zero bottom white gap -->
+        <div class="w-full h-[350vh] bg-black -mt-[2px]"></div>
+      </div>
+
+      <!-- Scene 1: Image Lightbox Modal (90% white overlay) -->
+      <div id="scene1-lightbox" class="fixed inset-0 z-50 bg-white/90 flex items-center justify-center p-4 md:p-8 opacity-0 pointer-events-none transition-opacity duration-200 select-none">
+        <!-- Full-size Image Card in Middle of Screen (150% size: 716px x 492px) -->
+        <div id="scene1-lightbox-card" class="relative w-[716px] max-w-[90vw] flex flex-col items-center">
+          <div class="relative w-full">
+            <!-- Close 'X' Button: Outside image at top-right (-25px, -25px), black, no shadow, half size -->
+            <button id="scene1-lightbox-close" type="button" aria-label="Close image" class="absolute -top-[25px] -right-[25px] text-black hover:opacity-60 text-lg md:text-2xl font-mono font-bold cursor-pointer transition-opacity z-20 leading-none select-none">
+              &times;
+            </button>
+            <img id="scene1-lightbox-img" src="" alt="Molotov Alva Full Size" class="w-full aspect-[477/328] object-cover block shadow-2xl" />
+          </div>
+          <!-- Caption: 1rem font-size, same font family (font-serif), italic, text-black -->
+          <p id="scene1-lightbox-caption" class="w-full text-left font-serif italic text-[1rem] leading-[1.45] text-black mt-3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed haec quidem liberius ab eo dicuntur et saepius.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- 1366px Main Canvas Wrapper (Fixed Viewport Stage) -->
     <div id="canvas-container" class="fixed inset-0 pointer-events-none flex justify-center z-10">
       <div id="main-canvas" class="w-full max-w-[1366px] h-full relative px-4 md:px-[50px] flex flex-col items-center justify-center">
@@ -24,28 +90,10 @@
           <span id="terminal-progress-text">0%</span><span class="terminal-cursor">_</span>
         </div>
 
-        <!-- Scene 1: Interactive Terminal Prompt (Vertical Middle, Flush Left at Canvas Left Anchor) -->
-        <div class="terminal-prompt absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-auto" role="button" tabindex="0" id="terminal-prompt">
+        <!-- Scene 1/2: Interactive Terminal Prompt (Vertical Middle, Flush Left at Canvas Left Anchor) -->
+        <div class="terminal-prompt absolute left-4 md:left-[50px] top-1/2 z-30 pointer-events-none opacity-0" role="button" tabindex="0" id="terminal-prompt">
           <span class="prompt-prefix">&gt;:&nbsp;</span><span id="prompt-text"></span><span class="terminal-cursor">_</span>
         </div>
-
-        <!-- Central Portal Section -->
-        <section id="intro-portal-section" class="flex flex-col items-center justify-center text-center pointer-events-auto relative z-20 cursor-pointer">
-          
-          <!-- Central Media Portal: 300px x 300px Circular Mask with Looping Video -->
-          <div class="media-portal border border-neutral-900 shadow-2xl relative overflow-hidden" id="media-portal">
-            <video 
-              id="intro-video" 
-              playsinline 
-              muted 
-              autoplay
-              loop
-              src="/images/S0-Intro-Video-v3.mp4" 
-              class="w-full h-full object-cover absolute inset-0 opacity-100"
-            ></video>
-          </div>
-
-        </section>
 
         <!-- Scene 2: 5 Central Portals (Each 300px x 300px, Stacked at Center, Initially Opacity 0) -->
         <div id="scene2-portals" class="absolute inset-0 flex items-center justify-center pointer-events-none">
