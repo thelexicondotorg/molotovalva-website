@@ -30,7 +30,7 @@
 | **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Standard 300px aperture; terminal prompt stationary at vertical middle flush left; un-typing click transition |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | **Dynamic Row Spacing**: `rowScale: 136/300`, `rowStep = Math.round((w - 160) / 4 * 0.92)` |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | **Grid Fitting**: `s3GridScale = Math.min(1.0, (w - 64) / 846)` ($0.832$ on 768px) |
-| **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | **Grid Fitting**: `s4GridScale = Math.min(1.0, (w - 64) / 796)` ($0.884$ on 768px) |
+| **Scene 4** | `you_think_in_fractions_with_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | **Grid Fitting**: `s4GridScale = Math.min(1.0, (w - 64) / 796)` ($0.884$ on 768px) |
 | **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | 3x2 grid (304px x 468px) centered comfortably |
 | **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | 15-circle constellation (724px width) fits unscaled inside 768px (22px margins) |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | **Centered Stack**: Portal `y: -190` (scale 0.85), text `y: 160` (max-width 600px) |

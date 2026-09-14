@@ -36,7 +36,7 @@
 | **Scene 1** | The Genesis & Funnel Transition | Pre-Scroll | Event-Driven | White stage $\to$ Text 1 center fade & 7s zoom $\to$ MA-Grid-01 fade-in & 20-image grid assembly (5x4) $\to$ Immediate Text 2 fade & zoom (4s) $\to$ Button $\to$ Seamless funnel swallowing into black |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | 5 center flashes $\to$ 5-circle row $\to$ Word-by-word heading $\to$ Staggered exit |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
-| **Scene 4** | `you_think_in_fractions_then_call_the_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
+| **Scene 4** | `you_think_in_fractions_with_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
 | **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | Orbital gravitational convergence (6 circles) $\to$ 3x2 grid $\to$ Heading $\to$ Exit |
 | **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Centered video scrub ($6.0\text{s}$) $\to$ 15-circle constellation $\to$ Purchase CTA $\to$ Exit |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | 512px avatar zoom $\to$ End-credits text crawl $\to$ Split layout separation $\to$ Exit |
@@ -140,13 +140,13 @@
 | **Phase 13** | `7,500px – 8,100px` | 600px | **Left Grid Assembly**:<br>• Deer portal glides and scales into Slot [3,3] (`power1.inOut`).<br>• Over the final 60px before docking (`8,040px – 8,100px`), the inner high-res detail layer smoothly dissolves into the base layer within the moving portal, matching Slot [3,3] with zero jump-cut or stationary ghosting.<br>• 19 remaining circles of Columns 1–5 fade in in randomized order (24px stagger, 120px duration). |
 | **Phase 14** | `8,100px – 8,300px` | 200px | **Contemplation Hold**: 200px stillness on completed left-half grid and "You see the deer". |
 | **Phase 15** | `8,300px – 8,900px` | 600px | **Right Grid Wildfire & Heading Completion**:<br>• 20 circles of Columns 6–10 appear in randomized order.<br>• Heading completes: "...but miss the burning forest." (words 4–8 fade up, 120px each). |
-| **Phase 16** | `8,900px – 10,000px` | 1,100px | **Subheading & Physical Telescope Flip**:<br>• `8,900px – 9,150px`: Part 1 fades in; Part 2 fades in mirrored (`scaleX: -1`).<br>• `9,150px – 9,300px`: 150px mirror contemplation hold.<br>• `9,300px – 9,700px`: Part 2 physically flips horizontally (`scaleX: -1 -> 1`, `power2.inOut`).<br>• `9,700px – 10,000px`: 300px complete end-state stillness hold. |
+| **Phase 16** | `8,900px – 10,000px` | 1,100px | **Subheading & Physical Telescope Flip**:<br>• `8,900px – 9,150px`: Part 1 ("The tools you use to find solutions only show you what you want to see.") fades in; Part 2 fades in mirrored (`scaleX: -1`).<br>• `9,150px – 9,300px`: 150px mirror contemplation hold.<br>• `9,300px – 9,700px`: Part 2 physically flips horizontally (`scaleX: -1 -> 1`, `power2.inOut`).<br>• `9,700px – 10,000px`: 300px complete end-state stillness hold. |
 | **Phase 17** | `10,000px – 10,600px` | 600px | **Zero-Gravity Float-Away Exit & Prompt Un-type**:<br>• `10,000px – 10,600px`: `#scene3-prompt` stationed at top of screen un-types right-to-left and clears cursor/prefix, disappearing completely before Scene 4.<br>• `10,000px – 10,350px`: Subheading floats up (`y: -40`, `opacity: 0`).<br>• `10,050px – 10,450px`: Heading floats up (`y: -60`, `opacity: 0`).<br>• `10,100px – 10,550px`: 40-circle grid floats up (`y: -80`, `opacity: 0`). |
 | **Phase 18** | `10,600px – 10,900px` | 300px | **Black Void Runway**: 300px pitch-black contemplation space before Scene 4. |
 
 ---
 
-## Scene 4: "you_think_in_fractions_then_call_the_consequences_unexpected_"
+## Scene 4: "you_think_in_fractions_with_consequences_unexpected_"
 **Pixel Range**: `10,600px – 18,600px` (Total Span: `8,000px`)  
 **Elements**: `#scene4-prompt`, `#scene4-video-portal` (`#scene4-video`), `#scene4-grid` (10 circles), `#scene4-heading`, `#scene4-subheading-line1`, `#scene4-subheading-line2`
 
@@ -155,7 +155,7 @@
 | **Phase 19** | `10,900px – 11,300px` | 400px | `#scene4-prompt` activates in place at vertical center, flush left (`opacity: 0 -> 1`, blinking cursor at `>: _`). |
 | **Phase 20** | `11,300px – 11,700px` | 400px | Clause 1 types: `you_think_in_fractions`. |
 | **Phase 21** | `11,700px – 11,800px` | 100px | Breathing pause with cursor blinking. |
-| **Phase 22** | `11,800px – 12,500px` | 700px | Clause 2 types: `_then_call_the_consequences_unexpected`. |
+| **Phase 22** | `11,800px – 12,500px` | 700px | Clause 2 types: `_with_consequences_unexpected`. |
 | **Phase 23** | `12,500px – 12,700px` | 200px | Centered stillness hold on full prompt. |
 | **Phase 24** | `12,700px – 13,200px` | 500px | Prompt translates vertically upward (zero horizontal displacement) till it butts with the top of the canvas at 50px from top (`y: -(H/2 - 50)`), holding there throughout Scene 4. |
 | **Phase 25** | `13,200px – 14,600px` | 1,400px | **Centered Video Scrub ($6.04\text{s}$)**:<br>• Fades in `13,200px – 13,350px` (150px).<br>• Video plays 0.0s to 6.04s scrubbed linearly.<br>• Fades out `14,450px – 14,600px` (150px). |

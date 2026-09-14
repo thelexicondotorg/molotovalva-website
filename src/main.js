@@ -1120,7 +1120,7 @@ function handleEnter() {
                   id: 'scene4',
                   promptSelector: '#scene4-prompt',
                   textSelector: '#scene4-prompt-text',
-                  fullText: 'you_think_in_fractions_then_call_the_consequences_unexpected',
+                  fullText: 'you_think_in_fractions_with_consequences_unexpected',
                   entrancePx: 10900,
                   typeStartPx: 11300,
                   typeEndPx: 12500,
@@ -1128,7 +1128,7 @@ function handleEnter() {
                   untypeEndPx: 18600,
                   typeFn: (p) => {
                     const part1 = 'you_think_in_fractions';
-                    const full = 'you_think_in_fractions_then_call_the_consequences_unexpected';
+                    const full = 'you_think_in_fractions_with_consequences_unexpected';
                     const currentPx = 11300 + p * 1200;
                     if (currentPx < 11700) {
                       const subP = (currentPx - 11300) / 400;
