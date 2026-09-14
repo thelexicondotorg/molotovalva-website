@@ -83,7 +83,7 @@ Each element ascends by `-200px` on the Y-axis while fading to `opacity: 0`.
 - **Typeface**: Adobe Garamond Pro Regular / Italic (`1.3rem`, `#A3A3A3`).
 - **Reveal**: Two-part sequence:
   - **Part 1 (Regular)**: `300px` fade-in (`opacity: 0 → 1`, `y: 8px → 0px`), followed by a `100px` hold.
-  - **Part 2 (Italic)**: `300px` fade-in (`opacity: 0 → 1`, `y: 8px → 0px`).
+  - **Part 2**: `300px` fade-in (`opacity: 0 → 1`, `y: 8px → 0px`).
 
 ### Terminal CTA Button (`.purchase-btn`)
 - **Typeface**: Platelet monospace (`1.25rem`, `#00E900`).

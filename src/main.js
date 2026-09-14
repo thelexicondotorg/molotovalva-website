@@ -1445,7 +1445,7 @@ function handleEnter() {
                 3800
               );
 
-              // Part 2 (italic): Starts 100px earlier at 4200px, fades in over 300px (4200-4500)
+              // Part 2: Starts 100px earlier at 4200px, fades in over 300px (4200-4500)
               scrollTl.fromTo('#subheading-part2',
                 { opacity: 0, y: 8 },
                 { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
