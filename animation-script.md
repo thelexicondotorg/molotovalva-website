@@ -37,8 +37,8 @@
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | 5 center flashes $\to$ 5-circle row $\to$ Word-by-word heading $\to$ Staggered exit |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | Big Deer portal $\to$ 40-circle grid explosion $\to$ Subheading mirror flip $\to$ Exit |
 | **Scene 4** | `you_think_in_fractions_with_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 512px video scrub ($6.04\text{s}$) $\to$ Still handoff $\to$ 10-circle grid $\to$ Exit |
-| **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | Orbital gravitational convergence (6 circles) $\to$ 3x2 grid $\to$ Heading $\to$ Exit |
-| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Centered video scrub ($6.0\text{s}$) $\to$ 15-circle constellation $\to$ Purchase CTA $\to$ Exit |
+| **Scene 5** | `we_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | Orbital gravitational convergence (6 circles) $\to$ 3x2 grid $\to$ Heading $\to$ Exit |
+| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | Centered video scrub ($6.0\text{s}$) $\to$ 15-circle constellation $\to$ Narrative directive paragraph $\to$ Exit |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | 512px avatar zoom $\to$ End-credits text crawl $\to$ Split layout separation $\to$ Exit |
 | **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | Staggered lateral card entrance (Quotes 1 & 3 from left, 2 & 4 from right) at 100% scale $\to$ 2x2 grid reading hold $\to$ Exit |
 | **Scene 9** | `instructions_for_toppling_goliath_provided_` | `49,100px – 58,500px` | 9,400px | 600px book circle $\to$ Under-book text $\to$ Side-by-side finale $\to$ Footer form |
@@ -52,10 +52,17 @@
 - **Scene 1 Motion Rule**: **Only use ease-out (`power2.out`), no ease-in / ease-in-out for scaling, position, and translation.**
 - **Fast-Forward Dev Helper**: Clicking anywhere on the stage mid-animation instantly completes all tweens, rendering the full end-state layout immediately.
 - **Stage**: Pure white page (`#ffffff`). Main content container `#scene1-content` constrained to `max-w-[1366px]` with container padding (`px-4 md:px-[50px]`) and permanently centered both vertically and horizontally via `m-auto` (equal space above and below). Both text boxes are horizontally centered (`w-full max-w-[840px] mx-auto text-left`).
-- **Vertical Spacing Architecture**:
-  - Text Box 1 to Grid: `50px` (`mb-[50px]`).
-  - 20-Image Grid to Text Box 2: `50px` (`mb-[50px]`).
-  - Text Box 2 to Button: `100px` (`mb-[100px]`).
+- **Vertical Spacing & Responsive Adaptation Architecture**:
+  - **Full Desktop Baseline ($h > 1050\text{px}$)**:
+    - Text Box 1 to Grid: `50px` (`mb-[50px]`).
+    - 20-Image Grid to Text Box 2: `50px` (`mb-[50px]`).
+    - Text Box 2 to Button: `100px` (`mb-[100px]`).
+    - Typography: Adobe Garamond Pro `1.3rem` (leading 1.45).
+  - **Laptop & MacBook Adaptation ($h \le 1050\text{px}$ or $w \le 1600\text{px}$)**:
+    - Grid width constrained to `min(720px, calc((100vh - 340px) * 1.8))` ensuring grid height stays at `~380px` instead of `~684px`.
+    - Spacing compressed to `clamp(12px, 1.8vh, 22px)` between sections and `clamp(16px, 2.5vh, 28px)` before button.
+    - Typography scaled to `clamp(1.02rem, 1.6vh, 1.18rem)` (leading 1.4).
+    - Guarantees entire Scene 1 fits seamlessly within `100vh` across 13", 14", 15", and 16" MacBooks with no scroll.
 - **Phase 1.1 — Text Box 1 Center Fade & Slow Zoom (`0.0s – 8.2s`)**:
   - **Typography**: Adobe Garamond Pro, 1.15rem (mobile) / 1.3rem (desktop), line-height 1.45, color black (`#000000`).
   - **Text**: *"In 2006, Douglas Gayeton stumbled upon an amplified intelligence living in Second Life. The result of that encounter, <span class="italic font-bold">Molotov Alva and His Search for the Creator</span>, became a ten-part HBO series and ignited an international academic debate over where the human ends and the synthetic begins."*
@@ -81,8 +88,8 @@
   - **Choreography**:
     - `11.04s – 13.04s`: Slow fade in over 2.0s (`opacity: 0 -> 1`, `power2.out`).
     - `11.04s – 15.04s`: Slow zoom from 95% to 100% over the full 4.0s duration (`scale: 0.95 -> 1.0`, `power2.out`).
-- **Phase 1.5 — Button Entrance, Outer-Edge Shadow Pulse & Interactive Swipe Hover (`14.04s – 15.04s`)**:
-  - Button `MEET MOLOTOV` slides up and fades in over 1.0s (`y: 30 -> 0`, `opacity: 0 -> 1`, `power2.out`, pointer events enabled), entering **1 second earlier** (`14.04s`) to overlap with the final second of Text Box 2's movement.
+- **Phase 1.5 — Button Entrance, Outer-Edge Shadow Pulse & Interactive Swipe Hover (`13.04s – 14.04s`)**:
+  - Button `MEET MOLOTOV` slides up and fades in over 1.0s (`y: 30 -> 0`, `opacity: 0 -> 1`, `power2.out`, pointer events enabled), entering **1 second earlier** at `13.04s` (`t2EndTime - 2.0s`) right as Text Box 2 completes its opacity fade-in.
   - **Outer-Edge Shadow Pulse**: When not hovered, the button maintains fixed geometry (no scaling) and emits a soft shadow ripple emanating outward from its perimeter edges every 2.5 seconds via CSS (`animation: scene1BtnPulse 2.5s infinite`, expanding over `1.125s` to `35px` with a `1.375s` rest interval).
   - **Typography & Spacing**: 20px spacing between `"MOLOTOV"` and arrow `↓` (`ml-[20px]`).
   - **Swipe Reversible Hover Transition**:
@@ -161,26 +168,26 @@
 | **Phase 25** | `13,200px – 14,600px` | 1,400px | **Centered Video Scrub ($6.04\text{s}$)**:<br>• Fades in `13,200px – 13,350px` (150px).<br>• Video plays 0.0s to 6.04s scrubbed linearly.<br>• Fades out `14,450px – 14,600px` (150px). |
 | **Phase 26** | `14,600px – 14,650px` | 50px | **Transition Gap**: Clean 50px pause after video fade-out before grid assembly. |
 | **Phase 27** | `14,650px – 16,100px` | 1,450px | **10-Circle Grid Assembly & Heading**:<br>• 10 circles fade in randomly (130px stagger, 180px dur).<br>• Position 1 has Wood (`[0,0]`), Position 2 has Activists (`[0,1]`), Position 5 has Orangutan (`[0,4]`), Position 8 has Plane (`[1,2]`).<br>• Position 9 has Woman in Sea of Bottles (`[1,3]`), appearing 6th in sequence (mid-way) at `15,300px`.<br>• Heading words "Nature thinks in wholes." fade up (`14,800px – 16,000px`, 300px per word). |
-| **Phase 28** | `16,100px – 16,900px` | 800px | **Subheading reveal**:<br>• Line 1 (`16,100px – 16,500px`), Line 2 (`16,500px – 16,900px`). |
+| **Phase 28** | `16,100px – 16,900px` | 800px | **Subheading reveal**:<br>• Line 1 (`16,100px – 16,500px`): "While climate change presents our planet with existential challenges, biodiversity loss,"<br>• Line 2 (`16,500px – 16,900px`): "desertification, and water scarcity should be of equal concern. They’re all connected." |
 | **Phase 29** | `16,900px – 18,000px` | 1,100px | **Final Scene 4 Reading Hold**: 1,100px complete stillness hold on full 10-circle grid, heading, and subheading. |
 | **Phase 30** | `18,000px – 18,600px` | 600px | **Zero-Gravity Float-Away Exit & Prompt Un-type**:<br>• `18,000px – 18,600px`: `#scene4-prompt` stationed at top of screen un-types right-to-left and clears cursor/prefix, disappearing completely before Scene 5.<br>• Subheading (`y: -40`), Heading (`y: -60`), Grid (`y: -80`). |
 | **Phase 31** | `18,600px – 18,900px` | 300px | **Black Void Runway**: 300px pitch-black contemplation space before Scene 5. |
 
 ---
 
-## Scene 5: "you_say_no_instead_of_yes_"
+## Scene 5: "we_say_no_instead_of_yes_"
 **Pixel Range**: `18,600px – 25,150px` (Total Span: `6,550px`)  
 **Elements**: `#scene5-prompt`, `#scene5-grid` (6 circles), `#scene5-heading`, `#scene5-subheading-line1`, `#scene5-subheading-line2-part1`, `#scene5-subheading-line2-part2`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
 | **Phase 33** | `18,900px – 19,300px` | 400px | `#scene5-prompt` activates in place at vertical center, flush left (`opacity: 0 -> 1`, blinking cursor at `>: _`). |
-| **Phase 34** | `19,300px – 20,000px` | 700px | Prompt types: `you_say_no_instead_of_yes`. |
+| **Phase 34** | `19,300px – 20,000px` | 700px | Prompt types: `we_say_no_instead_of_yes`. |
 | **Phase 35** | `20,000px – 20,500px` | 500px | Centered breathing hold on prompt with cursor blinking. |
 | **Phase 36** | `20,500px – 21,000px` | 500px | Prompt translates vertically upward (zero horizontal displacement) till it butts with the top of the canvas at 50px from top (`y: -(H/2 - 50)`), holding there throughout Scene 5. |
 | **Phase 37** | `21,000px – 22,400px` | 1,400px | **Orbital Gravitational Convergence**:<br>6 circles converge from asymmetric off-center vector origins into 3x2 grid:<br>• `21,000px`: Slot [1,1] from `x: -240, y: -180`<br>• `21,100px`: Slot [0,0] from `x: -190, y: 210`<br>• `21,220px`: Slot [2,1] from `x: 230, y: -240`<br>• `21,320px`: Slot [1,0] from `x: 260, y: 150`<br>• `21,420px`: Slot [0,1] from `x: -270, y: -50`<br>• `21,520px`: Slot [2,0] from `x: 70, y: -260` |
 | **Phase 38** | `22,400px – 22,900px` | 500px | Heading words "Doing less bad is bad." fade up sequentially (100px each). |
-| **Phase 39** | `22,900px – 24,000px` | 1,100px | **Subheading reveal**:<br>• Line 1 (`22,900px – 23,200px`)<br>• 100px pause (`23,200px – 23,300px`)<br>• Line 2 Part 1 (`23,300px – 23,600px`)<br>• 100px pause after question mark (`23,600px – 23,700px`)<br>• Line 2 Part 2: "What if you said yes?" (`23,700px – 24,000px`). |
+| **Phase 39** | `22,900px – 24,000px` | 1,100px | **Subheading reveal**:<br>• Line 1 (`22,900px – 23,200px`): "Nobody gets out of bed in the morning to do less bad, but ask us to save the planet, and we show up."<br>• 100px pause (`23,200px – 23,300px`)<br>• Line 2 Part 1 (`23,300px – 23,600px`): "What if we stopped organizing against things and started building toward what we want? "<br>• 100px pause after question mark (`23,600px – 23,700px`)<br>• Line 2 Part 2 (`23,700px – 24,000px`): "What if we said yes?". |
 | **Phase 40** | `24,000px – 24,600px` | 600px | **Scene 5 Reading Hold**: 600px complete stillness hold on 3x2 grid and full text. |
 | **Phase 41** | `24,600px – 25,150px` | 550px | **Zero-Gravity Staggered Exit & Prompt Un-type**:<br>• `24,600px – 25,100px`: `#scene5-prompt` stationed at top of screen un-types right-to-left and clears cursor/prefix, disappearing completely before Scene 6.<br>• 3x2 Grid (`24,700px – 24,950px`)<br>• Heading (`24,800px – 25,050px`)<br>• Subheading (`24,900px – 25,150px`). |
 
@@ -188,7 +195,7 @@
 
 ## Scene 6: "our_future_without_food_illustratively_explained_by_ai_"
 **Pixel Range**: `25,100px – 35,950px` (Total Span: `10,850px`)  
-**Elements**: `#scene6-prompt`, `#scene6-video-portal` (`#scene6-video`), `#scene6-grid` (15 circles), `#scene6-heading`, `#scene6-subheading-line1`, `#scene6-subheading-line2`, `#scene6-purchase-btn`
+**Elements**: `#scene6-prompt`, `#scene6-video-portal` (`#scene6-video`), `#scene6-grid` (15 circles), `#scene6-heading`, `#scene6-subheading-line1`, `#scene6-subheading-paragraph`
 
 | Phase | Pixel Range | Duration | Action / Animation Details |
 | :--- | :---: | :---: | :--- |
@@ -200,10 +207,10 @@
 | **Phase 47** | `28,900px – 28,950px` | 50px | **Transition Gap**: Clean 50px darkness hold before grid assembly begins. |
 | **Phase 48** | `28,950px – 30,450px` | 1,500px | **Assembly of All 15 Museum Circles**: All 15 circles fly in with rotation and scale into 5x3 constellation (`power2.out`).<br>• Burning forest circle (`#scene6-circle-0-2`, Row 0 Col 2) flies in 8th (**mid-sequence**) at `29,700px`. |
 | **Phase 49** | `30,450px – 31,250px` | 800px | Heading words reveal: *"Molotov Alva and the Museum of Extraction."* fade up (100px each). |
-| **Phase 50** | `31,250px – 32,050px` | 800px | **Subheading reveal**:<br>• Line 1: "As witnessed by Douglas Gayeton." (`31,250px – 31,550px`)<br>• 100px pause (`31,550px – 31,650px`)<br>• Line 2: "272 pages. Signed and numbered edition of 500." (`31,650px – 31,950px`). |
-| **Phase 51** | `32,050px – 32,350px` | 300px | **Purchase Button Entrance**: `#scene6-purchase-btn` fades up (`y: 10 -> 0`, `opacity: 0 -> 1`, pointer-events unlocked). |
-| **Phase 52** | `32,350px – 35,300px` | 2,950px | **Reading & Interactive Hold**: 2,950px stillness on museum grid, typography, and active CTA button. |
-| **Phase 53** | `35,300px – 35,950px` | 650px | **Zero-Gravity Staggered Exit & Prompt Un-type** (`y: -200`, `opacity: 0`):<br>• `35,300px – 35,900px`: `#scene6-prompt` stationed at top of screen un-types right-to-left and clears cursor/prefix, disappearing completely before Scene 7.<br>• 15-circle Grid (`35,400px – 35,650px`)<br>• Heading (`35,500px – 35,750px`)<br>• Subheading (`35,600px – 35,850px`)<br>• Purchase CTA (`35,700px – 35,950px`). |
+| **Phase 50** | `31,250px – 31,750px` | 500px | **Subheading Line 1 reveal**: "As witnessed by Douglas Gayeton." (`31,250px – 31,650px`). |
+| **Phase 51** | `31,750px – 32,350px` | 600px | **Narrative Directive Paragraph reveal**: "Pursuant to Molotov’s express directive, Rumplefarm Press has printed his words in full color, at twelve by nine inches, on FSC-certified paper, in Marceline, Missouri, the farm town Walt Disney later reconstructed as Disneyland’s Main Street from childhood memory, an act of faction the Museum of Extraction would recognize as its own." (`31,750px – 32,350px`, replacing former purchase button). |
+| **Phase 52** | `32,350px – 35,300px` | 2,950px | **Reading & Contemplation Hold**: 2,950px stillness on museum grid, typography, and directive paragraph. |
+| **Phase 53** | `35,300px – 35,950px` | 650px | **Zero-Gravity Staggered Exit & Prompt Un-type** (`y: -200`, `opacity: 0`):<br>• `35,300px – 35,900px`: `#scene6-prompt` stationed at top of screen un-types right-to-left and clears cursor/prefix, disappearing completely before Scene 7.<br>• 15-circle Grid (`35,400px – 35,650px`)<br>• Heading (`35,500px – 35,750px`)<br>• Subheading (`35,600px – 35,850px`). |
 
 ---
 

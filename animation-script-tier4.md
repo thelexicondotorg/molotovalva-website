@@ -31,7 +31,7 @@
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | **Micro 5-Circle Row**: `rowScale <= 0.24`, `rowStep = Math.round((w - 48) / 4 * 0.88)` |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | **Grid Fitting**: `s3GridScale = Math.min(1.0, (w - 32) / 846)` ($0.405$ on 375px) |
 | **Scene 4** | `you_think_in_fractions_with_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | **Grid Fitting**: `s4GridScale = Math.min(1.0, (w - 32) / 796)` ($0.431$ on 375px) |
-| **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | **Container Scale**: `#scene5-container` fits height and width (`s5ContainerScale`) |
+| **Scene 5** | `we_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | **Container Scale**: `#scene5-container` fits height and width (`s5ContainerScale`) |
 | **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | **Container Scale**: `#scene6-container` fits height and width (`s6ContainerScale`) |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | **Mobile Stack**: Height-aware portal scale ($0.42 - 0.55$), compact typography (`0.88rem`, gap 12px) |
 | **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | **Mobile Cards**: Fly scale ($0.65 - 1.0$), `sideOffsetY <= 50px`, grid layer scale fitting |

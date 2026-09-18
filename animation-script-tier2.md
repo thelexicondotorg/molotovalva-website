@@ -27,15 +27,15 @@
 
 | Scene | Working Title / Prompt | Pixel Range | Scroll Span | Tier 2 Specific Adaptation |
 | :---: | :--- | :---: | :---: | :--- |
-| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Standard 300px aperture; terminal prompt stationary at vertical middle flush left; un-typing click transition |
+| **Scene 1** | `click_to_enter_` | Pre-Scroll | Event-Driven | Height-fitted 5x4 grid (`max-w: min(720px, calc((100vh - 340px) * 1.8))`), compact font (`1.02rem - 1.18rem`), tight spacing; 100% fits within `100vh` on all laptops |
 | **Scene 2** | `hello_this_is_molotov_` | `0px – 5,550px` | 5,550px | Standard 5-circle row (`rowStep: 194px`, `rowScale: 0.5667`); fits inside 1024px with 126px margins |
 | **Scene 3** | `you_look_through_the_wrong_end_of_telescopes_` | `5,500px – 10,600px` | 5,100px | 40-circle grid (846px width) fits unscaled inside 1024px (89px margins) |
 | **Scene 4** | `you_think_in_fractions_with_consequences_unexpected_` | `10,600px – 18,600px` | 8,000px | 10-circle grid (796px width) fits unscaled inside 1024px (114px margins) |
-| **Scene 5** | `you_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | 3x2 grid (304px x 468px) centered comfortably |
-| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | 15-circle constellation (724px width) fits; height-scaled when $h < 820\text{px}$ |
+| **Scene 5** | `we_say_no_instead_of_yes_` | `18,600px – 25,150px` | 6,550px | 3x2 grid (304px x 468px) centered comfortably |
+| **Scene 6** | `our_future_without_food_illustratively_explained_by_ai_` | `25,100px – 35,950px` | 10,850px | 15-circle constellation scaled to 0.60 to accommodate added directive paragraph |
 | **Scene 7** | `narrated_by_an_otherwordly_intelligence_` | `35,900px – 41,650px` | 5,750px | **Fitted Split**: Portal `x: -250` (scale 0.80), text `x: 225` (max-width 460px) |
 | **Scene 8** | `reviewed_by_machines_` | `41,600px – 49,150px` | 7,550px | **Dynamic Fly Scale**: `scale` dynamically fitted between 1.2 and 2.0; `sideOffsetY <= 140px` |
-| **Scene 9** | `instructions_for_toppling_goliath_provided_` | `49,100px – 58,500px` | 9,400px | **Fitted Finale**: Book `x: -260`, content `x: 235`; height-scaled elevation |
+| **Scene 9** | `instructions_for_toppling_goliath_provided_` | `49,100px – 58,500px` | 9,400px | **Fitted Finale**: Book peak scale 0.60 (360px), elevation `y: -85` (anti-prompt interference), text `y: 180`, side split `x: -220 / 180` |
 
 ---
 
@@ -123,12 +123,18 @@
 ---
 
 ### Scene 9: "instructions_for_toppling_goliath_provided_" (`49,100px – 58,500px`)
-- **Phase 80 (Under-Book Text)**:
-  - `desktopHeightScale = Math.min(1.0, Math.max(0.70, (window.innerHeight - 100) / 750))`
-  - `s9BookElevateY = window.innerHeight >= 850 ? -160 * desktopHeightScale : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60)))`
-  - `s9ContentY = 335 * desktopHeightScale`
-- **Phase 84 (Finale Side-by-Side Split)**:
-  - Book coordinates: `x: -260`, `y: 0`, `scale: 0.60` ($360\text{px}$ diameter).
-  - Content coordinates: `x: 235`, `y: 0`, `width: 480px`.
-  - Total span: $360 + 40 + 480 = 880\text{px} < 1024\text{px}$.
-  - Footer Elevation: `s9FooterElevationY = window.innerHeight >= 1050 ? -150 : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5))`.
+- **Phase 79 (Center Book Entrance — Height & Scale Control)**:
+  - **Aperture Fitting**: Native 600px book circle scales up from `0` to **`0.60`** ($360\text{px}$ visual diameter) instead of the oversized 600px desktop scale (`1.0`).
+  - **Dead Center Headroom**: In vertical center ($y = 0$), top edge of the 360px circle sits at $204\text{px}$ from top (on 768px height), leaving $\approx 119\text{px}$ clearance below the prompt.
+- **Phase 80 (Under-Book Text & Centered Upward Slide)**:
+  - **Balanced Vertical Elevation**: Book upward slide is set to **`s9BookElevateY = -30px`** (on $h \ge 850\text{px}$) or `-55px` (on $h < 850\text{px}$), moving the entire cluster down by $\approx 55\text{px}$ to center it vertically on the screen.
+  - **Prompt Protection**: Top of book circle stays at $\approx 173\text{px}$ below `#scene9-prompt`. Zero interference with the top prompt.
+  - **Under-Book Text Placement**: Content wrapper activates at **`s9ContentY = 305px`** (on $h \ge 850\text{px}$) or `265px` (on $h < 850\text{px}$), maintaining a clean 45px gap directly underneath the circle and balancing the margins above the progress line.
+- **Phase 82 (Ease-In-Ease-Out Side-by-Side Transition)**:
+  - Book circle glides to `x: -310` to `-350`, `y: -20`, scaling to `0.45` to `0.48` ($270\text{px} - 288\text{px}$ diameter).
+  - Text container glides to `x: 280` to `330`, `y: -20`.
+  - Side-by-side gap: $\ge 200\text{px}$ between book right edge and text left edge. Zero collision.
+- **Phase 84 (Finale Side-by-Side Split & Elevated Footer)**:
+  - Book coordinates: `x: -310` to `-350`, `y: -20`, `scale: 0.45` to `0.48`.
+  - Content coordinates: `x: 280` to `330`, `y: -20`.
+  - Footer Elevation: `s9FooterElevationY = window.innerHeight >= 1050 ? -150 : (window.innerHeight < 820 ? -35 : -Math.max(0, Math.min(150, (window.innerHeight - 800) * 0.5)))`.

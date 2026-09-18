@@ -616,8 +616,8 @@ function initScene1() {
 
     const t2EndTime = t2StartTime + 4.0;
 
-    // BUTTON: comes in 1 second earlier (1.0s before TEXT 2 ends)
-    const buttonStartTime = t2EndTime - 1.0;
+    // BUTTON: enters 1 second earlier (2.0s before TEXT 2 ends, overlapping with text 2's movement)
+    const buttonStartTime = t2EndTime - 2.0;
     if (scene1MeetBtnWrapper) {
       introTl.to(scene1MeetBtnWrapper, {
         y: 0,
@@ -791,15 +791,22 @@ function handleEnter() {
 
               // Scene 9 Dynamic Height-Aware Layout Coordinates
               const isMobileS9 = window.innerWidth < 768;
-              const s9BookInitialScale = 1.0 * desktopHeightScale;
+              const isLaptopS9 = window.innerHeight <= 1050 || window.innerWidth < 1366;
+              const s9BookInitialScale = isLaptopS9
+                ? 0.60
+                : 1.0 * desktopHeightScale;
               const s9BookElevateY = isMobileS9 && window.innerHeight < 750
                 ? -Math.round(Math.min(110, Math.max(70, (window.innerHeight - 500) * 0.2 + 60)))
-                : (window.innerHeight >= 850
-                    ? -160 * desktopHeightScale
-                    : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60))));
+                : (isLaptopS9
+                    ? (window.innerHeight >= 850 ? -30 : -55)
+                    : (window.innerHeight >= 850
+                        ? -160 * desktopHeightScale
+                        : -Math.round(Math.min(85, Math.max(50, (window.innerHeight - 600) * 0.15 + 60)))));
               const s9ContentY = isMobileS9 && window.innerHeight < 750
                 ? Math.min(200, Math.round((window.innerHeight - 280) * 0.45 + 40))
-                : 335 * desktopHeightScale;
+                : (isLaptopS9
+                    ? (window.innerHeight >= 850 ? 305 : 265)
+                    : 335 * desktopHeightScale);
               const s9FooterElevationY = window.innerWidth < 1024
                 ? 0
                 : (window.innerHeight >= 1050
@@ -989,9 +996,11 @@ function handleEnter() {
               // Responsive grid scaling for Tier 3 tablets and Tier 4 mobile
               const isTier3 = window.innerWidth >= 768 && window.innerWidth < 1024;
               const isMobile = window.innerWidth < 768;
+              const isLaptopS3 = window.innerHeight <= 1050 || window.innerWidth <= 1600;
               const s3GridScale = isMobile
                 ? Math.min(1.0, (window.innerWidth - 32) / 846)
-                : Math.min(1066 / 846, (window.innerWidth - 100) / 846);
+                : (isLaptopS3 ? 0.92 : Math.min(1066 / 846, (window.innerWidth - 100) / 846));
+              const s3GridY = isLaptopS3 ? 20 : -25;
               const s4GridScale = isMobile
                 ? Math.min(1.0, (window.innerWidth - 32) / 796)
                 : Math.min(1.0, (window.innerWidth - 100) / 796);
@@ -1001,7 +1010,8 @@ function handleEnter() {
               const s6ContainerScale = isMobile
                 ? Math.min(1.0, (window.innerHeight - 80) / 820, (window.innerWidth - 32) / 724)
                 : 1.0;
-              gsap.set('#scene3-grid', { scale: s3GridScale, y: -25, transformOrigin: 'center center' });
+              gsap.set('#scene3-grid', { scale: s3GridScale, y: s3GridY, transformOrigin: 'center center' });
+              gsap.set('#scene3-typography', { y: s3GridY });
               gsap.set('#scene4-grid', { scale: s4GridScale, transformOrigin: 'center center' });
               gsap.set('#scene5-container', { scale: s5ContainerScale, transformOrigin: 'center center' });
               gsap.set('#scene6-container', { scale: s6ContainerScale, transformOrigin: 'center center' });
@@ -1057,11 +1067,14 @@ function handleEnter() {
               }
 
               const updateScene3Docking = () => {
+                const isLaptop = window.innerHeight <= 1050 || window.innerWidth <= 1600;
                 const mobile = window.innerWidth < 768;
                 const scale = mobile
                   ? Math.min(1.0, (window.innerWidth - 32) / 846)
-                  : Math.min(1066 / 846, (window.innerWidth - 100) / 846);
-                gsap.set('#scene3-grid', { scale: scale, y: -25, transformOrigin: 'center center' });
+                  : (isLaptop ? 0.92 : Math.min(1066 / 846, (window.innerWidth - 100) / 846));
+                const s3GridY = isLaptop ? 20 : -25;
+                gsap.set('#scene3-grid', { scale: scale, y: s3GridY, transformOrigin: 'center center' });
+                gsap.set('#scene3-typography', { y: s3GridY });
                 if (deerFocusEl && deerSlotEl) {
                   const focusRect = deerFocusEl.getBoundingClientRect();
                   const slotRect = deerSlotEl.getBoundingClientRect();
@@ -1075,14 +1088,36 @@ function handleEnter() {
               window.addEventListener('resize', updateScene3Docking);
 
 
-              // Scene 6 Still Portals Delta calculation (400px -> 124px into Slot 2,0 and Slot 2,1)
-              // Scene 6 Grid Scale for compact laptop viewports (<820px height)
-              const s6GridScale = (window.innerWidth >= 1024 && window.innerHeight < 820)
-                ? Math.min(1.0, Math.max(0.80, (window.innerHeight - 80) / 720))
-                : 1.0;
-              if (s6GridScale < 1.0) {
-                gsap.set('#scene6-grid', { scale: s6GridScale, transformOrigin: 'center center' });
-              }
+              // Scene 5 Grid Scale & Laptop Positioning:
+              // Scaled down ~22% (scale: 0.78) and shifted down to center vertically on laptops (h <= 1050px or w <= 1600px)
+              // Increases padding below the prompt, tightens spacing to title, and centers content vertically
+              const updateScene5GridScale = () => {
+                const isLaptop = window.innerHeight <= 1050 || window.innerWidth <= 1600;
+                const s5GridScale = isLaptop ? 0.78 : 1.0;
+                const s5GridY = isLaptop ? 40 : -20;
+                const s5TypoY = isLaptop ? 15 : -20;
+                gsap.set('#scene5-grid', { scale: s5GridScale, y: s5GridY, transformOrigin: 'center center' });
+                gsap.set('#scene5-typography', { y: s5TypoY });
+              };
+              updateScene5GridScale();
+              window.addEventListener('resize', updateScene5GridScale);
+
+
+              // Scene 6 Grid Scale & Laptop Positioning:
+              // Scaled down to 0.60 (or 0.54 on shorter laptops <820px) to make ample vertical space for the added paragraph.
+              // Shifted whole section up 50px (grid y: -14px, typo y: -60px) to balance between top prompt and bottom progress line.
+              const updateScene6GridScale = () => {
+                const isLaptop = window.innerHeight <= 1050 || window.innerWidth <= 1600;
+                const s6GridScale = isLaptop
+                  ? (window.innerHeight < 820 ? 0.54 : 0.60)
+                  : 0.85;
+                const s6GridY = isLaptop ? (window.innerHeight < 820 ? -25 : -14) : -20;
+                const s6TypoY = isLaptop ? (window.innerHeight < 820 ? -70 : -60) : -40;
+                gsap.set('#scene6-grid', { scale: s6GridScale, y: s6GridY, transformOrigin: 'center center' });
+                gsap.set('#scene6-typography', { y: s6TypoY });
+              };
+              updateScene6GridScale();
+              window.addEventListener('resize', updateScene6GridScale);
 
 
               // 4. Bind GSAP ScrollTrigger for 1:1 pixel-to-timeline scroll scrub
@@ -1146,7 +1181,7 @@ function handleEnter() {
                   id: 'scene5',
                   promptSelector: '#scene5-prompt',
                   textSelector: '#scene5-prompt-text',
-                  fullText: 'you_say_no_instead_of_yes',
+                  fullText: 'we_say_no_instead_of_yes',
                   entrancePx: 18900,
                   typeStartPx: 19300,
                   typeEndPx: 20000,
@@ -1928,7 +1963,7 @@ function handleEnter() {
                 22900
               );
               // 100px pause between Line 1 and Line 2
-              // Line 2, Part 1: "What if you stopped mitigating risks and started building what you want?" (23300 -> 23600)
+              // Line 2, Part 1: "What if we stopped organizing against things and started building toward what we want?" (23300 -> 23600)
               scrollTl.fromTo('#scene5-subheading-line2-part1',
                 { opacity: 0, y: 8 },
                 { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
@@ -2087,31 +2122,24 @@ function handleEnter() {
                 );
               });
 
-              // Phase 50: Narrative Subheading Reveal (31250px -> 32050px)
-              // Line 1: "As witnessed by Douglas Gayeton." (31250 -> 31550)
+              // Phase 50: Subheading Line 1 Reveal (31250px -> 31650px)
+              // Line 1: "As witnessed by Douglas Gayeton." (31250 -> 31650)
               scrollTl.fromTo('#scene6-subheading-line1',
                 { opacity: 0, y: 8 },
-                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
+                { opacity: 1, y: 0, duration: 400, ease: 'none', immediateRender: false },
                 31250
               );
-              // 100px pause (31550 -> 31650)
-              // Line 2: "272 pages. Signed and numbered edition of 500." (31650 -> 31950)
-              scrollTl.fromTo('#scene6-subheading-line2',
-                { opacity: 0, y: 8 },
-                { opacity: 1, y: 0, duration: 300, ease: 'none', immediateRender: false },
-                31650
-              );
 
-              // Phase 51: Purchase Button Fade-In (32050px -> 32350px)
-              scrollTl.fromTo('#scene6-purchase-btn',
+              // Phase 51: Descriptive Paragraph Reveal (31750px -> 32350px)
+              // Replaces former purchase button with narrative directive paragraph
+              scrollTl.fromTo('#scene6-subheading-paragraph',
                 { opacity: 0, y: 10 },
-                { opacity: 1, y: 0, duration: 300, ease: 'power1.out', immediateRender: false },
-                32050
+                { opacity: 1, y: 0, duration: 600, ease: 'power1.out', immediateRender: false },
+                31750
               );
-              scrollTl.set('#scene6-purchase-btn', { pointerEvents: 'auto' }, 32050);
 
-              // Phase 52: Scene 6 Reading & Interactive Hold (32350px -> 35300px)
-              // [2,950px generous stillness hold on the museum constellation and purchase CTA]
+              // Phase 52: Scene 6 Reading & Contemplation Hold (32350px -> 35300px)
+              // [2,950px generous stillness hold on the museum constellation and narrative paragraph]
 
               // Phase 53: Scene 6 Zero-Gravity Staggered Exit (35300px -> 35950px)
               // Outgoing elements ascend by -200px on Y while fading to opacity: 0
@@ -2133,22 +2161,13 @@ function handleEnter() {
                 ease: 'power1.in',
               }, 35500);
 
-              // 4. Scene 6 Subheading
+              // 4. Scene 6 Subheading (Line 1 + Paragraph)
               scrollTl.to('#scene6-subheading', {
                 y: -200,
                 opacity: 0,
                 duration: 250,
                 ease: 'power1.in',
               }, 35600);
-
-              // 5. Scene 6 Purchase Button
-              scrollTl.to('#scene6-purchase-btn-wrapper', {
-                y: -200,
-                opacity: 0,
-                duration: 250,
-                ease: 'power1.in',
-              }, 35700);
-              scrollTl.set('#scene6-purchase-btn', { pointerEvents: 'none' }, 35700);
 
               // Phase 55: Scene 7 Prompt in-place activation (35900px -> 36300px)
               // (Coordinated dynamically by syncPromptStates)
@@ -2500,13 +2519,23 @@ function handleEnter() {
               // The book circle scales down to side-by-side scale and glides left,
               // while the heading & subtitle group glides right, matching Scene9-end.png
               const isS9Stacked = window.innerWidth < 1024;
-              const isTier2 = window.innerWidth >= 1024 && window.innerWidth < 1366;
-              const s9BookFinalX = isS9Stacked ? 0 : (isTier2 ? -220 : -300) * Math.min(1.0, desktopHeightScale * 1.05);
-              const s9BookFinalY = isS9Stacked ? (window.innerWidth < 768 ? -140 : -160) : -20 * desktopHeightScale;
-              const s9BookFinalScale = (isS9Stacked ? (window.innerWidth < 768 ? 0.42 : 0.48) : 0.5333) * desktopHeightScale;
+              const isCompact = window.innerWidth < 1280;
+              const s9BookFinalX = isS9Stacked
+                ? 0
+                : (isCompact ? -310 : -350) * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9BookFinalY = isS9Stacked
+                ? (window.innerWidth < 768 ? -140 : -160)
+                : -20 * desktopHeightScale;
+              const s9BookFinalScale = (isS9Stacked
+                ? (window.innerWidth < 768 ? 0.42 : 0.48)
+                : (isCompact ? 0.45 : 0.48)) * desktopHeightScale;
 
-              const s9TextFinalX = isS9Stacked ? 0 : (isTier2 ? 180 : 230) * Math.min(1.0, desktopHeightScale * 1.05);
-              const s9TextFinalY = isS9Stacked ? (window.innerWidth < 768 ? 120 : 160) : -20 * desktopHeightScale;
+              const s9TextFinalX = isS9Stacked
+                ? 0
+                : (isCompact ? 280 : 330) * Math.min(1.0, desktopHeightScale * 1.05);
+              const s9TextFinalY = isS9Stacked
+                ? (window.innerWidth < 768 ? 120 : 160)
+                : -20 * desktopHeightScale;
 
               scrollTl.to('#scene9-book-wrapper', {
                 x: s9BookFinalX,
@@ -2587,7 +2616,7 @@ document.addEventListener('click', (e) => {
 });
 
 // Scene 1: Initial load pointer-events safeguard so inactive background elements never block clicks
-gsap.set(['#scene6-purchase-btn', '#scene7-purchase-btn', '#scene9-purchase-btn', '#scene9-footer-wrapper', '#scene9-email-form', '#scene9-links-row'], {
+gsap.set(['#scene7-purchase-btn', '#scene9-purchase-btn', '#scene9-footer-wrapper', '#scene9-email-form', '#scene9-links-row'], {
   pointerEvents: 'none'
 });
 

@@ -653,5 +653,91 @@ body {
   color: #000000;
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Scene 1: Responsive Laptop & Compact Height Adaptations                   */
+/* -------------------------------------------------------------------------- */
+
+/* Tier A: Standard Laptops & MacBooks (h <= 1050px or w <= 1600px) */
+@media (max-height: 1050px), (max-width: 1600px) {
+  #scene1-content {
+    padding-top: clamp(12px, 2vh, 24px) !important;
+    padding-bottom: clamp(12px, 2vh, 24px) !important;
+  }
+
+  #scene1-text-1,
+  #scene1-text-2 {
+    max-width: min(780px, 86vw) !important;
+    font-size: clamp(1.02rem, 1.6vh, 1.18rem) !important;
+    line-height: 1.4 !important;
+  }
+
+  #scene1-text-1 {
+    margin-bottom: clamp(12px, 1.8vh, 22px) !important;
+  }
+
+  #scene1-grid-wrapper {
+    /* Height-constrained: ensures the 4 rows of 5x4 never exceed ~42vh */
+    max-width: min(720px, calc((100vh - 340px) * 1.8), 86vw) !important;
+    margin-bottom: clamp(12px, 1.8vh, 22px) !important;
+  }
+
+  #scene1-grid {
+    gap: clamp(4px, 0.6vw, 8px) !important;
+  }
+
+  #scene1-text-2 {
+    margin-bottom: clamp(16px, 2.5vh, 28px) !important;
+  }
+
+  #scene1-meet-btn {
+    padding: clamp(0.55rem, 1.1vh, 0.75rem) clamp(1.5rem, 2vw, 2rem) !important;
+    font-size: clamp(0.78rem, 1.1vh, 0.88rem) !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* Scene 3 Laptop Spacing: tighten gap between grid and typography */
+  #scene3-typography {
+    margin-top: 1.5rem !important;
+  }
+}
+
+/* Tier B: Compact Laptops & Short Viewports (h <= 780px) */
+@media (max-height: 780px) {
+  #scene1-content {
+    padding-top: clamp(8px, 1.5vh, 16px) !important;
+    padding-bottom: clamp(8px, 1.5vh, 16px) !important;
+  }
+
+  #scene1-text-1,
+  #scene1-text-2 {
+    max-width: min(680px, 88vw) !important;
+    font-size: clamp(0.88rem, 1.5vh, 1.02rem) !important;
+    line-height: 1.35 !important;
+  }
+
+  #scene1-text-1 {
+    margin-bottom: clamp(8px, 1.4vh, 14px) !important;
+  }
+
+  #scene1-grid-wrapper {
+    max-width: min(600px, calc((100vh - 260px) * 1.8), 88vw) !important;
+    margin-bottom: clamp(8px, 1.4vh, 14px) !important;
+  }
+
+  #scene1-grid {
+    gap: 4px !important;
+  }
+
+  #scene1-text-2 {
+    margin-bottom: clamp(12px, 2vh, 18px) !important;
+  }
+
+  #scene1-meet-btn {
+    padding: 0.5rem 1.3rem !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+
 
 
